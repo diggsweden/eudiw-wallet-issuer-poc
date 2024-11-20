@@ -1,4 +1,4 @@
-# Credential Issuer
+# Credential Wallet Issuer POC
 
 ## Preparations
 
