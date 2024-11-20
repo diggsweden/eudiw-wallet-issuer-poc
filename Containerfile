@@ -10,7 +10,7 @@ COPY . .
 RUN gradle assemble --no-daemon
 
 # Final runtime stage - using specific JRE version
-FROM cgr.dev/chainguard/jre:openjdk-21.0.5
+FROM eclipse-temurin:21.0.5_11-jre-noble
 USER java
 WORKDIR /app
 
