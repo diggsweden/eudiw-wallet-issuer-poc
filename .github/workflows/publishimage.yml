@@ -19,7 +19,9 @@ jobs:
       packages: write
       id-token: write  # Required for SLSA provenance
       actions: read   # Required for SLSA provenance v2
-
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      digest: ${{ steps.build.outputs.digest }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -66,24 +68,29 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           provenance: true  # Enable SLSA provenance
           sbom: true       # Generate SBOM
-      
-      # New steps for SLSA v2 provenance
-      - name: Generate SLSA provenance
-        uses: slsa-framework/slsa-github-generator/container/v2@v2.0.0
+     
+    
+      - name: Output image
+        id: image
+        run: |
+          # NOTE: Set the image as an output because the `env` context is not
+          # available to the inputs of a reusable workflow call.
+          image_name="${REGISTRY}/${IMAGE_NAME}"
+          echo "image=$image_name" >> "$GITHUB_OUTPUT"
+   
+        # This step calls the container workflow to generate provenance and push it to
+        # the container registry.
+      provenance:
+        needs: [build]
+        permissions:
+          actions: read # for detecting the Github Actions environment.
+          id-token: write # for creating OIDC tokens for signing.
+          packages: write # for uploading attestations.
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.0.0
         with:
-          image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
-          source-uri: "git+https://github.com/${{ github.repository }}.git"
-          compile-generator: true
-          signature-format: "pgp"
-          build-env-vars: |
-            DOCKER_BUILDKIT=1
-            BUILDKIT_PROGRESS=plain
-        
-      - name: Upload provenance
-        uses: actions/upload-artifact@v4
-        with:
-          name: slsa-provenance
-          path: |
-            *.intoto.jsonl
-            *.sig
-          retention-days: 90
+          image: ${{ needs.build.outputs.image }}
+          digest: ${{ needs.build.outputs.digest }}
+          registry-username: ${{ github.actor }}
+        secrets:
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
