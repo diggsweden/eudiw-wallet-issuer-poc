@@ -38,18 +38,18 @@ jobs:
           MEGALINTER_CONFIG: ./development/megalinter.yml
           DEFAULT_WORKSPACE: .
 
-      # - name: Archive MegaLinter artifacts
-      #   if: always()
-      #   uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 #v4.4.3
-      #   with:
-      #     name: MegaLinter reports
-      #     path: |
-      #       megalinter-reports
-      #     retention-days: 5
+      - name: Archive MegaLinter artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 #v4.4.3
+        with:
+          name: MegaLinter reports
+          path: |
+            megalinter-reports
+          retention-days: 5
 
-          #TODO add secrets for private
-      # - name: Upload MegaLinter scan results to GitHub Security tab
-      #   if: success() || failure()
-      #   uses: github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
-      #   with:
-      #     sarif_file: "megalinter-reports/megalinter-report.sarif"
+          TODO add secrets for private
+      - name: Upload MegaLinter scan results to GitHub Security tab
+        if: success() || failure()
+        uses: github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
+        with:
+          sarif_file: "megalinter-reports/megalinter-report.sarif"
