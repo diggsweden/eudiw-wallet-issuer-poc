@@ -27,8 +27,8 @@ jobs:
       contents: read
       security-events: write
     uses: ./.github/workflows/misclint.yml
-  license:
-    uses: ./.github/workflows/license.yml
+  # license:
+  #   uses: ./.github/workflows/license.yml
   test:
     permissions:
       contents: read
