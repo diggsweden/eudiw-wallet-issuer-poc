@@ -1,7 +1,8 @@
 # Dependencies stage - caches dependencies layer
 FROM gradle:jdk21-jammy AS builder-with-project-dependencies
 WORKDIR /app
-COPY ["build.gradle","settings.gradle", "gradlew","gradle","./"]
+COPY build.gradle settings.gradle gradlew ./
+COPY gradle gradle/
 RUN ./gradlew dependencies --no-daemon
 
 # Build stage - builds the application
