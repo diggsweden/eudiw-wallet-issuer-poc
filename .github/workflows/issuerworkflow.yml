@@ -27,10 +27,12 @@ jobs:
       contents: read
       security-events: write
     uses: ./.github/workflows/misclint.yml
+  license:
+    uses: ./.github/workflows/license.yml
   test:
     permissions:
       contents: read
-    needs: [commitlint, misclint]
+    needs: [commitlint, misclint, dependencyreviewlint]
     uses: ./.github/workflows/test.yml
   publish-container-image: # only on semver tag
     permissions:

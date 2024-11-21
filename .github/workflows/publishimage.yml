@@ -18,6 +18,7 @@ jobs:
       contents: read
       packages: write
       id-token: write  # Required for SLSA provenance
+      actions: read   # Required for SLSA provenance v2
 
     steps:
       - name: Checkout Repository
@@ -65,17 +66,24 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           provenance: true  # Enable SLSA provenance
           sbom: true       # Generate SBOM
-
-      # # Generate SLSA provenance
-      # - name: Generate SLSA Provenance
-      #   uses: slsa-framework/slsa-github-generator/container-based-action@v2.0.0
-      #   with:
-      #     image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
-      #     artifacts: ${{ steps.metadata.outputs.tags }}
-      #     predicate-type: "https://slsa.dev/provenance/v1"
-
-      # # Optional: Verify the provenance
-      # - name: Verify SLSA Provenance
-      #   uses: slsa-framework/slsa-verifier/github-actions/verify-container@v2.0.0
-      #   with:
-      #     image: ${{ steps.metadata.outputs.tags }}
+      
+      # New steps for SLSA v2 provenance
+      - name: Generate SLSA provenance
+        uses: slsa-framework/slsa-github-generator/container/v2@v2.0.0
+        with:
+          image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+          source-uri: "git+https://github.com/${{ github.repository }}.git"
+          compile-generator: true
+          signature-format: "pgp"
+          build-env-vars: |
+            DOCKER_BUILDKIT=1
+            BUILDKIT_PROGRESS=plain
+        
+      - name: Upload provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: slsa-provenance
+          path: |
+            *.intoto.jsonl
+            *.sig
+          retention-days: 90
