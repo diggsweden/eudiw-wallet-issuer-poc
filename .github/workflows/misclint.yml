@@ -18,7 +18,6 @@ jobs:
     name: Megalinter analysis
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       security-events: write
     steps:
       - name: Harden GitHub runner
@@ -49,4 +48,4 @@ jobs:
       - name: Upload MegaLinter scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
         with:
-          sarif_file: "megalinter-reports/megalinter-report.sarif"
+          sarif_file: megalinter-reports/megalinter-report.sarif
