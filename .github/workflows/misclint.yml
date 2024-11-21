@@ -47,7 +47,6 @@ jobs:
             megalinter-reports
           retention-days: 5
 
-          TODO add secrets for private
       - name: Upload MegaLinter scan results to GitHub Security tab
         if: success() || failure()
         uses: github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
