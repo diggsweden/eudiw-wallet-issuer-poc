@@ -1,5 +1,5 @@
 # Dependencies stage - caches dependencies layer
-FROM gradle:jdk21-jammy AS builder-with-project-dependencies
+FROM gradle:jdk21-jammy@sha256:7990a44ed0ad609ee740426d3becc69ae7d10a5ed14da7e354ad83cf7ef1d087 AS builder-with-project-dependencies
 WORKDIR /app
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle gradle/
