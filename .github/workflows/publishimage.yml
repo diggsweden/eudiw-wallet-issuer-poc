@@ -68,7 +68,7 @@ jobs:
 
       # Generate SLSA provenance
       - name: Generate SLSA Provenance
-        uses: slsa-framework/slsa-github-generator/container-based-action@v2
+        uses: slsa-framework/slsa-github-generator/container-based-action@v2.0.0
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
           artifacts: ${{ steps.metadata.outputs.tags }}
@@ -76,6 +76,6 @@ jobs:
 
       # Optional: Verify the provenance
       - name: Verify SLSA Provenance
-        uses: slsa-framework/slsa-verifier/github-actions/verify-container@v2
+        uses: slsa-framework/slsa-verifier/github-actions/verify-container@v2.0.0
         with:
           image: ${{ steps.metadata.outputs.tags }}
