@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.0'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id "org.openapi.generator" version "7.9.0"
 }
 
 group = 'se.digg.eudiw'
@@ -13,8 +14,12 @@ java {
 	}
 }
 
+sourceSets.main.java.srcDir "${buildDir}/generate-resources/src/main/java"
+
+
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 dependencies {
@@ -39,6 +44,10 @@ dependencies {
 	implementation 'com.google.zxing:core:3.5.3'
 	implementation 'com.google.zxing:javase:3.5.3'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.bouncycastle:bcpkix-jdk18on:1.79'
+	implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
+	implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
+	implementation 'se.digg.wallet:wallet-metadata:1.0.0-SNAPSHOT'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -67,4 +76,21 @@ tasks.withType(Jar) {
     archiveFileName = archiveClassifier.get().isEmpty() ? 
         "eudiw-wallet-issuer-poc.jar" : 
         "eudiw-wallet-issuer-poc-${archiveClassifier.get()}.jar"
+}
+
+openApiGenerate {
+	generatorName = "java"
+	inputSpec.set("$rootDir/endpoints-api-modified.yaml")
+	ignoreFileOverride.set(".openapi-generator-java-sources.ignore")
+	configOptions.put("name", "oidfed")
+	invokerPackage.set('se.digg.eudiw')
+	modelPackage.set('se.digg.eudiw.model')
+	apiPackage.set('se.digg.eudiw.client')
+	configOptions.set([
+			library: 'resttemplate',
+			openApiNullable: 'false',
+			useJakartaEe: 'true'
+	])
+
+	outputDir.set("${buildDir}/generate-resources/")
 }

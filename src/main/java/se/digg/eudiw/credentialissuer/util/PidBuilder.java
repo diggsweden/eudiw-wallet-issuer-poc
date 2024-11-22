@@ -17,41 +17,34 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 
+import se.digg.eudiw.auth.config.SignerConfig;
 import se.digg.eudiw.credentialissuer.model.SelectiveDisclosure;
 
 public class PidBuilder {
     List<SelectiveDisclosure> selectiveDisclosures = new ArrayList<SelectiveDisclosure>();
 	Map<String, Object> payload = new HashMap<String, Object>();
     Calendar issCalendar;
-    RSAKey rsaJWK;
-    RSAKey rsaPublicJWK;
-    JWSSigner signer;
+    //RSAKey rsaJWK;
+    //RSAKey rsaPublicJWK;
+    private final JWK publicJWK;
+    private final String kid;
+    private final JWSSigner signer;
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public PidBuilder(String iss) {
+    public PidBuilder(String iss, SignerConfig signerConfig) {
         Date now = new Date();
         issCalendar = Calendar.getInstance();
         issCalendar.setTime(now);    
         payload.put("iss", iss);
         payload.put("iat", now);
         payload.put("nbf", now);
-
-        try {
-            rsaJWK = new RSAKeyGenerator(2048)
-                .keyID("123")
-                .generate();
-            rsaPublicJWK = rsaJWK.toPublicJWK();
-
-            // Create RSA-signer with the private key
-            signer = new RSASSASigner(rsaJWK);	
-        } catch (Exception e) {
-            // TODO: logger 
-            throw new RuntimeException(e);
-        }
+        this.signer = signerConfig.getSigner();
+        publicJWK = signerConfig.getPublicJwk().toPublicJWK();
+        kid = signerConfig.getPublicJwk().getKeyID();
     }
 
     public PidBuilder withExp(int hours) {
@@ -149,10 +142,11 @@ public class PidBuilder {
         StringBuffer sb = new StringBuffer();
 
         payload.put("_sd", selectiveDisclosures.stream().map(sd -> sd.hash()).collect(Collectors.toList()));
+
         JWSObject jwsObject = new JWSObject(
-            new JWSHeader.Builder(JWSAlgorithm.RS256)
-                .keyID(rsaJWK.getKeyID())
-                .jwk(rsaPublicJWK)
+            new JWSHeader.Builder(JWSAlgorithm.ES256)
+                .keyID(kid)
+                .jwk(publicJWK)
                 .type(new JOSEObjectType("vc+sd-jwt"))
             .build(),
             new Payload(payload)
@@ -163,7 +157,7 @@ public class PidBuilder {
         new SecureRandom().nextBytes(sharedKey);
 
         try {
-            signer = new RSASSASigner(rsaJWK);
+            //signer = new RSASSASigner(rsaJWK);
             jwsObject.sign(signer);
             sb.append(jwsObject.serialize());
             sb.append("~");

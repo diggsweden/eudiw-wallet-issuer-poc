@@ -1,0 +1,499 @@
+openapi: 3.1.0
+info:
+  title: Federation endpoints API
+  description: |-
+    APIs for OpenID federation endpoints provided by this application
+    
+    The server URL:s provided in this API documentation describes the server URL:s that are made
+    available when running the demo setup.
+    
+    The name component of all URLs is a URL safe name assigned to each Federation Entity through the
+    configuration setup of this application. The configuration setup allows creation of any number of
+    individual federation entities, each supporting a configurable set of the endpoints described here.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/oidfed'
+paths:
+  /{name}/.well-known/openid-federation:
+    get:
+      description: Get Entity Configuration
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/entity-statement+jwt:
+              schema:
+                type: string
+              title: Entity Configuration Signed JWT
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/fetch:
+    get:
+      description: Fetch Entity Statement endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: iss
+          title: Issuer
+          description: |- 
+            The Entity Identifier of the issuer of the Entity Statement
+            
+            Note that the standard draft currently requires the 'iss' query parameter to be provided
+            in the request, but we allow it to be absent as it is not used for anything.
+            If issuer is not provided, we can safely assume that the request was intended for the entity
+            that provides this endpoint.
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sub
+          title: Subject
+          description: The Entity Identifier of the subject of the Entity Statement
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/entity-statement+jwt:
+              schema:
+                type: string
+              title: Entity Configuration Signed JWT
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/subordinate_listing:
+    get:
+      description: Subordinate Listings endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: entity_type
+          title: Entity type
+          description: Filter the response to only entities of this type
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityTypes'
+        - in: query
+          name: trust_marked
+          title: Trust marked
+          description: Determines if the list is limited to only entities with an active trust mark
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: trust_mark_id
+          title: Trust Mark ID
+          description: Filter the response to only entities with an active trust mark with this ID
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: intermediate
+          title: Intermediate
+          description: Determines if the list is limited to only Intermediate Entities
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              title: List of supported subordinate entities Entity Identifier
+              schema:
+                type: array
+                items:
+                  type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/trust_mark:
+    get:
+      description: Trust Mark endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: trust_mark_id
+          title: Trust Mark ID
+          description: The ID of the requested Trust Mark
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: sub
+          title: Subject
+          description: The subject for which the Trust Mark should be issued
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/trust-mark+jwt:
+              title: A Trust Mark for the requested subject
+              schema:
+                type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/trust_mark_listing:
+    get:
+      description: Trust Marked Entities Listing endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: trust_mark_id
+          title: Trust Mark ID
+          description: The ID that must match listed Trust Marks
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: sub
+          title: Subject
+          description: Optional subject that must match listed Trust Marks
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              title: List of subjects that have an active Trust Mark matching the request
+              schema:
+                type: array
+                items:
+                  type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/trust_mark_status:
+    post:
+      description: Trust Mark Status endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: trust_mark_id
+          title: Trust Mark ID
+          description: The Trust Mark ID of the status request
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sub
+          title: Subject
+          description: The Trust Mark subject of the status request
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: trust_mark
+          title: Trust Mark
+          description: A Trust Mark to be checked
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              title: The status of the Trust Mark matching the request
+              schema:
+                $ref: '#/components/schemas/TrustMarkStatusResponse'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/resolve:
+    get:
+      description: Resolve Entity endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: sub
+          title: Subject
+          description: The Entity Identifier of the subject to resolve
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: anchor
+          title: Trust Anchor
+          description: A Trust Mark to be checked
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: type
+          title: Entity Type
+          description: Optional entity type that limits metadata returned to include just this type along with federation entity metadata if present
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityTypes'
+      responses:
+        200:
+          description: OK
+          content:
+            application/resolve-response+jwt:
+              title: Resolve response for the specified Entity, Entity Type and Trust Anchor
+              schema:
+                type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /{name}/discovery:
+    get:
+      description: Discovery endpoint
+      parameters:
+        - in: path
+          name: name
+          required: true
+          title: Federation Entity name
+          description: The configured name of the federation entity providing this endpoint
+          schema:
+            type: string
+        - in: query
+          name: anchor
+          title: Trust Anchor
+          description: The Trust Anchor used to validate entity data
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: type
+          title: Entity Type
+          description: Optional array of entity types to include in the discovery response
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EntityTypes'
+        - in: query
+          name: trust_mark_id
+          title: Subject
+          description: Optional array of IDs of Trust Marks that listed entities must have
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              title: Discovery response
+              schema:
+                type: array
+                items:
+                  type: string
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+components:
+  schemas:
+    ErrorResponse:
+      description: Error response from a Federation Endpoint
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorCodes'
+        error_description:
+          title: Human readable description of the error
+          type: string
+
+    TrustMarkStatusResponse:
+      description: Trust Mark status response from a Trust Mark Status endpoint
+      properties:
+        active:
+          type: boolean
+
+    ErrorCodes:
+      title: Federation endpoint error codes
+      type: string
+      enum:
+        - invalid_request
+        - invalid_client
+        - invalid_issuer
+        - not_found
+        - server_error
+        - temporarily_unavailable
+        - unsupported_parameter
+
+    EntityTypes:
+      title: Federation endpoint error codes
+      type: string
+      enum:
+        - federation_entity
+        - openid_relying_party
+        - openid_provider
+        - oauth_authorization_server
+        - oauth_client
+        - oauth_resource
+

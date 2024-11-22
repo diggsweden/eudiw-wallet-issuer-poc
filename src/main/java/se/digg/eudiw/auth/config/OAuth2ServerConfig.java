@@ -107,6 +107,7 @@ public class OAuth2ServerConfig {
                     .requestMatchers("/v3/api-docs/**").permitAll()
                     .requestMatchers("/actuator/**").permitAll()
                     .requestMatchers("/demo-credential").permitAll()
+                    .requestMatchers("/demo-oidfed-client").permitAll()
                     .requestMatchers("/wallet-cert.pem").permitAll()
                     .requestMatchers("/credential").hasAuthority("SCOPE_VerifiablePortableDocumentA1")
                     .requestMatchers("/credential_offer").hasAuthority("SCOPE_VerifiablePortableDocumentA1")
