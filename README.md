@@ -13,6 +13,26 @@ Do the mkcert config and /etc/hosts config in [quick-start](../dev-environment/c
 
 Install jdk21
 
+## Signer certificate
+
+JWTs are signed with a private key. 
+
+Generate key
+```shell
+openssl ecparam -genkey -name prime256v1 -noout -out issuer-jwt-ec256-key-pair.pem
+```
+
+Export public key 
+```
+openssl ec -in issuer-jwt-ec256-key-pair.pem -pubout -out issuer-jwt-ec256-public-key.pem
+```
+
+Make sure application.properties in the active profile has proper key pair config
+```
+eudiw.issuerSignerKeyPemFile: issuer-jwt-ec256-key-pair.pem
+```
+or set it with environment variable `EUDIW_ISSUER_SIGNER_KEY_PEM_FILE=issuer-jwt-ec256-key-pair.pem`
+
 ## Start the server
 
 ### command line

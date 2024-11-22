@@ -27,6 +27,10 @@ public class EudiwConfig {
 
     private List<String> redirectUris;
 
+    private String oidFederationBaseUrl;
+
+    private String issuerSignerKeyPemFile;
+
     public String getAuthHost() {
         return authHost;
     }
@@ -92,6 +96,22 @@ public class EudiwConfig {
         this.redirectUris = redirectUris;
     }
 
+    public String getOidFederationBaseUrl() {
+        return oidFederationBaseUrl;
+    }
+
+    public void setOidFederationBaseUrl(String oidFederationBaseUrl) {
+        this.oidFederationBaseUrl = oidFederationBaseUrl;
+    }
+
+    public String getIssuerSignerKeyPemFile() {
+        return issuerSignerKeyPemFile;
+    }
+
+    public void setIssuerSignerKeyPemFile(String issuerSignerKeyPemFile) {
+        this.issuerSignerKeyPemFile = issuerSignerKeyPemFile;
+    }
+
     @Override
     public String toString() {
         return "EudiwConfig{" +
@@ -102,6 +122,9 @@ public class EudiwConfig {
                 ", credentialHost='" + credentialHost + '\'' +
                 ", expHours=" + expHours +
                 ", clientId='" + clientId + '\'' +
+                ", redirectUris=" + redirectUris +
+                ", oidFederationBaseUrl='" + oidFederationBaseUrl + '\'' +
+                ", issuerSignerKeyPemFile='" + issuerSignerKeyPemFile + '\'' +
                 '}';
     }
 }
