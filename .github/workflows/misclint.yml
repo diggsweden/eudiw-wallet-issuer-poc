@@ -18,11 +18,10 @@ jobs:
     name: Megalinter analysis
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       security-events: write
     steps:
       - name: Harden GitHub runner
-        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 #v2.10.1
+        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
         with:
           egress-policy: audit
 
@@ -33,23 +32,12 @@ jobs:
 
       - name: MegaLinter lint
         id: ml
-        uses: oxsecurity/megalinter@b38cdf1f0cbe056fad4112cb7cd99c2b574c9617 #v8.1.0
+        uses: oxsecurity/megalinter@d8c95fc6f2237031fb9e9322b0f97100168afa6e # v8.2.0
         env:
           MEGALINTER_CONFIG: ./development/megalinter.yml
           DEFAULT_WORKSPACE: .
 
-      # - name: Archive MegaLinter artifacts
-      #   if: always()
-      #   uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 #v4.4.3
-      #   with:
-      #     name: MegaLinter reports
-      #     path: |
-      #       megalinter-reports
-      #     retention-days: 5
-
-          #TODO add secrets for private
-      # - name: Upload MegaLinter scan results to GitHub Security tab
-      #   if: success() || failure()
-      #   uses: github/codeql-action/upload-sarif@662472033e021d55d94146f66f6058822b0b39fd # v3.27.0
-      #   with:
-      #     sarif_file: "megalinter-reports/megalinter-report.sarif"
+      - name: Upload MegaLinter scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+        with:
+          sarif_file: megalinter-reports/megalinter-report.sarif

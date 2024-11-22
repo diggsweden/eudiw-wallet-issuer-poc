@@ -1,0 +1,127 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":gitSignOff",
+    ":maintainLockFilesWeekly",
+    ":automergeMinor",
+    ":semanticCommits"
+  ],
+  "semanticCommitType": "build",
+  "semanticCommitScope": "deps",
+  "commitMessageLowerCase": "auto",
+  "commitBody": "Signed-off-by: {{{gitAuthor}}}",
+  "vulnerabilityAlerts": {
+    "labels": [
+      "security"
+    ],
+    "enabled": true,
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "addLabels": [
+        "actions"
+      ],
+      "pinDigests": true,
+      "groupName": "github actions",
+      "schedule": [
+        "after 10pm every weekday",
+        "before 5am every weekday"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "slsa-framework/slsa-github-generator"
+      ],
+      "pinDigests": false
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "addLabels": [
+        "java",
+        "dependencies"
+      ]
+    },
+    {
+      "description": "Spring dependencies - Major updates",
+      "groupName": "spring major",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "major-update",
+        "spring"
+      ],
+      "schedule": [
+        "after 10pm every weekday",
+        "before 5am every weekday"
+      ],
+      "matchPackageNames": [
+        "org.springframework{/,}**",
+        "org.springdoc{/,}**",
+        "/org.springframework.boot:spring-boot-gradle-plugin/",
+        "/io.spring.dependency-management/"
+      ]
+    },
+    {
+      "description": "Spring dependencies - Non-major updates",
+      "groupName": "spring non-major",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "labels": [
+        "spring"
+      ],
+      "schedule": [
+        "after 10pm every weekday",
+        "before 5am every weekday"
+      ],
+      "matchPackageNames": [
+        "org.springframework{/,}**",
+        "org.springdoc{/,}**",
+        "/org.springframework.boot:spring-boot-gradle-plugin/",
+        "/io.spring.dependency-management/"
+      ]
+    },
+    {
+      "description": "Group Nimbusds dependencies",
+      "groupName": "nimbusds",
+      "matchPackageNames": [
+        "com.nimbusds{/,}**"
+      ]
+    },
+    {
+      "description": "Group ZXing dependencies",
+      "groupName": "zxing",
+      "matchPackageNames": [
+        "com.google.zxing{/,}**"
+      ]
+    },
+    {
+      "description": "Development tools",
+      "groupName": "dev tools",
+      "matchPackageNames": [
+        "org.projectlombok:lombok",
+        "me.paulschwarz:spring-dotenv",
+        "commons-io:commons-io"
+      ]
+    },
+    {
+      "description": "Monitoring dependencies",
+      "groupName": "monitoring",
+      "matchPackageNames": [
+        "io.micrometer:micrometer-registry-prometheus"
+      ]
+    }
+  ]
+}
