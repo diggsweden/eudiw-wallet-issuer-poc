@@ -11,7 +11,7 @@ COPY . .
 RUN ./gradlew assemble --no-daemon
 
 # Final runtime stage - using specific JRE version
-FROM cgr.dev/chainguard/jre:latest@sha256:a6aff0af8fd0a45f06aad3e3f075e71a726b13256ea3b588f274506d05100244
+FROM cgr.dev/chainguard/jre:latest@sha256:803b651145a3d287d9b35f1091239e16c014ce53d20915ac81d0a9dcd459d43b
 USER java
 WORKDIR /app
 
