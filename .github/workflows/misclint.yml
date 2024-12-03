@@ -32,12 +32,12 @@ jobs:
 
       - name: MegaLinter lint
         id: ml
-        uses: oxsecurity/megalinter@d8c95fc6f2237031fb9e9322b0f97100168afa6e # v8.2.0
+        uses: oxsecurity/megalinter@1fc052d03c7a43c78fe0fee19c9d648b749e0c01 # v8.3.0
         env:
           MEGALINTER_CONFIG: ./development/megalinter.yml
           DEFAULT_WORKSPACE: .
 
       - name: Upload MegaLinter scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+        uses: github/codeql-action/upload-sarif@aa578102511db1f4524ed59b8cc2bae4f6e88195 # v3.27.6
         with:
           sarif_file: megalinter-reports/megalinter-report.sarif
