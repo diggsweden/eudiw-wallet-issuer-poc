@@ -52,6 +52,16 @@
       ]
     },
     {
+      "description": "Maven dependencies",
+      "matchManagers": [
+        "maven"
+      ],
+      "addLabels": [
+        "java",
+        "dependencies"
+      ]
+    },
+    {
       "description": "Spring dependencies - Major updates",
       "groupName": "spring major",
       "matchUpdateTypes": [
@@ -69,6 +79,7 @@
         "org.springframework{/,}**",
         "org.springdoc{/,}**",
         "/org.springframework.boot:spring-boot-gradle-plugin/",
+        "/org.springframework.boot:spring-boot-maven-plugin/",
         "/io.spring.dependency-management/"
       ]
     },
@@ -90,6 +101,7 @@
         "org.springframework{/,}**",
         "org.springdoc{/,}**",
         "/org.springframework.boot:spring-boot-gradle-plugin/",
+        "/org.springframework.boot:spring-boot-maven-plugin/",
         "/io.spring.dependency-management/"
       ]
     },
