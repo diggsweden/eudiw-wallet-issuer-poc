@@ -1,5 +1,5 @@
 # Dependencies stage - caches dependencies layer
-FROM maven:3.9-eclipse-temurin-21-jammy AS builder-with-project-dependencies
+FROM maven:3.9-eclipse-temurin-21-jammy@sha256:3df7f4a433809a4362fe8a91e3f31521146309cb17cf2e141b3f847aa6c2ded1 AS builder-with-project-dependencies
 
 WORKDIR /app
 
