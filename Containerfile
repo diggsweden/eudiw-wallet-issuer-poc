@@ -1,19 +1,34 @@
 # Dependencies stage - caches dependencies layer
-FROM gradle:jdk21-jammy@sha256:7990a44ed0ad609ee740426d3becc69ae7d10a5ed14da7e354ad83cf7ef1d087 AS builder-with-project-dependencies
+FROM maven:3.9-eclipse-temurin-21-jammy AS builder-with-project-dependencies
+
 WORKDIR /app
-COPY build.gradle settings.gradle gradlew ./
-COPY gradle gradle/
-RUN ./gradlew dependencies --no-daemon
+
+# Copy Maven project files
+COPY pom.xml ./
+#COPY ....settings.xml /root/.m2/settings.xml
+
+# Pre-download dependencies
+#RUN mvn dependency:go-offline -B 
+RUN mvn dependency:go-offline -B -Daether.connector.https.securityMode=insecure
 
 # Build stage - builds the application
-FROM builder-with-project-dependencies AS builder 
+FROM builder-with-project-dependencies AS builder
+
+# Copy the rest of the project files
 COPY . .
-RUN ./gradlew assemble --no-daemon
+
+# Build the application
+#RUN mvn package -DskipTests -B -Daether.connector.https.securityMode=insecure
+RUN mvn package -DskipTests -B 
+
 
 # Final runtime stage - using specific JRE version
 FROM cgr.dev/chainguard/jre:latest@sha256:a6aff0af8fd0a45f06aad3e3f075e71a726b13256ea3b588f274506d05100244
+
 USER java
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/eudiw-wallet-issuer-poc.jar ./eudiw-wallet-issuer-poc.jar
+# Copy the built JAR file from the builder stage
+COPY --from=builder /app/target/eudiw-wallet-issuer-poc.jar ./eudiw-wallet-issuer-poc.jar
+
 ENTRYPOINT ["java", "-jar", "./eudiw-wallet-issuer-poc.jar"]
