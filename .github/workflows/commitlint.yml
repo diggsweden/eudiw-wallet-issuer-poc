@@ -16,7 +16,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Harden GitHub runner
-        uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f # v2.10.2
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
         with:
           egress-policy: audit
 
@@ -30,6 +30,6 @@ jobs:
         run: git fetch origin main:main
 
       - name: Commit (conform) analysis
-        uses: docker://ghcr.io/siderolabs/conform@sha256:e824f01caf3eb5feb29f9eeac857a3e9131c5e39362bdc4ec299929eddba6852
+        uses: docker://ghcr.io/siderolabs/conform@sha256:f7e72122d4296b90285ac51964361295adf1f2018420a8547cb2b069f94a776d
         with:
           args: "enforce --base-branch=main"

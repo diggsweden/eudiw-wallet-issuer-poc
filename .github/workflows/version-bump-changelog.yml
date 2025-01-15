@@ -17,13 +17,13 @@ jobs:
       MAVEN_CLI_OPTS: "--batch-mode --no-transfer-progress --errors --fail-at-end -Dstyle.color=always -s development/maven-gh-settings.xml"
     
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Import GPG key
         id: import-gpg
-        uses: crazy-max/ghaction-import-gpg@v6
+        uses: crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5 # v6
         with:
           gpg_private_key: ${{ secrets.OSPO_BOT_GPG_PRIV }}
           passphrase: ${{ secrets.OSPO_BOT_GPG_PASS }}
@@ -44,7 +44,7 @@ jobs:
           mvn $MAVEN_CLI_OPTS -s development/maven-gh-settings.xml versions:set -DnewVersion="${TAG}" -DgenerateBackupPoms=false -DskipTests
        
       - name: Generate a changelog
-        uses: orhun/git-cliff-action@v3
+        uses: orhun/git-cliff-action@b946ed27a675d653b308f29a7bbad813b85bf7aa # v3
         with:
           config: development/gitcliff-gh-keepachangelog.toml
           args: --verbose
@@ -59,7 +59,7 @@ jobs:
           git branch --set-upstream-to=origin/main main
 
       - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
         with:
           commit_message: |
             chore(release): ${{ github.ref_name }}
@@ -75,7 +75,7 @@ jobs:
           skip_fetch: true
           
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
         with:
           java-version: 21
           distribution: 'temurin'  
@@ -89,7 +89,7 @@ jobs:
           mvn $MAVEN_CLI_OPTS -s development/maven-gh-settings.xml package -DskipTests
                   
       - name: Upload JAR
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         with:
           name: ${{ github.event.repository.name }}-jar
           path: target/${{ github.event.repository.name }}.jar
