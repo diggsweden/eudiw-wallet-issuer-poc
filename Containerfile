@@ -23,7 +23,7 @@ RUN mvn package -DskipTests -B
 
 
 # Final runtime stage - using specific JRE version
-FROM cgr.dev/chainguard/jre:latest@sha256:a6aff0af8fd0a45f06aad3e3f075e71a726b13256ea3b588f274506d05100244
+FROM cgr.dev/chainguard/jre:latest@sha256:fba813a1a91ce642ce87515ea6603fa3255cd6732c9faef014b696ab358222df
 
 USER java
 WORKDIR /app
