@@ -139,7 +139,7 @@ public class MetadataController {
                                     .build()
                     )
                             .sourceEndpoint(String.format("%s/%s", eudiwConfig.getIssuerBaseUrl(), ".well-known/openid-federation"))
-                            .authorityHints(List.of("https://local.dev.swedenconnect.se:9040/oidfed/intermediate"))
+                            .authorityHints(eudiwConfig.getOpenidFederation().authorityHints())
                             .trustMarks(List.of(TrustMarkClaim.builder()
                                             .id(eudiwConfig.getOpenidFederation().trustMarkId())
                                             .trustMark(openIdFederationService.trustMark(eudiwConfig.getOpenidFederation().trustMarkId(), eudiwConfig.getOpenidFederation().subject()))

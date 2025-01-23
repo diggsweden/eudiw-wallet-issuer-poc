@@ -11,7 +11,7 @@ import java.util.List;
 @Component 
 public class EudiwConfig {
 
-    public record OpenIdFederationConfiguration(String baseUrl, String trustMarkId, String subject, Integer trustListTtlInSeconds, String walletProviderAnchor) {
+    public record OpenIdFederationConfiguration(String baseUrl, String trustMarkId, String subject, Integer trustListTtlInSeconds, String walletProviderAnchor, String walletBaseUri, List<String> authorityHints) {
     }
 
     public record SwedenConnectConfiguration(String baseUrl, String client, String returnBaseUrl) {

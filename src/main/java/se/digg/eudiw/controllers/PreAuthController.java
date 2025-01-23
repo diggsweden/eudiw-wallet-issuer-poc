@@ -194,14 +194,14 @@ public class PreAuthController {
     }
 
     @GetMapping(value="/callbackdebug", produces = MediaType.TEXT_HTML_VALUE) 
-    String callback(@PathParam("code") String code, @PathParam("state") String state) throws URISyntaxException {
+    String callback(@PathParam("code") String code, @PathParam("state") String state) {
         logger.info("Callback called with code: " + code + " and state: " + state);
         // The obtained authorisation code
         AuthorizationCode authorizationCode = new AuthorizationCode(code);
 
         // Make the token request, with PKCE
         TokenRequest tokenRequest = new TokenRequest(
-            URI.create("https://local.dev.swedenconnect.se:9090/oauth2/token"),
+            URI.create(String.format("%s/oauth2/token", eudiwConfig.getIssuerBaseUrl())),
             new ClientID(eudiwConfig.getClientId()),
             new AuthorizationCodeGrant(authorizationCode, callbackUri, pkceVerifier));
 

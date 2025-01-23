@@ -49,6 +49,8 @@ public class OpenIdFederationServiceImpl implements OpenIdFederationService {
 
     private final List<TokenCredential> trustedCredentials;
 
+    private final String walletUriTemplate;
+
     public OpenIdFederationServiceImpl(@Autowired EudiwConfig eudiwConfig, @Autowired RestTemplate restTemplate, @Autowired List<TokenCredential> tokenCredentials) {
         this.eudiwConfig = eudiwConfig;
         this.restTemplate = restTemplate;
@@ -58,6 +60,8 @@ public class OpenIdFederationServiceImpl implements OpenIdFederationService {
         oidFederation = new DefaultApi(client);
 
         trustedCredentials = tokenCredentials;
+
+        walletUriTemplate = String.format("%s%%s", eudiwConfig.getOpenidFederation().walletBaseUri());
     }
 
     @Override
@@ -65,8 +69,8 @@ public class OpenIdFederationServiceImpl implements OpenIdFederationService {
         WalletOAuthClientMetadata clientMetadata = null;
         String oidFedJwt = oidFederation.nameResolveGet(
                 "wallet-provider",
-                String.format("https://local.dev.swedenconnect.se/wallets/%s", walletId),
-                "https://local.dev.swedenconnect.se:9040/oidfed/wallet-provider",
+                String.format(walletUriTemplate, walletId),
+                eudiwConfig.getOpenidFederation().walletProviderAnchor(),
                 null);
         try {
             SignedJWT signedJwt = parseJwt(oidFedJwt);

@@ -48,8 +48,11 @@ eudiw:
     baseUrl:  https://local.dev.swedenconnect.se:9040/oidfed
     trustMarkId: https://local.dev.swedenconnect.se/trust-mark-id/pid-issuer
     walletProviderAnchor: https://local.dev.swedenconnect.se:9040/oidfed/wallet-provider
+    walletBaseUri: https://local.dev.swedenconnect.se/wallets/
     subject: https://local.dev.swedenconnect.se:9090
     trustListTtlInSeconds: 60
+    authorityHints:
+      - "https://local.dev.swedenconnect.se:9040/oidfed/intermediate"
 
   valkey:
     host: local.dev.swedenconnect.se
