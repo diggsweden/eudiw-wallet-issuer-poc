@@ -40,7 +40,7 @@
     <zxing.version>3.5.3</zxing.version>
     <lombok.version>1.18.36</lombok.version>
     <reactor-core.version>3.6.0</reactor-core.version>
-    <bouncy-castle.version>1.79</bouncy-castle.version>
+    <bouncy-castle.version>1.80</bouncy-castle.version>
     <jakarta-annotation.version>3.0.0</jakarta-annotation.version>
     <eudiw-wallet-metadata.version>1.0.0-SNAPSHOT</eudiw-wallet-metadata.version>
 
