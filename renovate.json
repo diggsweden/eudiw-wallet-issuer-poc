@@ -77,8 +77,8 @@
     {
       "description": "Apache Maven plugins",
       "groupName": "maven-plugins",
-      "matchPackagePatterns": [
-        "^org\\.apache\\.maven\\.plugins:"
+      "matchPackageNames": [
+        "/^org\\.apache\\.maven\\.plugins:/"
       ]
     },
     {
