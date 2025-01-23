@@ -45,7 +45,7 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
-	implementation 'io.projectreactor:reactor-core:3.6.0'
+	implementation 'io.projectreactor:reactor-core:3.7.2'
 
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 	implementation 'commons-io:commons-io:2.18.0'
