@@ -1,0 +1,21 @@
+openid-credential-offer://credential_offer?credential_offer=%7B%22credential_issuer%22:%20%22https://issuer.eudiw.dev%22%2C%20%22credential_configuration_ids%22:%20%5B%22eu.europa.ec.eudi.pid_jwt_vc_json%22%2C%20%22eu.europa.ec.eudi.pid_mdoc%22%5D%2C%20%22grants%22:%20%7B%22authorization_code%22:%20%7B%7D%7D%7D
+
+
+
+authorization_code
+
+openid-credential-offer://
+credential_offer?
+credential_offer={
+"credential_issuer": "https://issuer.eudiw.dev",
+"credential_configuration_ids": ["eu.europa.ec.eudi.pid_jwt_vc_json", "eu.europa.ec.eudi.pid_mdoc"],
+"grants": {"authorization_code": {}}}
+
+openid-credential-offer://
+credential_offer?credential_offer=
+{"credential_issuer": "https://issuer.eudiw.dev",
+"credential_configuration_ids": ["eu.europa.ec.eudi.pid_jwt_vc_json", "eu.europa.ec.eudi.pid_mdoc"],
+"grants": {"urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+    "pre-authorized_code": "28802d55-f44f-4545-afa7-f0d2c6e4d379",
+    "tx_code": {"length": 5, "input_mode": "numeric", "description": "Please provide the one-time code."}
+    }}}
