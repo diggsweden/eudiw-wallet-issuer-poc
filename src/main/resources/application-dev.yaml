@@ -24,8 +24,8 @@ spring:
       host: "local.dev.swedenconnect.se"
       port: 6379
       database: 0
-      #username: "user"
-      #password: "secret"
+      username: "default"
+      password: "secret"
 
   ssl:
     bundle:

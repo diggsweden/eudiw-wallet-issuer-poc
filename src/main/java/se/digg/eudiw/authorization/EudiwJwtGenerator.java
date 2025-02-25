@@ -90,7 +90,10 @@ public final class EudiwJwtGenerator implements OAuth2TokenGenerator<Jwt> {
                     claimsBuilder.claim("azp", registeredClient.getClientId());
                     if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
                         OAuth2AuthorizationRequest authorizationRequest = (OAuth2AuthorizationRequest)context.getAuthorization().getAttribute(OAuth2AuthorizationRequest.class.getName());
-                        String nonce = (String)authorizationRequest.getAdditionalParameters().get("nonce");
+                        String nonce = null;
+                        if (authorizationRequest != null) {
+                            nonce = (String)authorizationRequest.getAdditionalParameters().get("nonce");
+                        }
                         if (StringUtils.hasText(nonce)) {
                             claimsBuilder.claim("nonce", nonce);
                         }
