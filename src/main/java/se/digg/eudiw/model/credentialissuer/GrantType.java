@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class Grants {
-    AuthorizationCode  authorizationCode;
+public enum GrantType {
+    @JsonProperty("authorization_code")
+    AUTHORIZATION_CODE,
     @JsonProperty("urn:ietf:params:oauth:grant-type:pre-authorized_code")
-    PreAuthorizedCode preAuthorizedCode;
+    PRE_AUTHORIZED_CODE;
 }

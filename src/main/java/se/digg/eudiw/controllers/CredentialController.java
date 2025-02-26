@@ -30,6 +30,7 @@ import se.digg.eudiw.model.credentialissuer.CredentialOfferParam;
 import se.digg.eudiw.model.credentialissuer.CredentialParam;
 import se.digg.eudiw.model.credentialissuer.CredentialResponse;
 import se.digg.eudiw.service.CredentialIssuerService;
+import se.digg.eudiw.service.CredentialOfferService;
 import se.digg.eudiw.service.OpenIdFederationService;
 import se.digg.wallet.datatypes.common.TokenIssuingException;
 import se.oidc.oidfed.md.wallet.credentialissuer.WalletOAuthClientMetadata;
@@ -42,13 +43,15 @@ public class CredentialController {
     private final OpenIdFederationService openIdFederationService;
     private final ProofDecoder proofDecoder;
     private final CredentialIssuerService credentialIssuerService;
+    private final CredentialOfferService credentialOfferService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public CredentialController(@Autowired OpenIdFederationService openIdFederationService, @Autowired ProofDecoder proofDecoder, @Autowired CredentialIssuerService credentialIssuerService) {
+    public CredentialController(@Autowired OpenIdFederationService openIdFederationService, @Autowired ProofDecoder proofDecoder, @Autowired CredentialIssuerService credentialIssuerService, @Autowired CredentialOfferService credentialOfferService) {
         this.openIdFederationService = openIdFederationService;
         this.proofDecoder = proofDecoder;
         this.credentialIssuerService = credentialIssuerService;
+        this.credentialOfferService = credentialOfferService;
     }
 
     @GetMapping("/demo-oidfed-client")
@@ -121,6 +124,11 @@ public class CredentialController {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @GetMapping("/credential_offer/{credential_offer_id}")
+    CredentialOfferParam credentialOffer(@PathVariable String credential_offer_id) {
+        return credentialOfferService.credentialOffer(credential_offer_id);
     }
 
     @ExceptionHandler(ValidationException.class)

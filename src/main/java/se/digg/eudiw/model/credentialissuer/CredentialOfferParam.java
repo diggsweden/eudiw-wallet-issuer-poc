@@ -1,21 +1,27 @@
 package se.digg.eudiw.model.credentialissuer;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CredentialOfferParam {
 
     String credentialIssuer;
-    List<String> credentials;
-    Grants grants;
+    List<String> credentialConfigurationIds;
+    Map<GrantType, Grant> grants;
 
-    public CredentialOfferParam(String credentialIssuer, List<String> credentials) {
+    public CredentialOfferParam(String credentialIssuer, List<String> credentialConfigurationIds) {
         this.credentialIssuer = credentialIssuer;
-        this.credentials = credentials;
+        this.credentialConfigurationIds = credentialConfigurationIds;
+        this.grants = new HashMap<>();
     }
 
     public String getCredentialIssuer() {
@@ -26,19 +32,19 @@ public class CredentialOfferParam {
         this.credentialIssuer = credentialIssuer;
     }
 
-    public List<String> getCredentials() {
-        return credentials;
+    public List<String> getCredentialConfigurationIds() {
+        return credentialConfigurationIds;
     }   
 
-    public void setCredentials(List<String> credentials) {
-        this.credentials = credentials;
+    public void setCredentialConfigurationIds(List<String> credentialConfigurationIds) {
+        this.credentialConfigurationIds = credentialConfigurationIds;
     }
 
-    public Grants getGrants() {
+    public Map<GrantType, Grant> getGrants() {
         return grants;
     }
 
-    public void setGrants(Grants grants) {
+    public void setGrants(Map<GrantType, Grant> grants) {
         this.grants = grants;
     }
 
@@ -47,7 +53,7 @@ public class CredentialOfferParam {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((credentialIssuer == null) ? 0 : credentialIssuer.hashCode());
-        result = prime * result + ((credentials == null) ? 0 : credentials.hashCode());
+        result = prime * result + ((credentialConfigurationIds == null) ? 0 : credentialConfigurationIds.hashCode());
         result = prime * result + ((grants == null) ? 0 : grants.hashCode());
         return result;
     }
@@ -66,10 +72,10 @@ public class CredentialOfferParam {
                 return false;
         } else if (!credentialIssuer.equals(other.credentialIssuer))
             return false;
-        if (credentials == null) {
-            if (other.credentials != null)
+        if (credentialConfigurationIds == null) {
+            if (other.credentialConfigurationIds != null)
                 return false;
-        } else if (!credentials.equals(other.credentials))
+        } else if (!credentialConfigurationIds.equals(other.credentialConfigurationIds))
             return false;
         if (grants == null) {
             if (other.grants != null)
@@ -81,7 +87,7 @@ public class CredentialOfferParam {
 
     @Override
     public String toString() {
-        return "CredentialOfferParam [credentialIssuer=" + credentialIssuer + ", credentials=" + credentials
+        return "CredentialOfferParam [credentialIssuer=" + credentialIssuer + ", credentials=" + credentialConfigurationIds
                 + ", grants=" + grants + "]";
     }
 

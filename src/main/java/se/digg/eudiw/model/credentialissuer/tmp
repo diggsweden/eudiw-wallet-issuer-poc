@@ -4,8 +4,11 @@ openid-credential-offer://credential_offer?credential_offer=%7B%22credential_iss
 
 authorization_code
 
-openid-credential-offer://
-credential_offer?
+
+openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22https%3A%2F%2Flocal.dev.swedenconnect.se%3A9090%22%2C%22credential_configuration_ids%22%3A%5B%22eu.europa.ec.eudi.pid_jwt_vc_json%22%5D%2C%22grants%22%3A%7B%22authorization_code%22%3A%7B%7D%7D%7D
+
+
+openid-credential-offer://credential_offer?
 credential_offer={
 "credential_issuer": "https://issuer.eudiw.dev",
 "credential_configuration_ids": ["eu.europa.ec.eudi.pid_jwt_vc_json", "eu.europa.ec.eudi.pid_mdoc"],

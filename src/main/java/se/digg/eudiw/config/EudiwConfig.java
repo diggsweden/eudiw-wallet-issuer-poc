@@ -37,6 +37,8 @@ public class EudiwConfig {
 
     private List<String> redirectUris;
 
+    private int credentialOfferTtlInSeconds;
+
     private OpenIdFederationConfiguration openidFederation;
 
     private SwedenConnectConfiguration swedenconnect;
@@ -104,6 +106,14 @@ public class EudiwConfig {
         return redirectUris;
     }
 
+    public int getCredentialOfferTtlInSeconds() {
+        return credentialOfferTtlInSeconds;
+    }
+
+    public void setCredentialOfferTtlInSeconds(int credentialOfferTtlInSeconds) {
+        this.credentialOfferTtlInSeconds = credentialOfferTtlInSeconds;
+    }
+
     public void setRedirectUris(List<String> redirectUris) {
         this.redirectUris = redirectUris;
     }
@@ -143,6 +153,7 @@ public class EudiwConfig {
                 ", expHours=" + expHours +
                 ", clientId='" + clientId + '\'' +
                 ", redirectUris=" + redirectUris +
+                ", credentialOfferTtlInSeconds=" + credentialOfferTtlInSeconds +
                 ", oidFederation='" + openidFederation + '\'' +
                 '}';
     }

@@ -11,6 +11,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
 import org.springframework.util.MultiValueMap;
+import se.digg.eudiw.model.credentialissuer.CredentialOfferParam;
 
 import java.time.Duration;
 
@@ -19,6 +20,13 @@ public class ValKeyConfig {
     @Bean
     RedisTemplate<String, MultiValueMap<String, String>> valKeyMultiValueMapTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, MultiValueMap<String, String>> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        return template;
+    }
+
+    @Bean
+    RedisTemplate<String, CredentialOfferParam> valKeyCredentialOfferParamRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, CredentialOfferParam> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         return template;
     }

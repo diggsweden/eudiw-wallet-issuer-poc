@@ -174,6 +174,7 @@ public class OAuth2ServerConfig {
                                     .requestMatchers("/error**").permitAll()
                                     .requestMatchers("/login*").permitAll()
                                     .requestMatchers("/demo-credential").permitAll()
+                                    .requestMatchers("/pid").permitAll()
                                     .requestMatchers("/demo-oidfed-client").authenticated()
                                     .requestMatchers("/credential").authenticated() //hasAuthority("SCOPE_VerifiablePortableDocumentA1")
                                     .requestMatchers("/credential_offer").hasAuthority("SCOPE_VerifiablePortableDocumentA1")
