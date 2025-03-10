@@ -13,7 +13,6 @@ public class PreAuthCodeGrantAuthenticationToken extends AbstractAuthenticationT
 
     private final String preAuthorizedCode;
     private final String clientId;
-    private final String redirectUri;
     private final Authentication authentication;
     private final Map<String, Object> additionalParameters;
     private final AuthorizationGrantType authorizationGrantType;
@@ -25,14 +24,12 @@ public class PreAuthCodeGrantAuthenticationToken extends AbstractAuthenticationT
         additionalParameters = Map.of();
         this.authorizationGrantType = new AuthorizationGrantType(PreAuthParameterNames.PRE_AUTHORIZED_CODE_GRANT);
         clientId = null;
-        redirectUri = null;
     }
 
-    public PreAuthCodeGrantAuthenticationToken(String preAuthorizedCode, String clientId, String redirectUri, Authentication authentication, Map<String, Object> additionalParameters) {
+    public PreAuthCodeGrantAuthenticationToken(String preAuthorizedCode, String clientId, Authentication authentication, Map<String, Object> additionalParameters) {
         super(authentication.getAuthorities());
         this.preAuthorizedCode = preAuthorizedCode;
         this.clientId = clientId;
-        this.redirectUri = redirectUri;
         this.authentication = authentication;
         this.additionalParameters = additionalParameters;
         this.authorizationGrantType = new AuthorizationGrantType(PreAuthParameterNames.PRE_AUTHORIZED_CODE_GRANT);
@@ -66,10 +63,6 @@ public class PreAuthCodeGrantAuthenticationToken extends AbstractAuthenticationT
 
     public String getClientId() {
         return clientId;
-    }
-
-    public String getRedirectUri() {
-        return redirectUri;
     }
 
     public AuthorizationGrantType getAuthorizationGrantType() {

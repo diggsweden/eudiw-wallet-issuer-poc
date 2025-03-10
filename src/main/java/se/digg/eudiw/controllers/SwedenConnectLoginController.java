@@ -69,12 +69,12 @@ public class SwedenConnectLoginController {
         }
     }
 
-    @GetMapping("/")
-    String foobar(HttpServletRequest request, HttpServletResponse response) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-
-        return "foobar" + securityContext.getAuthentication().getPrincipal().toString();
-    }
+//    @GetMapping("/")
+//    String foobar(HttpServletRequest request, HttpServletResponse response) {
+//        SecurityContext securityContext = SecurityContextHolder.getContext();
+//
+//        return "foobar" + securityContext.getAuthentication().getPrincipal().toString();
+//    }
 
 }
 

@@ -23,9 +23,9 @@ public class ProofDecoder {
         try {
             SignedJWT signedJWT = SignedJWT.parse(proof.getJwt());
             JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
-
             JWSHeader header = signedJWT.getHeader();
             JWK jwk = header.getJWK();
+
 
             if (jwk != null)  return  Optional.of(jwk);
 

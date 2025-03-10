@@ -168,6 +168,9 @@ public class OAuth2ServerConfig {
                             authorizeRequests
                                     .requestMatchers("/favicon.ico").permitAll()
                                     .requestMatchers("/.well-known/**").permitAll()
+                                    .requestMatchers("/").permitAll()
+                                    .requestMatchers("/index.html").permitAll()
+                                    .requestMatchers("/images/**").permitAll()
                                     .requestMatchers("/cert/**").permitAll()
                                     .requestMatchers("/actuator/**").permitAll()
                                     .requestMatchers("/v3/api-docs/**").permitAll()
@@ -175,6 +178,7 @@ public class OAuth2ServerConfig {
                                     .requestMatchers("/login*").permitAll()
                                     .requestMatchers("/demo-credential").permitAll()
                                     .requestMatchers("/pid").permitAll()
+                                    .requestMatchers("/pid/preauth").permitAll()
                                     .requestMatchers("/demo-oidfed-client").authenticated()
                                     .requestMatchers("/credential").authenticated() //hasAuthority("SCOPE_VerifiablePortableDocumentA1")
                                     .requestMatchers("/credential_offer").hasAuthority("SCOPE_VerifiablePortableDocumentA1")

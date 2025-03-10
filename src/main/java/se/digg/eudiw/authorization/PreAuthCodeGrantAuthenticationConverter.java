@@ -53,19 +53,29 @@ public class PreAuthCodeGrantAuthenticationConverter implements AuthenticationCo
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
         }
 
-        String redirectUri = parameters.getFirst("redirect_uri");
-        if (!StringUtils.hasText(preAuthorizedCode) ||
-                parameters.get("redirect_uri").size() != 1) {
-            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
-        }
-
         String clientId = parameters.getFirst("client_id");
         if (!StringUtils.hasText(preAuthorizedCode) ||
                 parameters.get("client_id").size() != 1) {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
         }
 
+        String txCode = parameters.getFirst("tx_code");
+        if (StringUtils.hasText(txCode)) {
+            if (parameters.get("tx_code").size() != 1) {
+                throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+            }
+            // todo verify that tx_code is valid
+            logger.info("tx_code: {} TODO VERIFY!", txCode);
+        }
 
+        String userPin = parameters.getFirst("user_pin");
+        if (StringUtils.hasText(userPin)) {
+            if (parameters.get("user_pin").size() != 1) {
+                throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_REQUEST);
+            }
+            // todo verify that EWC legacy userPin is valid - user_pin is replaced with tx_code in current spec
+            logger.info("userPin: {} TODO VERIFY!", userPin);
+        }
 
         Map<String, Object> additionalParameters = new HashMap<>();
         parameters.forEach((key, value) -> {
@@ -75,7 +85,7 @@ public class PreAuthCodeGrantAuthenticationConverter implements AuthenticationCo
             }
         });
 
-        return new PreAuthCodeGrantAuthenticationToken(preAuthorizedCode, clientId, redirectUri, clientPrincipal, additionalParameters);
+        return new PreAuthCodeGrantAuthenticationToken(preAuthorizedCode, clientId, clientPrincipal, additionalParameters);
         //return new OAuth2AuthorizationCodeAuthenticationToken(preAuthorizedCode, clientPrincipal, redirectUri, additionalParameters);
     }
 

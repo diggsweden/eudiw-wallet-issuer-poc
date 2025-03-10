@@ -90,6 +90,7 @@ public class OidFederatedRegisteredClientRepository implements RegisteredClientR
                 .redirectUri(String.format("%s/credentials", config.getIssuerBaseUrl()))
                 .redirectUri(String.format("%s/callback-demo-pre-auth", config.getIssuerBaseUrl()))
                 .redirectUri("com.example.eudiwdemo:/oauthredirect")
+                .redirectUri(String.format("%s/pid/preauth", config.getIssuerBaseUrl()))
                 .redirectUri(config.getIssuerBaseUrl());
 
         for (String uri : config.getRedirectUris()) {

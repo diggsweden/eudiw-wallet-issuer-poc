@@ -27,7 +27,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -44,7 +43,7 @@ public class PidCredentialOfferFormController {
     public String pidCredentialOffer(Model model) {
         model.addAttribute("credentialOffer", new CredentialOfferFormParam());
         model.addAttribute("urn:eu.europa.ec.eudi:pid:1", Boolean.FALSE);
-        return "pidCredentialOffer";
+        return "pid-credential-offer";
     }
 
     /*
@@ -73,7 +72,7 @@ credential_offer?credential_offer=
 
             if (credentialOffer.isPreAuthCodeFlow()) {
                 credentialOffer.setValidationErrors("TODO implementera");
-                return "pidCredentialOffer";
+                return "pid-credential-offer";
             }
 
             String credentialOfferId = UUID.randomUUID().toString();
@@ -98,7 +97,6 @@ credential_offer?credential_offer=
                 MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream,con);
                 byte[] pngData = pngOutputStream.toByteArray();
                 String qrCode = Base64.getEncoder().encodeToString(pngData);
-                credentialOffer.setValidationErrors("Klart! REndera qr osv");
 
                 model.addAttribute("qrCode", String.format("data:image/jpeg;base64, %s", qrCode));
                 model.addAttribute("linkUrl", credOffer);
@@ -115,6 +113,6 @@ credential_offer?credential_offer=
             credentialOffer.setValidationErrors("Minst ett pid format måste markeras");
         }
 
-        return "pidCredentialOffer";
+        return "pid-credential-offer";
     }
 }

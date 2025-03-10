@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Aggregator</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #f1f3f4;
+            --text-color: #202124;
+            --light-gray: #e8eaed;
+            --medium-gray: #dadce0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        nav {
+            background-color: #d5dad4;
+            padding: 15px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 5px;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .content {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .top-stories {
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .article {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            transition: background-color 0.2s;
+        }
+
+        .article:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .article-image {
+            width: 120px;
+            height: 80px;
+            background-color: var(--medium-gray);
+            margin-right: 15px;
+            flex-shrink: 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .article-content {
+            flex-grow: 1;
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .article-source {
+            font-size: 12px;
+            color: #5f6368;
+            display: flex;
+            align-items: center;
+        }
+
+        .article-time {
+            margin-left: 10px;
+            padding-left: 10px;
+            border-left: 1px solid var(--medium-gray);
+        }
+
+        .article-stats {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .article-stats span {
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-section {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-content {
+            padding: 15px;
+        }
+
+        .popular-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background-color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .tag:hover {
+            background-color: var(--medium-gray);
+        }
+
+        footer {
+            border-top: 1px solid var(--light-gray);
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            justify-content: space-between;
+        }
+
+        .footer-links {
+            background-color: #d5dad4;
+            padding: 20px;
+            display: flex;
+        }
+
+        .footer-links a {
+            margin-right: 15px;
+            color: #5f6368;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                margin-top: 10px;
+            }
+
+            nav ul li {
+                margin-left: 0;
+                margin-right: 15px;
+            }
+
+            .article-image {
+                width: 80px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a href="https://www.digg.se" aria-label="Gå till digg.se">
+                <img alt="DIGG - Myndigheten för digital förvaltning" class="sv-noborder sv-svg" src="./images/DIGG-logo-color.svg">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="main-container">
+    <div class="content-area">
+        <section class="content top-stories">
+            <div class="section-header">Links</div>
+
+
+            <article class="article">
+
+                <div class="article-image">
+                    <img src="/api/placeholder/120/80" alt="placeholder" />
+                </div>
+                <div class="article-content">
+                    <h3 class="article-title">Credential offer</h3>
+                    <span>Issue mso mdoc and sd jwt vc personal identity credential to wallet</span>
+                </div>
+            </article>
+
+            <article class="article">
+
+                <div class="article-image">
+                    <img src="/api/placeholder/120/80" alt="placeholder" />
+                </div>
+                <div class="article-content">
+                    <h3 class="article-title">Wallet apps</h3>
+                    <span>Android and iOS apps</span>
+                </div>
+            </article>
+
+
+
+        </section>
+
+
+        <section class="content">
+            <div class="section-header">Integration end-points</div>
+
+            <article class="article">
+                <div class="article-image">
+                    <img src="/api/placeholder/120/80" alt="placeholder" />
+                </div>
+                <div class="article-content">
+                    <h3 class="article-title">Metadata</h3>
+                    <div class="article-source">
+                        <span>specification</span>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="content">
+            <div class="section-header">Standards</div>
+
+            <article class="article">
+                <div class="article-image">
+                    <img src="/api/placeholder/120/80" alt="placeholder" />
+                </div>
+                <div class="article-content">
+                    <h3 class="article-title">OpenId4vci</h3>
+                    <div class="article-source">
+                        <span>specification</span>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+    </div>
+
+</main>
+
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-links">
+            <div>
+                <a href="https://www.linkedin.com/company/digg-sverige/" class="dg-normal dg-external-link  dg-footer-social-link LinkedIn" lang="en"><span class="env-assistive-text">DIGG på&nbsp;</span><span>LinkedIn</span></a>
+                <a href="https://press.newsmachine.com/pressroom/view/digg-myndigheten-for-digital-forvaltning" class="dg-normal dg-external-link  dg-footer-social-link PressMachine" lang="en"><span class="env-assistive-text">DIGG på&nbsp;</span><span>PressMachine</span></a>
+            </div>
+            <div>
+                <a href="mailto:info@digg.se">info@digg.se</a>
+                <a href="tel:0771-114400">Tel: 0771-11 44 00</a>
+            </div>
+
+        </div>
+        <div class="copyright">© 2025 <strong>Digg</strong> - Myndigheten för digital förvaltning. All rights reserved.</div>
+    </div>
+</footer>
+</body>
+</html>
