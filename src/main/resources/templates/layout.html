@@ -1,0 +1,42 @@
+<header th:fragment="header">
+    <div class="header">
+        <div class="logo">
+            <a href="https://www.digg.se" aria-label="Gå till digg.se">
+                <img alt="DIGG - Myndigheten för digital förvaltning" src="./images/DIGG-logo-color.svg">
+            </a>
+        </div>
+
+        <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">
+        <label for="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+            <span class="menu-icon">☰</span>
+            <span class="close-icon">×</span>
+        </label>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a th:href="@{~/}+'#introduction'">Home</a></li>
+                <li><a th:href="@{~/}+'#library'">Library</a></li>
+                <li><a th:href="@{~/}+'#learn-more'">Learn More</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<footer th:fragment="footer">
+    <div class="footer-container">
+        <div class="footer-links">
+            <div>
+                <a href="https://www.linkedin.com/company/digg-sverige/"
+                    class="dg-normal dg-external-link  dg-footer-social-link LinkedIn" lang="en"><span
+                        class="env-assistive-text">DIGG på&nbsp;</span><span>LinkedIn</span></a>
+                <a href="https://press.newsmachine.com/pressroom/view/digg-myndigheten-for-digital-forvaltning"
+                    class="dg-normal dg-external-link  dg-footer-social-link PressMachine" lang="en"><span
+                        class="env-assistive-text">DIGG på&nbsp;</span><span>PressMachine</span></a>
+            </div>
+            <a>info@digg.se</a>
+            <a>Tel: 0771-11 44 00</a>
+        </div>
+        <div class="copyright">© 2025 <strong>Digg</strong> - Myndigheten för digital förvaltning. All rights
+            reserved.</div>
+    </div>
+</footer>

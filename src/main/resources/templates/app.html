@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digg Wallet Sandbox</title>
+    <link href="./style/digg.css" rel="stylesheet" />
+</head>
+<header th:replace="~{layout :: header}"></header>
+
+<body>
+    <main class="main-container">
+        <div class="content-area">
+            <section class="content top-stories">
+
+                <div class="section-group" id="test-pid-issuance">
+                    <div class="section-header">Wallet application</div>
+                
+                    <div class="section-disclaimer">
+                        <h4>Steps</h4>
+                        <p>Gain access to our distributed version of the EUDIW Reference Wallet</p>
+                        <div class="article-content">
+                            <ol>
+                                <li>Step 1
+                                </li>
+                                <li>Step 2
+                                </li>
+                            </ol>
+                        </div>
+                        <p>Our goal is to continuously expand and update our wallet support to ensure the broadest
+                            possible compatibility.</p>
+                    </div>
+
+                    <article style="margin-top: 15px;" class="article wallet-app">
+                        <a href="./app">
+                            <div class="article-content">
+                                <h3 class="article-title">Android</h3>
+                                <p class="article-description">
+                                    Download our version of the reference wallet android app.
+                                </p>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="article wallet-app">
+                        <a href="./app">
+                            <div class="article-content">
+                                <h3 class="article-title">iOS</h3>
+                                <p class="article-description">
+                                    Download our version of the reference wallet iOS app.
+                                </p>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+
+                <div class="section-group">
+                    <div class="section-header">Other Wallet Solutions</div>
+             
+                        <div class="article-grid">
+                            <article class="article">
+                                <a href="https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework"
+                                    target="_blank">
+                                    <div class="article-image">👥</div>
+                                    <div class="article-content">
+                                        <h3 class="article-title">Link to information about other wallets</h3>
+                                        <p class="article-description">Following this link you will find more
+                                            information about wallets that are developed and operating within the
+                                            EWC-consortium.</p>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+<div th:replace="~{layout :: footer}"></div>
+
+</html>

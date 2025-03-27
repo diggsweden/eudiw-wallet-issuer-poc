@@ -19,6 +19,8 @@ logging:
     whitelabel:
       enabled: false
 spring:
+  main:
+    allow-bean-definition-overriding: true
   data:
     redis:
       host: "local.dev.swedenconnect.se"
@@ -26,7 +28,23 @@ spring:
       database: 0
       username: "default"
       password: "secret"
-
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+      additional-paths: src/main/resources/templates/
+      poll-interval: 1s
+      quiet-period: 400ms
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+  resources:
+    static-locations: file:src/main/resources/static/
+    cache:
+      period: 0
   ssl:
     bundle:
       pem:
