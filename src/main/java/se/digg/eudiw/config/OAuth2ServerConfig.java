@@ -177,7 +177,6 @@ public class OAuth2ServerConfig {
                                     .requestMatchers("/login*").permitAll()
                                     .requestMatchers("/demo-credential").permitAll()
                                     .requestMatchers("/app").permitAll()
-                                    .requestMatchers("/pid-credential-offer").permitAll()
                                     .requestMatchers("/prepare-credential-offer").permitAll()
                                     .requestMatchers("/credential-offer").permitAll()
                                     .requestMatchers("/credential_offer/**").permitAll()

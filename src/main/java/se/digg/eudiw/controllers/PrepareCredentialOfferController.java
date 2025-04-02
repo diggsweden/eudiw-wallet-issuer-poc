@@ -216,7 +216,7 @@ public class PrepareCredentialOfferController {
         logger.info("code: {}", codeParam);
 
         AuthorizationCode code = new AuthorizationCode(codeParam.get());
-        AuthorizationGrant codeGrant = new PidPreAuthCredentialOfferController.PreAuthCodeAuthorizationGrant(code, callbackUri, pkceVerifier);
+        AuthorizationGrant codeGrant = new PreAuthCodeAuthorizationGrant(code, callbackUri, pkceVerifier);
 
         logger.info("codeGrant: {}", codeGrant.toParameters());
 
@@ -255,6 +255,34 @@ public class PrepareCredentialOfferController {
 
     private Display getDisplay(AbstractCredentialConfiguration credentialConfiguration, String locale) {
         return credentialConfiguration.getDisplay().stream().filter(d -> d.getLocale().equals(locale)).findFirst().orElse(credentialConfiguration.getDisplay().get(0));
+    }
+
+    protected static class PreAuthCodeAuthorizationGrant extends AuthorizationGrant {
+        private final AuthorizationCode code;
+        private final URI redirectURI;
+        private final CodeVerifier pkceVerifier;
+        private static final com.nimbusds.oauth2.sdk.GrantType GRANT_TYPE = new com.nimbusds.oauth2.sdk.GrantType("urn:ietf:params:oauth:grant-type:pre-authorized_code");
+
+        PreAuthCodeAuthorizationGrant(AuthorizationCode code, URI redirectURI, CodeVerifier pkceVerifier) {
+            super(GRANT_TYPE);
+            this.code = code;
+            this.redirectURI = redirectURI;
+            this.pkceVerifier = pkceVerifier;
+        }
+
+        @Override
+        public Map<String, List<String>> toParameters() {
+            Map<String, List<String>> params = new LinkedHashMap();
+            params.put("grant_type", Collections.singletonList(GRANT_TYPE.getValue()));
+            params.put("pre-authorized_code", Collections.singletonList(this.code.getValue()));
+            params.put("code", Collections.singletonList(this.code.getValue()));
+            if (this.redirectURI != null) {
+                params.put("redirect_uri", Collections.singletonList(this.redirectURI.toString()));
+                params.put("code_verifier", List.of(pkceVerifier.getValue()));
+            }
+
+            return params;
+        }
     }
 
 }
