@@ -8,39 +8,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CredentialOfferFormParam {
-    boolean pidMsoMdoc;
-    boolean pidSdJwtVc;
     boolean preAuthCodeFlow;
-    String validationErrors;
+    List<String> availableCredentials;
+    List<String> selectedCredentials;
+    String message;
 
     public CredentialOfferFormParam() {
-        pidMsoMdoc = false;
-        pidSdJwtVc = false;
         preAuthCodeFlow = false;
-        validationErrors = "";
     }
 
-    public CredentialOfferFormParam(boolean pidMsoMdoc, boolean pidSdJwtVc, boolean preAuthCodeFlow, String validationErrors) {
-        this.pidMsoMdoc = pidMsoMdoc;
-        this.pidSdJwtVc = pidSdJwtVc;
+    public CredentialOfferFormParam(boolean preAuthCodeFlow, List<String> availableCredentials, List<String> selectedCredentials, String message) {
         this.preAuthCodeFlow = preAuthCodeFlow;
-        this.validationErrors = validationErrors;
+        this.availableCredentials = availableCredentials;
+        this.selectedCredentials = selectedCredentials;
+        this.message = message;
     }
 
-    public boolean isPidMsoMdoc() {
-        return pidMsoMdoc;
-    }
-
-    public void setPidMsoMdoc(boolean pidMsoMdoc) {
-        this.pidMsoMdoc = pidMsoMdoc;
-    }
-
-    public boolean isPidSdJwtVc() {
-        return pidSdJwtVc;
-    }
-
-    public void setPidSdJwtVc(boolean pidSdJwtVc) {
-        this.pidSdJwtVc = pidSdJwtVc;
+    public boolean isCompleteAndValid() {
+        return selectedCredentials != null && !selectedCredentials.isEmpty();
     }
 
     public boolean isPreAuthCodeFlow() {
@@ -51,43 +36,61 @@ public class CredentialOfferFormParam {
         this.preAuthCodeFlow = preAuthCodeFlow;
     }
 
-    public String getValidationErrors() {
-        return validationErrors;
+    public List<String> getAvailableCredentials() {
+        return availableCredentials;
     }
 
-    public void setValidationErrors(String validationErrors) {
-        this.validationErrors = validationErrors;
+    public void setAvailableCredentials(List<String> availableCredentials) {
+        this.availableCredentials = availableCredentials;
     }
 
-    public List<String> listOfCredentials() {
-        return Stream.of(
-                isPidMsoMdoc() ? "eu.europa.ec.eudi.pid_mdoc" : null ,
-                isPidSdJwtVc() ? "eu.europa.ec.eudi.pid_jwt_vc_json" : null)
-                .filter(Objects::nonNull).toList();
+    public List<String> getSelectedCredentials() {
+        return selectedCredentials;
     }
 
-    public enum CredentialTypeEnum {
-        @JsonProperty("eu.europa.ec.eudi.pid_jwt_vc_json")
-        PID_SD_JWT_VC("eu.europa.ec.eudi.pid_jwt_vc_json"),
-        @JsonProperty("eu.europa.ec.eudi.pid_mdoc")
-        PID_MSO_MDOC("eu.europa.ec.eudi.pid_mdoc");
+    public void setSelectedCredentials(List<String> selectedCredentials) {
+        this.selectedCredentials = selectedCredentials;
+    }
 
-        private final String credentialType;
+    public String getMessage() {
+        return message;
+    }
 
-        CredentialTypeEnum(String credentialType) {
-            this.credentialType = credentialType;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof CredentialOfferFormParam that)) return false;
+        return preAuthCodeFlow == that.preAuthCodeFlow && Objects.equals(availableCredentials, that.availableCredentials) && Objects.equals(selectedCredentials, that.selectedCredentials) && Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(preAuthCodeFlow, availableCredentials, selectedCredentials, message);
+    }
+
+    @Override
+    public String toString() {
+        return "CredentialOfferFormParam{" +
+                "preAuthCodeFlow=" + preAuthCodeFlow +
+                ", availableCredentials=" + availableCredentials +
+                ", selectedCredentials=" + selectedCredentials +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
+    public record RequestCredential(String credential, String logo, boolean selected) {
+        public String getCredential() {
+            return credential;
         }
 
-        public String getCredentialType() {
-            return credentialType;
+        public boolean isSelected() {
+            return selected;
         }
 
-        public static CredentialTypeEnum fromString(String credentialType) {
-            return Arrays.stream(values())
-                    .filter(credFormat -> credFormat.credentialType.equalsIgnoreCase(credentialType))
-                    .findFirst()
-                    .orElse(null);
-        }
 
     }
+
 }

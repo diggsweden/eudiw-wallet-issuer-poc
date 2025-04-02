@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
@@ -52,32 +53,15 @@ public class PidCredentialOfferFormController {
         return "pid-credential-offer";
     }
 
-    /*
-    openid-credential-offer://credential_offer?credential_offer={
-"credential_issuer": "https://issuer.eudiw.dev",
-"credential_configuration_ids": ["eu.europa.ec.eudi.pid_jwt_vc_json", "eu.europa.ec.eudi.pid_mdoc"],
-"grants": {"authorization_code": {}}}
-
-openid-credential-offer://
-credential_offer?credential_offer=
-{"credential_issuer": "https://issuer.eudiw.dev",
-"credential_configuration_ids": ["eu.europa.ec.eudi.pid_jwt_vc_json", "eu.europa.ec.eudi.pid_mdoc"],
-"grants": {"urn:ietf:params:oauth:grant-type:pre-authorized_code": {
-    "pre-authorized_code": "28802d55-f44f-4545-afa7-f0d2c6e4d379",
-    "tx_code": {"length": 5, "input_mode": "numeric", "description": "Please provide the one-time code."}
-    }}}
-
-
-     */
     @PostMapping("/pid")
     public String pidCredentialOffer(@ModelAttribute CredentialOfferFormParam credentialOffer, Model model) {
 
         model.addAttribute("credentialOffer", credentialOffer);
 
-        if (credentialOffer.isPidMsoMdoc() || credentialOffer.isPidSdJwtVc()) {
+        if (credentialOffer.isCompleteAndValid()) {
 
             if (credentialOffer.isPreAuthCodeFlow()) {
-                credentialOffer.setValidationErrors("TODO implementera");
+                // TODO credentialOffer.setValidationErrors("TODO implementera");
                 return "pid-credential-offer";
             }
 
@@ -85,7 +69,7 @@ credential_offer?credential_offer=
 
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
-            CredentialOfferParam credentialOfferParam = new CredentialOfferParam(eudiwConfig.getIssuer(), credentialOffer.listOfCredentials());
+            CredentialOfferParam credentialOfferParam = new CredentialOfferParam(eudiwConfig.getIssuer(), new ArrayList<>(credentialOffer.getSelectedCredentials()));
             IssuerStateBuilder issuerStateBuilder = new IssuerStateBuilder(eudiwConfig.getIssuer(), issuerCredential);
             issuerStateBuilder.withCredentialOfferId(UUID.randomUUID().toString());
 
@@ -109,17 +93,13 @@ credential_offer?credential_offer=
 
                 model.addAttribute("qrCode", String.format("data:image/jpeg;base64, %s", qrCode));
                 model.addAttribute("linkUrl", credOffer);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            } catch (WriterException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (WriterException | IOException e) {
                 throw new RuntimeException(e);
             }
 
         }
         else {
-            credentialOffer.setValidationErrors("Minst ett pid format måste markeras");
+            credentialOffer.setMessage("Minst ett pid format måste markeras");
         }
 
         return "pid-credential-offer";
