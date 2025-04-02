@@ -157,16 +157,6 @@ public class CredentialController {
     }
 
 
-    @GetMapping("/credential_offer")
-    Map<String, Object> credentialOffer(@RequestParam("credential_offer") CredentialOfferParam credentialOffer) {
-        try {
-            return Map.of("todo", "foobar");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
     @GetMapping("/credential_offer/{credential_offer_id}")
     CredentialOfferParam credentialOffer(@PathVariable String credential_offer_id) {
         return credentialOfferService.credentialOffer(credential_offer_id);

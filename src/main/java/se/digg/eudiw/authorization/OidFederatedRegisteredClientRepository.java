@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.util.Assert;
 import se.digg.eudiw.config.EudiwConfig;
 import se.digg.eudiw.service.OpenIdFederationService;
-import se.oidc.oidfed.md.wallet.credentialissuer.WalletOAuthClientMetadata;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -90,7 +89,7 @@ public class OidFederatedRegisteredClientRepository implements RegisteredClientR
                 .redirectUri(String.format("%s/credentials", config.getIssuerBaseUrl()))
                 .redirectUri(String.format("%s/callback-demo-pre-auth", config.getIssuerBaseUrl()))
                 .redirectUri("com.example.eudiwdemo:/oauthredirect")
-                .redirectUri(String.format("%s/pid/preauth", config.getIssuerBaseUrl()))
+                .redirectUri(String.format("%s/pre-auth-credential-offer", config.getIssuerBaseUrl()))
                 .redirectUri(config.getIssuerBaseUrl());
 
         for (String uri : config.getRedirectUris()) {
