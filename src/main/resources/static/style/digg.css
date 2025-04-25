@@ -314,14 +314,16 @@ footer {
     padding: 0 15px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: end;
+    flex-direction: column;
+    text-align: center;
 }
 
 .footer-links {
     background-color: var(--primary-color);
     padding: 20px;
     display: flex;
-    width: max-content;
+    width: 100%;
 }
 
 .footer-links a {
@@ -413,11 +415,6 @@ footer {
     .article-image img {
         max-width: 50px;
         max-height: 50px;
-    }
-
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
     }
 
     .footer-links {
