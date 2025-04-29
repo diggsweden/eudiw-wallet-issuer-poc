@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.server.authorization.settings.OAuth2T
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.util.Assert;
 import se.digg.eudiw.config.EudiwConfig;
-import se.digg.eudiw.service.OpenIdFederationService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -23,13 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OidFederatedRegisteredClientRepository implements RegisteredClientRepository {
 
     private final EudiwConfig config;
-    private final OpenIdFederationService openIdFederationService;
+    //private final OpenIdFederationService openIdFederationService;
     private final Map<String, RegisteredClient> idRegistrationMap;
     private final Map<String, RegisteredClient> clientIdRegistrationMap;
 
-    public OidFederatedRegisteredClientRepository(EudiwConfig config, OpenIdFederationService openIdFederationService ) {
+    public OidFederatedRegisteredClientRepository(EudiwConfig config/*, OpenIdFederationService openIdFederationService  */) {
         this.config = config;
-        this.openIdFederationService = openIdFederationService;
+        //this.openIdFederationService = openIdFederationService;
         ConcurrentHashMap<String, RegisteredClient> idRegistrationMapResult = new ConcurrentHashMap<>();
         ConcurrentHashMap<String, RegisteredClient> clientIdRegistrationMapResult = new ConcurrentHashMap<>();
         this.idRegistrationMap = idRegistrationMapResult;

@@ -1,11 +1,6 @@
 package se.digg.eudiw.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import se.digg.eudiw.model.credentialissuer.CredentialFormatEnum;
-
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CredentialOfferFormParam {
     boolean preAuthCodeFlow;

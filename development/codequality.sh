@@ -120,6 +120,6 @@ is_command_available 'sed' ''
 lint
 #format
 commit
-#coverage 
+#coverage
 
 check_exit_codes

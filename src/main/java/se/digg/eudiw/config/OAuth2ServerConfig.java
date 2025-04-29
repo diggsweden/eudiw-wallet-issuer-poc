@@ -20,13 +20,34 @@ import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.token.*;
-import org.springframework.security.web.authentication.*;
-import se.digg.eudiw.authentication.*;
-import se.digg.eudiw.authorization.*;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2RefreshTokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import se.digg.eudiw.authentication.IdProxyRequestBuilder;
+import se.digg.eudiw.authentication.SwedenConnectAuthenticationProvider;
+import se.digg.eudiw.authentication.SwedenconnectAuthenticationReturnFilter;
+import se.digg.eudiw.authorization.OAuth2ParAuthorizationCodeRequestAuthenticationConverter;
+import se.digg.eudiw.authorization.PreAuthCodeGrantAuthenticationConverter;
+import se.digg.eudiw.authorization.OidFederatedRegisteredClientRepository;
+import se.digg.eudiw.authorization.PreAuthCodeGrantAuthenticationProvider;
+import se.digg.eudiw.authorization.EudiwJwtGenerator;
+import se.digg.eudiw.service.ParCacheService;
+import se.digg.eudiw.service.CredentialOfferService;
+import se.digg.eudiw.service.DummyProofService;
+import se.digg.eudiw.service.OpenIdFederationService;
+import se.digg.eudiw.service.OidcUserInfoService;
+
 import se.digg.eudiw.context.EudiwSessionSecurityContextRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +68,6 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.nimbusds.jose.jwk.source.JWKSource;
-import se.digg.eudiw.service.*;
 
 @Configuration
 @EnableWebSecurity
@@ -120,7 +140,7 @@ public class OAuth2ServerConfig {
                             )
                             .tokenEndpoint(tokenEndpoint -> tokenEndpoint
 
-                                    .accessTokenRequestConverter(new PreAuthCodeGrantAuthenticationConverter(contextRepository, credentialOfferService, dummyProofService))
+                                    .accessTokenRequestConverter(new PreAuthCodeGrantAuthenticationConverter(credentialOfferService, dummyProofService))
                                     .authenticationProvider(new PreAuthCodeGrantAuthenticationProvider(authorizationService, tokenGenerator, registeredClientRepository)))
 
             )
@@ -213,7 +233,7 @@ public class OAuth2ServerConfig {
   @Bean
   public RegisteredClientRepository registeredClientRepository(OpenIdFederationService openIdFederationService) {
 
-    return new OidFederatedRegisteredClientRepository(config, openIdFederationService);
+    return new OidFederatedRegisteredClientRepository(config/*, openIdFederationService */);
 /*
     RegisteredClient.Builder registeredClientBuilder = RegisteredClient.withId(UUID.randomUUID().toString())
       .clientId(config.getClientId())

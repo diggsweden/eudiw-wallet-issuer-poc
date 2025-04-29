@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.openid.connect.sdk.Nonce;
 import jakarta.validation.Valid;
@@ -24,8 +23,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import se.digg.eudiw.component.ProofDecoder;
@@ -38,7 +41,6 @@ import se.digg.eudiw.service.CredentialOfferService;
 import se.digg.eudiw.service.DummyProofService;
 import se.digg.eudiw.service.OpenIdFederationService;
 import se.digg.wallet.datatypes.common.TokenIssuingException;
-import se.oidc.oidfed.md.wallet.credentialissuer.WalletOAuthClientMetadata;
 
 @RestController
 public class CredentialController {
@@ -86,7 +88,7 @@ public class CredentialController {
                     try {
                         logger.info("proof jwt: {}", jwtProof.getJwt());
                         SignedJWT signedJWT = SignedJWT.parse(jwtProof.getJwt());
-                        JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+                        //JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
                         JWSHeader header = signedJWT.getHeader();
                         JWK jwk = header.getJWK();
                         if (jwk != null)  {
@@ -94,11 +96,9 @@ public class CredentialController {
                         }
                         else {
                             String kid = header.getKeyID();
-                            if (StringUtils.hasText(kid)) {
-                                if (kid.indexOf("#") > 0) {
-                                    kid = kid.split("#")[0];
-                                    proofJwk = dummyProofService.jwk(kid);
-                                }
+                            if (StringUtils.hasText(kid) && kid.indexOf("#") > 0) {
+                                kid = kid.split("#")[0];
+                                proofJwk = dummyProofService.jwk(kid);
                             }
                         }
                         logger.info("jwk: {}", jwk);

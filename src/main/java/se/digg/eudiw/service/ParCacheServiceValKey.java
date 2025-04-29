@@ -20,7 +20,7 @@ public class ParCacheServiceValKey implements ParCacheService {
 
     @Override
     public void saveParParams(String requestId, MultiValueMap<String, String> storedParams, int ttl) {
-        operations.opsForValue().set(requestId, storedParams, Duration.ofMinutes((10)));
+        operations.opsForValue().set(requestId, storedParams, Duration.ofMinutes(10));
     }
 
     @Override

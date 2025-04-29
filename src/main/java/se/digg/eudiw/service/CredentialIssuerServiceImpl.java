@@ -10,7 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import se.digg.eudiw.config.EudiwConfig;
 import se.digg.eudiw.model.credentialissuer.CredentialFormatEnum;
-import se.digg.wallet.datatypes.common.*;
+import se.digg.wallet.datatypes.common.TokenIssuer;
+import se.digg.wallet.datatypes.common.TokenIssuingException;
+import se.digg.wallet.datatypes.common.TokenAttribute;
+import se.digg.wallet.datatypes.common.TokenAttributeType;
+import se.digg.wallet.datatypes.common.TokenInput;
+import se.digg.wallet.datatypes.common.TokenSigningAlgorithm;
+import se.digg.wallet.datatypes.common.TokenAttributeNameSpace;
 import se.digg.wallet.datatypes.mdl.process.MdlTokenIssuer;
 import se.digg.wallet.datatypes.sdjwt.process.SdJwtTokenInput;
 import se.digg.wallet.datatypes.sdjwt.process.SdJwtTokenIssuer;
@@ -45,7 +51,7 @@ public class CredentialIssuerServiceImpl implements CredentialIssuerService {
                 return sdJwtVcCredential(credentialType, deviceProofPublicKey, jwt);
             }
             case MSO_MDOC -> {
-                return msoMdocCredential(credentialType, deviceProofPublicKey, jwt);
+                return msoMdocCredential(deviceProofPublicKey, jwt);
             }
         }
         return null;
@@ -61,7 +67,7 @@ public class CredentialIssuerServiceImpl implements CredentialIssuerService {
                 TokenAttribute.builder().type(new TokenAttributeType("issuance_date")).value(new Date()).build(),
                 TokenAttribute.builder().type(new TokenAttributeType("issuing_country")).value("SE").build(),
                 TokenAttribute.builder().type(new TokenAttributeType("issuing_authority")).value("DIGG").build(),
-                TokenAttribute.builder().type(new TokenAttributeType("expiry_date")).value(Instant.now().plus(Duration.ofHours(eudiwConfig.getExpHours()))).build() // TODO
+                TokenAttribute.builder().type(new TokenAttributeType("expiry_date")).value(Instant.now().plus(Duration.ofHours(eudiwConfig.getExpHours()))).build()
         ));
         String birthDate = jwt.getClaim("birthDate");
         if (StringUtils.hasText(birthDate)) {
@@ -117,7 +123,7 @@ public class CredentialIssuerServiceImpl implements CredentialIssuerService {
         return pidJwtToken;
     }
 
-    private String msoMdocCredential(String credentialType, JWK deviceProofPublicKey, Jwt jwt) throws TokenIssuingException {
+    private String msoMdocCredential(JWK deviceProofPublicKey, Jwt jwt) throws TokenIssuingException {
 
         List<TokenAttribute> tokenAttributes = new ArrayList<>(Arrays.asList(
                 TokenAttribute.builder()
@@ -231,16 +237,6 @@ public class CredentialIssuerServiceImpl implements CredentialIssuerService {
 
         logger.info("mdl token {}", mdlToken);
         return mdlToken;
-    }
-
-    private boolean isOver(String birthDate, int ageInYears) {
-        try {
-            int age = ageInYears(birthDate);
-            return age >= ageInYears;
-        }
-        catch (RuntimeException e) {
-            return false;
-        }
     }
 
     private int ageInYears(String birthDate) {

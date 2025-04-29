@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.view.RedirectView;
 import se.digg.eudiw.config.EudiwConfig;
 import se.swedenconnect.auth.commons.dto.ClientAuthRequest;
 
@@ -44,8 +41,6 @@ public class IdProxyRequestBuilder {
     }
 
     public String buildAuthenticationRequest(String authenticationId) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-
         try {
             ClientAuthRequest authreq = new ClientAuthRequest(authenticationId, client, returnBaseUrl + "/" + authenticationId);
             String encodedRequest = Base64.getEncoder().encodeToString(OBJECT_MAPPER.writeValueAsBytes(authreq));

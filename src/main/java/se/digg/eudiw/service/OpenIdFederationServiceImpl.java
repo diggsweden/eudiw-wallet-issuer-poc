@@ -119,7 +119,7 @@ public class OpenIdFederationServiceImpl implements OpenIdFederationService {
             if (!valid) {
                 throw new IdTokenValidationException("ID token signature validation failed", signedJWT);
             }
-            Object metadata = signedJWT.getJWTClaimsSet().getClaim("metadata");
+            //Object metadata = signedJWT.getJWTClaimsSet().getClaim("metadata");
         } catch (ParseException e) {
             throw new IdTokenValidationException("Unable to parse ID token", e, signedJWT);
         } catch (JOSEException e) {

@@ -1,6 +1,5 @@
 package se.digg.eudiw.controllers;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.digg.eudiw.config.EudiwConfig;
 import se.digg.eudiw.service.ParCacheService;
 
 import java.util.Map;
@@ -28,7 +26,7 @@ public class ParController {
     private final ParCacheService parRequestStore;
     private final int PAR_REQUEST_TTL;
 
-    public ParController(@Autowired ParCacheService parRequestStore, @Autowired EudiwConfig eudiwConfig) {
+    public ParController(@Autowired ParCacheService parRequestStore/*, @Autowired EudiwConfig eudiwConfig*/) {
         PAR_REQUEST_TTL = 600; // todo PAR config
         this.parRequestStore = parRequestStore;
     }

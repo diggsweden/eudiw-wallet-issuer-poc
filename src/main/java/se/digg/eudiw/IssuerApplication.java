@@ -3,7 +3,6 @@ package se.digg.eudiw;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import se.digg.eudiw.model.AuthReturnPayload;
 import se.digg.eudiw.model.CustomUserDetails;

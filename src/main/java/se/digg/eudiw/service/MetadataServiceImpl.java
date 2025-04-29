@@ -6,9 +6,12 @@ import com.nimbusds.jose.JWSAlgorithm;
 import org.springframework.stereotype.Service;
 import se.digg.eudiw.config.EudiwConfig;
 import se.digg.eudiw.config.SignerConfig;
-import se.digg.eudiw.controllers.MetadataController;
-import se.oidc.oidfed.md.wallet.credentialissuer.*;
-
+import se.oidc.oidfed.md.wallet.credentialissuer.CredentialIssuerMetadata;
+import se.oidc.oidfed.md.wallet.credentialissuer.AbstractCredentialConfiguration;
+import se.oidc.oidfed.md.wallet.credentialissuer.Display;
+import se.oidc.oidfed.md.wallet.credentialissuer.Claim;
+import se.oidc.oidfed.md.wallet.credentialissuer.SdJwtCredentialConfiguration;
+import se.oidc.oidfed.md.wallet.credentialissuer.IsoMdlCredentialConfiguration;
 import java.security.cert.CertificateEncodingException;
 import java.util.List;
 

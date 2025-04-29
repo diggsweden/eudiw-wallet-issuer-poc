@@ -1,13 +1,11 @@
 package se.digg.eudiw.authentication;
 
 import java.io.IOException;
-import java.time.Clock;
 import java.util.Base64;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.web.exchanges.HttpExchange.Principal;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +13,6 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -38,10 +34,6 @@ public class SwedenconnectAuthenticationReturnFilter extends AbstractAuthenticat
 
     private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/auth/return/**",
 			"POST");
-
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
-    private IdProxyRequestBuilder idProxyRequestBuilder;
 
     public SwedenconnectAuthenticationReturnFilter() {
         super(DEFAULT_ANT_PATH_REQUEST_MATCHER);

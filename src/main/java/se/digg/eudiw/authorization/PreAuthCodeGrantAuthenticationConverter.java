@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
-import se.digg.eudiw.context.EudiwSessionSecurityContextRepository;
 import se.digg.eudiw.model.credentialissuer.PendingPreAuthorization;
 import se.digg.eudiw.service.CredentialOfferService;
 import se.digg.eudiw.service.DummyProofService;
@@ -28,13 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PreAuthCodeGrantAuthenticationConverter implements AuthenticationConverter {
-    private final EudiwSessionSecurityContextRepository securityContextRepository;
     private final CredentialOfferService credentialOfferService;
     private final DummyProofService dummyProofService;
     Logger logger = LoggerFactory.getLogger(PreAuthCodeGrantAuthenticationConverter.class);
 
-    public PreAuthCodeGrantAuthenticationConverter(EudiwSessionSecurityContextRepository securityContextRepository, CredentialOfferService credentialOfferService, DummyProofService dummyProofService) {
-        this.securityContextRepository = securityContextRepository;
+    public PreAuthCodeGrantAuthenticationConverter(CredentialOfferService credentialOfferService, DummyProofService dummyProofService) {
         this.credentialOfferService = credentialOfferService;
         this.dummyProofService = dummyProofService;
     }
@@ -54,13 +51,11 @@ public class PreAuthCodeGrantAuthenticationConverter implements AuthenticationCo
          //DeferredSecurityContext deferredSecurityContext = securityContextRepository.loadDeferredContext(request);
         //Authentication clientPrincipal = deferredSecurityContext.get().getAuthentication();
         Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
-        String oauthClientAttestationPop = request.getHeader("oauth-client-attestation-pop");
+        //String oauthClientAttestationPop = request.getHeader("oauth-client-attestation-pop");
         String oauthClientAttestation = request.getHeader("oauth-client-attestation");
         logger.info("oauth-client-attestation-pop = {}", oauthClientAttestation);
         logger.info("oauth-client-attestation = {}", oauthClientAttestation);
         MultiValueMap<String, String> parameters = getParameters(request);
-
-
 
         if (oauthClientAttestation != null) {
             if (oauthClientAttestation.indexOf("~")>0) {
@@ -72,7 +67,6 @@ public class PreAuthCodeGrantAuthenticationConverter implements AuthenticationCo
                 JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
                 JWSHeader header = signedJWT.getHeader();
                 if ("wallet-unit-attestation+jwt".equals(header.getType().getType())) {
-                    JWK jwk = header.getJWK();
                     String sub = jwtClaimsSet.getSubject();
                     Object cnf = jwtClaimsSet.getClaim("cnf");
                     logger.info("cnf: {}", cnf);

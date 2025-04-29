@@ -27,7 +27,7 @@ import se.oidc.oidfed.base.data.federation.EntityStatementDefinedParams;
 import se.oidc.oidfed.base.data.federation.TrustMarkClaim;
 import se.oidc.oidfed.md.entities.FederationEntityMetadata;
 import se.oidc.oidfed.md.lang.LanguageObject;
-import se.oidc.oidfed.md.wallet.credentialissuer.*;
+import se.oidc.oidfed.md.wallet.credentialissuer.CredentialIssuerMetadata;
 import se.swedenconnect.security.credential.PkiCredential;
 import se.swedenconnect.security.credential.bundle.CredentialBundles;
 import se.swedenconnect.security.credential.nimbus.JwkTransformerFunction;

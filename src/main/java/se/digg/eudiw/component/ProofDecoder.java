@@ -2,7 +2,6 @@ package se.digg.eudiw.component;
 
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.stereotype.Component;
 import se.digg.eudiw.model.credentialissuer.JwtProof;
@@ -22,7 +21,7 @@ public class ProofDecoder {
 
         try {
             SignedJWT signedJWT = SignedJWT.parse(proof.getJwt());
-            JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+            //JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
             JWSHeader header = signedJWT.getHeader();
             JWK jwk = header.getJWK();
             String kid = header.getKeyID();
