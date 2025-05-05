@@ -27,14 +27,14 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Java
-        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
       
       - name: Import GPG key  # Added this step
-        uses: crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5 # v6
+        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec # v6
         with:
           gpg_private_key: ${{ secrets.OSPO_BOT_GPG_PRIV }}
           passphrase: ${{ secrets.OSPO_BOT_GPG_PASS }}
