@@ -24,7 +24,8 @@ public class CredentialOfferServiceImpl implements CredentialOfferService {
 
     @Override
     public CredentialOfferParam credentialOffer(String credentialOfferId) {
-        return operations.opsForValue().getAndDelete(credentialOfferId);
+        // TODO: change back to getAndDelete - temporary fix for android reference implementation wallet app
+        return operations.opsForValue().get(credentialOfferId);
     }
 
     @Override
@@ -39,7 +40,6 @@ public class CredentialOfferServiceImpl implements CredentialOfferService {
 
     @Override
     public PendingPreAuthorization pendingPreAuthorization(String preAuthCode) {
-        // TODO: change back to getAndDelete - temporary fix for android reference implementation wallet app
-        return pendingPreAuthorizationRedisOperations.opsForValue().get(preAuthCode);
+        return pendingPreAuthorizationRedisOperations.opsForValue().getAndDelete(preAuthCode);
     }
 }
