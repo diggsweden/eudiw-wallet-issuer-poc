@@ -45,7 +45,7 @@
     <eudiw-wallet-entities.version>1.0.0</eudiw-wallet-entities.version>
     <!-- Plugin versions -->
     <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-    <jreleaser-maven-plugin.version>1.18.0</jreleaser-maven-plugin.version>
+    <jreleaser-maven-plugin.version>1.19.0</jreleaser-maven-plugin.version>
     <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
     <openapi-generator.version>7.14.0</openapi-generator.version>
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
