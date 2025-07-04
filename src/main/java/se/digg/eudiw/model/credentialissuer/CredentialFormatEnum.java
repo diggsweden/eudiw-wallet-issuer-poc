@@ -1,13 +1,15 @@
 package se.digg.eudiw.model.credentialissuer;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
 
 public enum CredentialFormatEnum {
 
-    @JsonProperty("vc+sd-jwt")
-    VC_SD_JWT("vc+sd-jwt"),
+    @JsonProperty("dc+sd-jwt")
+    @JsonAlias({"vc+sd-jwt", "dc+sd-jwt"})
+    VC_SD_JWT("dc+sd-jwt"),
 
     @JsonProperty("mso_mdoc")
     MSO_MDOC("mso_mdoc");
