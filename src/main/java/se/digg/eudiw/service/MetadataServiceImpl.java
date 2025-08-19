@@ -56,7 +56,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "given_name"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Given Name")
@@ -75,7 +74,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "last_name"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Surname")
@@ -94,7 +92,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "issuance_data"))
                                 .mandatory(true)
-                                .valueType("full-date")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Date (and possibly time) when the PID was issued")
@@ -105,7 +102,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "issuing_country"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Alpha-2 country code, as defined in ISO 3166-1, of the PID Provider's country or territory")
@@ -116,7 +112,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "issuing_authority"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Name of the administrative authority that has issued this PID instance, or the ISO 3166 Alpha-2 country code of the respective Member State if there is no separate authority authorized to issue PIDs")
@@ -127,7 +122,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "expiry_date"))
                                 .mandatory(true)
-                                .valueType("full-date")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Expiry date")
@@ -138,7 +132,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "birth_date"))
                                 .mandatory(true)
-                                .valueType("full-date") // TODO kolla hur det ska formateras
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Date of Birth")
@@ -146,7 +139,7 @@ public class MetadataServiceImpl implements MetadataService {
                                                 .build()
                                 ))
                                 .build())
-                        .claim(Claim.builder() // TODO kolla om det finns value type för boolean
+                        .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "age_over_15"))
                                 .mandatory(false)
                                 .display(List.of(
@@ -156,7 +149,7 @@ public class MetadataServiceImpl implements MetadataService {
                                                 .build()
                                 ))
                                 .build())
-                        .claim(Claim.builder() // TODO kolla om det finns value type för boolean
+                        .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "age_over_15"))
                                 .mandatory(false)
                                 .display(List.of(
@@ -166,7 +159,7 @@ public class MetadataServiceImpl implements MetadataService {
                                                 .build()
                                 ))
                                 .build())
-                        .claim(Claim.builder() // TODO kolla om det finns value type för boolean
+                        .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "age_over_18"))
                                 .mandatory(true)
                                 .display(List.of(
@@ -176,7 +169,7 @@ public class MetadataServiceImpl implements MetadataService {
                                                 .build()
                                 ))
                                 .build())
-                        .claim(Claim.builder() // TODO kolla om det finns value type för boolean
+                        .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "age_over_20"))
                                 .mandatory(false)
                                 .display(List.of(
@@ -186,7 +179,7 @@ public class MetadataServiceImpl implements MetadataService {
                                                 .build()
                                 ))
                                 .build())
-                        .claim(Claim.builder() // TODO kolla om det finns value type för boolean
+                        .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "age_over_65"))
                                 .mandatory(false)
                                 .display(List.of(
@@ -196,7 +189,7 @@ public class MetadataServiceImpl implements MetadataService {
                                                 .build()
                                 ))
                                 .build())
-                        .claim(Claim.builder() // TODO kolla om det finns value type för boolean
+                        .claim(Claim.builder()
                                 .path(List.of("eu.europa.ec.eudi.pid.1", "age_in_years"))
                                 .mandatory(true)
                                 .display(List.of(
@@ -258,7 +251,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("given_name"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Given Name")
@@ -277,7 +269,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("last_name"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Surname")
@@ -297,7 +288,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("family_name"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Surname")
@@ -316,7 +306,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("issuance_date"))
                                 .mandatory(true)
-                                .valueType("full-date")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Date (and possibly time) when the PID was issued")
@@ -327,7 +316,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("issuing_country"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Alpha-2 country code, as defined in ISO 3166-1, of the PID Provider's country or territory")
@@ -338,7 +326,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("issuing_authority"))
                                 .mandatory(true)
-                                .valueType("text")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Name of the administrative authority that has issued this PID instance, or the ISO 3166 Alpha-2 country code of the respective Member State if there is no separate authority authorized to issue PIDs")
@@ -349,7 +336,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("expiry_date"))
                                 .mandatory(true)
-                                .valueType("full-date")
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Expiry date")
@@ -360,7 +346,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("birth_date"))
                                 .mandatory(true)
-                                .valueType("full-date") // TODO kolla hur det ska formateras
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Date of Birth")
@@ -372,7 +357,6 @@ public class MetadataServiceImpl implements MetadataService {
                         .claim(Claim.builder()
                                 .path(List.of("birthdate"))
                                 .mandatory(true)
-                                .valueType("full-date") // TODO kolla hur det ska formateras
                                 .display(List.of(
                                         Display.builder()
                                                 .name("Date of Birth")
@@ -381,7 +365,7 @@ public class MetadataServiceImpl implements MetadataService {
                                 ))
                                 .build())
                         .claim(Claim.builder()
-                                .path(List.of("age_over_15")) // TODO kolla om det finns value type för boolean
+                                .path(List.of("age_over_15"))
                                 .mandatory(false)
                                 .display(List.of(
                                         Display.builder()
@@ -391,7 +375,7 @@ public class MetadataServiceImpl implements MetadataService {
                                 ))
                                 .build())
                         .claim(Claim.builder()
-                                .path(List.of("age_over_16")) // TODO kolla om det finns value type för boolean
+                                .path(List.of("age_over_16"))
                                 .mandatory(false)
                                 .display(List.of(
                                         Display.builder()
@@ -401,7 +385,7 @@ public class MetadataServiceImpl implements MetadataService {
                                 ))
                                 .build())
                         .claim(Claim.builder()
-                                .path(List.of("age_over_18")) // TODO kolla om det finns value type för boolean
+                                .path(List.of("age_over_18"))
                                 .mandatory(true)
                                 .display(List.of(
                                         Display.builder()
@@ -411,7 +395,7 @@ public class MetadataServiceImpl implements MetadataService {
                                 ))
                                 .build())
                         .claim(Claim.builder()
-                                .path(List.of("age_over_20")) // TODO kolla om det finns value type för boolean
+                                .path(List.of("age_over_20"))
                                 .mandatory(false)
                                 .display(List.of(
                                         Display.builder()
@@ -421,7 +405,7 @@ public class MetadataServiceImpl implements MetadataService {
                                 ))
                                 .build())
                         .claim(Claim.builder()
-                                .path(List.of("age_over_65")) // TODO kolla om det finns value type för boolean
+                                .path(List.of("age_over_65"))
                                 .mandatory(false)
                                 .display(List.of(
                                         Display.builder()
@@ -431,7 +415,7 @@ public class MetadataServiceImpl implements MetadataService {
                                 ))
                                 .build())
                         .claim(Claim.builder()
-                                .path(List.of("age_in_years")) // TODO kolla om det finns value type för boolean
+                                .path(List.of("age_in_years"))
                                 .mandatory(true)
                                 .display(List.of(
                                         Display.builder()
