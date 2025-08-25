@@ -103,19 +103,19 @@
       <dependency>
           <groupId>se.oidc.oidfed</groupId>
           <artifactId>openid-federation-base</artifactId>
-          <version>3.0.1</version>
+          <version>4.0.0</version>
       </dependency>
 
       <dependency>
           <groupId>se.oidc.oidfed.md</groupId>
           <artifactId>wallet-entities</artifactId>
-          <version>1.2.0</version>
+          <version>2.0.0</version>
       </dependency>
 
       <dependency>
           <groupId>se.oidc.oidfed.md</groupId>
           <artifactId>metadata-base</artifactId>
-          <version>1.2.0</version>
+          <version>2.0.0</version>
       </dependency>
 
       <!-- Documentation -->
