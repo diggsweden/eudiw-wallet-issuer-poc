@@ -38,7 +38,7 @@
     <oauth2-oidc-sdk.version>11.28</oauth2-oidc-sdk.version>
     <nimbus-jose-jwt.version>10.4.2</nimbus-jose-jwt.version>
     <zxing.version>3.5.3</zxing.version>
-    <lombok.version>1.18.38</lombok.version>
+    <lombok.version>1.18.40</lombok.version>
     <reactor-core.version>3.7.9</reactor-core.version>
     <bouncy-castle.version>1.81</bouncy-castle.version>
     <jakarta-annotation.version>3.0.0</jakarta-annotation.version>
