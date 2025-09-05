@@ -36,7 +36,7 @@
     <spring-dotenv.version>4.0.0</spring-dotenv.version>
     <commons-io.version>2.20.0</commons-io.version>
     <oauth2-oidc-sdk.version>11.28</oauth2-oidc-sdk.version>
-    <nimbus-jose-jwt.version>10.4.2</nimbus-jose-jwt.version>
+    <nimbus-jose-jwt.version>10.5</nimbus-jose-jwt.version>
     <zxing.version>3.5.3</zxing.version>
     <lombok.version>1.18.40</lombok.version>
     <reactor-core.version>3.7.9</reactor-core.version>
