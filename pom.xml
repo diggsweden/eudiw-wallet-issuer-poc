@@ -39,7 +39,7 @@
     <nimbus-jose-jwt.version>10.5</nimbus-jose-jwt.version>
     <zxing.version>3.5.3</zxing.version>
     <lombok.version>1.18.40</lombok.version>
-    <reactor-core.version>3.7.9</reactor-core.version>
+    <reactor-core.version>3.7.11</reactor-core.version>
     <bouncy-castle.version>1.81</bouncy-castle.version>
     <jakarta-annotation.version>3.0.0</jakarta-annotation.version>
     <eudiw-wallet-entities.version>1.0.0</eudiw-wallet-entities.version>
