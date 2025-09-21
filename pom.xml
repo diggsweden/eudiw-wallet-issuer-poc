@@ -50,7 +50,7 @@
     <openapi-generator.version>7.15.0</openapi-generator.version>
     <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
-    <maven-javadoc-plugin.version>3.11.3</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
       <credentials-support.version>2.0.7</credentials-support.version>
       <maven.javadoc.skip>true</maven.javadoc.skip>
