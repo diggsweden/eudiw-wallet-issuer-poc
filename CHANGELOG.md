@@ -5,7 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.20] - 2025-09-08
+## [0.21.0] - 2025-09-29
+
+### Added
+
+- Add release flow perm
+- Add release flow
+
+### Changed
+
+- Update dependency org.openapitools:openapi-generator-maven-plugin to v7.16.0 (#185)
+- Update orhun/git-cliff-action action to v4.6.0 (#183)
+- Update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.12.0 (#182)
+- Update maven-plugins to v3.5.4 (#176)
+- Update step-security/harden-runner action to v2.13.1 (#174)
+
+### Fixed
+
+- Update dependency com.nimbusds:oauth2-oidc-sdk to v11.29.1 (#184)
+- Update dependency org.apache.httpcomponents.core5:httpcore5 to v5.3.6 (#181)
+- Update dependency org.springframework.boot:spring-boot-starter-parent to v3.5.6 (#180)
+- Update dependency org.projectlombok:lombok to v1.18.42 (#179)
+- Update dependency com.google.guava:guava to v33.5.0-jre (#178)
+- Update java non-major to v1.82 (#177)
+- Update java non-major to v2.0.7 (#175)
+- Update dependency io.projectreactor:reactor-core to v3.7.11 (#173)
+
+## [0.0.20] - 2025-09-09
 
 ### Added
 
@@ -67,6 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update java non-major (#133)
 - Update dependency io.lettuce:lettuce-core to v6.7.0.release (#132)
 - Update dependency com.nimbusds:oauth2-oidc-sdk to v11.25 (#129)
+
 
 ## [0.0.19] - 2025-05-19
 
@@ -342,6 +369,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update zxing to v3.5.3
 - Update spring non-major
 
+[0.21.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.20..v0.21.0
 [0.0.20]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.19..v0.0.20
 [0.0.19]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.18..v0.0.19
 [0.0.18]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.17..v0.0.18
