@@ -1,18 +1,19 @@
 package se.digg.eudiw.controllers;
 
-import java.security.cert.CertificateEncodingException;
-import java.text.ParseException;
-import java.util.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.ECDSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.openid.connect.sdk.Nonce;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import java.security.cert.CertificateEncodingException;
+import java.text.ParseException;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import se.digg.eudiw.component.ProofDecoder;
@@ -110,9 +111,18 @@ public class CredentialController {
                                 proofJwk = dummyProofService.jwk(kid);
                             }
                         }
+
+                        try {
+                            JWSVerifier verifier = new ECDSAVerifier(proofJwk.get().toECKey());
+                            boolean isSignatureValid = signedJWT.verify(verifier);
+                            if (!isSignatureValid) {
+                                throw new TokenIssuingException("Signature is not valid");
+                            }
+                        } catch (JOSEException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         logger.info("jwk: {}", jwk);
-
-
 
                     } catch (ParseException e) {
                         logger.info("No proof is parsed in credential request");
