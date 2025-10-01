@@ -119,7 +119,7 @@ public class CredentialController {
                                 throw new TokenIssuingException("Signature is not valid");
                             }
                         } catch (JOSEException e) {
-                            throw new RuntimeException(e);
+                            throw new TokenIssuingException("Failed to process proof JWT due to malformed content", e);
                         }
 
                         logger.info("jwk: {}", jwk);
