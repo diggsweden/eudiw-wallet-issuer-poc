@@ -15,6 +15,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,8 +36,12 @@ class CredentialControllerTest {
 
   @Autowired private ObjectMapper objectMapper;
 
-  @Test
-  void credential_happyCase_issuesCredentialSuccessfully() throws Exception {
+  private JwtRequestPostProcessor userJwt;
+
+  private CredentialParam requestBody;
+
+  @BeforeEach
+  void setup() throws Exception {
     final String CREDENTIAL_CONFIG_ID = "eu.europa.ec.eudi.pid_jwt_vc_json";
 
     ECKey walletKey = new ECKeyGenerator(Curve.P_256).generate();
@@ -56,15 +61,18 @@ class CredentialControllerTest {
     jwtProof.setProofType("jwt");
     jwtProof.setJwt(proofJwtString);
 
-    CredentialParam requestBody = new CredentialParam();
+    requestBody = new CredentialParam();
     requestBody.setFormat(CredentialFormatEnum.VC_SD_JWT);
     requestBody.setProof(jwtProof);
     requestBody.setCredentialConfigurationId(CREDENTIAL_CONFIG_ID);
 
-    JwtRequestPostProcessor userJwt =
+    userJwt =
         SecurityMockMvcRequestPostProcessors.jwt()
             .jwt(builder -> builder.claim("givenName", "john").claim("surname", "smith").build());
+  }
 
+  @Test
+  void credential_issuesCredentialSuccessfully() throws Exception {
     mockMvc
         .perform(
             post("/credential")
@@ -76,8 +84,7 @@ class CredentialControllerTest {
   }
 
   @Test
-  void credential_sadCase_throwsTokenIssuingException() throws Exception {
-    final String CREDENTIAL_CONFIG_ID = "eu.europa.ec.eudi.pid_jwt_vc_json";
+  void credential_whenProofSignatureIsInvalid_returns400() throws Exception {
 
     ECKey signingKey = new ECKeyGenerator(Curve.P_256).generate(); // This key will sign the JWT
     ECKey headerKey =
@@ -97,19 +104,7 @@ class CredentialControllerTest {
     proofJwt.sign(new ECDSASigner(signingKey)); // Signature is created with a different key!
     String invalidProofJwtString = proofJwt.serialize();
 
-    // --- CONSTRUCT THE REQUEST ---
-    JwtProof jwtProof = new JwtProof();
-    jwtProof.setProofType("jwt");
-    jwtProof.setJwt(invalidProofJwtString);
-
-    CredentialParam requestBody = new CredentialParam();
-    requestBody.setFormat(CredentialFormatEnum.VC_SD_JWT);
-    requestBody.setProof(jwtProof);
-    requestBody.setCredentialConfigurationId(CREDENTIAL_CONFIG_ID);
-
-    JwtRequestPostProcessor userJwt =
-        SecurityMockMvcRequestPostProcessors.jwt()
-            .jwt(builder -> builder.claim("givenName", "john").claim("surname", "smith").build());
+    requestBody.getProof().setJwt(invalidProofJwtString);
 
     // --- ACT & ASSERT ---
     mockMvc
