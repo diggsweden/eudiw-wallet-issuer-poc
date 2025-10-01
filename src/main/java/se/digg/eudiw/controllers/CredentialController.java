@@ -39,6 +39,7 @@ import se.digg.eudiw.model.credentialissuer.CredentialOfferParam;
 import se.digg.eudiw.model.credentialissuer.CredentialParam;
 import se.digg.eudiw.model.credentialissuer.CredentialResponse;
 import se.digg.eudiw.model.credentialissuer.JwtProof;
+import se.digg.eudiw.service.CertificateValidationService;
 import se.digg.eudiw.service.CredentialIssuerService;
 import se.digg.eudiw.service.CredentialOfferService;
 import se.digg.eudiw.service.DummyProofService;
@@ -52,26 +53,34 @@ import se.oidc.oidfed.md.wallet.credentialissuer.SdJwtCredentialConfiguration;
 @RestController
 public class CredentialController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CredentialController.class);
+  private static final Logger logger = LoggerFactory.getLogger(CredentialController.class);
 
-    private final OpenIdFederationService openIdFederationService;
-    private final ProofDecoder proofDecoder;
-    private final CredentialIssuerService credentialIssuerService;
-    private final CredentialOfferService credentialOfferService;
-    private final MetadataService metadataService;
-    private final DummyProofService dummyProofService;
+  private final OpenIdFederationService openIdFederationService;
+  private final ProofDecoder proofDecoder;
+  private final CredentialIssuerService credentialIssuerService;
+  private final CredentialOfferService credentialOfferService;
+  private final MetadataService metadataService;
+  private final DummyProofService dummyProofService;
+  private final CertificateValidationService certificateValidationService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public CredentialController(@Autowired OpenIdFederationService openIdFederationService, @Autowired ProofDecoder proofDecoder, @Autowired CredentialIssuerService credentialIssuerService, @Autowired CredentialOfferService credentialOfferService,
-        MetadataService metadataService, DummyProofService dummyProofService) {
-        this.openIdFederationService = openIdFederationService;
-        this.proofDecoder = proofDecoder;
-        this.credentialIssuerService = credentialIssuerService;
-        this.credentialOfferService = credentialOfferService;
-      this.metadataService = metadataService;
-      this.dummyProofService = dummyProofService;
-    }
+  public CredentialController(
+      @Autowired OpenIdFederationService openIdFederationService,
+      @Autowired ProofDecoder proofDecoder,
+      @Autowired CredentialIssuerService credentialIssuerService,
+      @Autowired CredentialOfferService credentialOfferService,
+      @Autowired MetadataService metadataService,
+      @Autowired DummyProofService dummyProofService,
+      @Autowired CertificateValidationService certificateValidationService) {
+    this.openIdFederationService = openIdFederationService;
+    this.proofDecoder = proofDecoder;
+    this.credentialIssuerService = credentialIssuerService;
+    this.credentialOfferService = credentialOfferService;
+    this.metadataService = metadataService;
+    this.dummyProofService = dummyProofService;
+    this.certificateValidationService = certificateValidationService;
+  }
 
     @GetMapping("/demo-oidfed-client")
     String oidfedClientDemo() {
@@ -111,6 +120,18 @@ public class CredentialController {
                                 proofJwk = dummyProofService.jwk(kid);
                             }
                         }
+
+                        try {
+                            List<String> x5cHeader = signedJWT.getHeader().getX509CertChain().stream().map(Object::toString).toList();
+
+                            // Validate the chain against your Root CA
+                            certificateValidationService.validateCertificateChain(x5cHeader);
+
+                        } catch (SecurityException e) {
+                            logger.warn("JWT certificate validation failed: {}", e.getMessage());
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT is not signed by a trusted issuer");
+                        }
+
 
                         try {
                             JWSVerifier verifier = new ECDSAVerifier(proofJwk.get().toECKey());
@@ -232,6 +253,12 @@ public class CredentialController {
             return handleGeneralException(ex);
         }
     }
+    
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
+        logger.error("ResponseStatusException in credential issuer", ex);
+        return new ResponseEntity<>("An error occurred: " + ex.getMessage(), ex.getStatusCode());
+    }
 
     // Catch all other exceptions
     @ExceptionHandler(Exception.class)
@@ -239,5 +266,4 @@ public class CredentialController {
         logger.error("General exception in credential issuer", ex);
         return new ResponseEntity<>("An error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
