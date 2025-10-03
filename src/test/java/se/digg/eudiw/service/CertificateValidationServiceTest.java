@@ -3,16 +3,17 @@ package se.digg.eudiw.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.nimbusds.jose.util.Base64;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -92,11 +93,11 @@ class CertificateValidationServiceTest {
   }
 
   @Test
-  void whenChainIsValid_thenValidationSucceeds() {
-    List<String> chain =
+  void whenChainIsValid_thenValidationSucceeds() throws CertificateEncodingException {
+    List<Base64> chain =
         List.of(
-            Base64.getEncoder().encodeToString(getBytes(leafCert)),
-            Base64.getEncoder().encodeToString(getBytes(intermediateCaCert)));
+            Base64.encode(leafCert.getEncoded()), Base64.encode(intermediateCaCert.getEncoded()));
+
     assertDoesNotThrow(() -> certificateValidationService.validateCertificateChain(chain));
   }
 
@@ -134,10 +135,10 @@ class CertificateValidationServiceTest {
             anotherIntermediateCaKeyPair.getPrivate(),
             anotherIntermediateCaCert);
 
-    List<String> chain =
+    List<Base64> chain =
         List.of(
-            Base64.getEncoder().encodeToString(getBytes(anotherLeafCert)),
-            Base64.getEncoder().encodeToString(getBytes(anotherIntermediateCaCert)));
+            Base64.encode(anotherLeafCert.getEncoded()),
+            Base64.encode(intermediateCaCert.getEncoded()));
     assertThrows(
         SecurityException.class,
         () -> certificateValidationService.validateCertificateChain(chain));
@@ -152,10 +153,10 @@ class CertificateValidationServiceTest {
             intermediateCaKeyPair.getPrivate(),
             intermediateCaCert);
 
-    List<String> chain =
+    List<Base64> chain =
         List.of(
-            Base64.getEncoder().encodeToString(getBytes(expiredLeafCert)),
-            Base64.getEncoder().encodeToString(getBytes(intermediateCaCert)));
+            Base64.encode(expiredLeafCert.getEncoded()),
+            Base64.encode(intermediateCaCert.getEncoded()));
 
     assertThrows(
         SecurityException.class,
@@ -171,10 +172,10 @@ class CertificateValidationServiceTest {
             intermediateCaKeyPair.getPrivate(),
             intermediateCaCert);
 
-    List<String> chain =
+    List<Base64> chain =
         List.of(
-            Base64.getEncoder().encodeToString(getBytes(notYetValidLeafCert)),
-            Base64.getEncoder().encodeToString(getBytes(intermediateCaCert)));
+            Base64.encode(notYetValidLeafCert.getEncoded()),
+            Base64.encode(intermediateCaCert.getEncoded()));
 
     assertThrows(
         SecurityException.class,
@@ -267,13 +268,5 @@ class CertificateValidationServiceTest {
 
     ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSA").build(signingKey);
     return new JcaX509CertificateConverter().getCertificate(builder.build(contentSigner));
-  }
-
-  private byte[] getBytes(X509Certificate certificate) {
-    try {
-      return certificate.getEncoded();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 }

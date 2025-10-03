@@ -7,6 +7,7 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.ECDSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.openid.connect.sdk.Nonce;
 import jakarta.validation.Valid;
@@ -121,16 +122,12 @@ public class CredentialController {
                         }
 
                         try {
-                            List<String> x5cHeader = signedJWT.getHeader().getX509CertChain().stream().map(Object::toString).toList();
-
-                            // Validate the chain against your Root CA
+                            List<Base64> x5cHeader = signedJWT.getHeader().getX509CertChain();
                             certificateValidationService.validateCertificateChain(x5cHeader);
-
                         } catch (SecurityException e) {
                             logger.warn("JWT certificate validation failed: {}", e.getMessage());
                             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT is not signed by a trusted issuer");
                         }
-
 
                         try {
                             JWSVerifier verifier = new ECDSAVerifier(proofJwk.get().toECKey());
@@ -252,7 +249,7 @@ public class CredentialController {
             return handleGeneralException(ex);
         }
     }
-    
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
         logger.error("ResponseStatusException in credential issuer", ex);
