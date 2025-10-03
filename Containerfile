@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/jre:latest@sha256:c4e02258ca54fcf0e0ea8b3cc5b9f0bcfa95fb2947ca280c9b529c88e992f8aa
+FROM cgr.dev/chainguard/jre:latest@sha256:cd3f3f82edd13a4e21e0f2e05861aad2d51380cfecd3bcce87486149482b1181
 
 USER java
 WORKDIR /app
