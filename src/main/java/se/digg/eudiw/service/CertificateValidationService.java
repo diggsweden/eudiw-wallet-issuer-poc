@@ -1,10 +1,15 @@
 package se.digg.eudiw.service;
 
+import com.nimbusds.jose.util.Base64;
+import com.nimbusds.jose.util.X509CertChainUtils;
 import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.*;
-import java.util.*;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,25 +65,23 @@ public class CertificateValidationService {
   }
 
   /**
-   * Validates a certificate chain against the configured Root CA. (This method does not need any
-   * changes)
+   * Validates a certificate chain against the configured Root CA.
    *
    * @param x5cChain A list of Base64-encoded DER X.509 certificates. The first cert is the leaf.
    * @throws SecurityException if the chain is invalid or not trusted.
    */
-  public void validateCertificateChain(List<String> x5cChain) throws SecurityException {
+  public void validateCertificateChain(List<Base64> x5cChain) throws SecurityException {
     if (x5cChain == null || x5cChain.isEmpty()) {
       throw new SecurityException("Certificate chain is missing in JWT 'x5c' header.");
     }
 
     try {
-      CertificateFactory cf = CertificateFactory.getInstance("X.509");
-
-      List<Certificate> certChain = new ArrayList<>();
-      for (String encodedCert : x5cChain) {
-        byte[] decodedCert = Base64.getDecoder().decode(encodedCert);
-        certChain.add(cf.generateCertificate(new java.io.ByteArrayInputStream(decodedCert)));
+      List<X509Certificate> certChain = X509CertChainUtils.parse(x5cChain);
+      if (certChain.isEmpty()) {
+        throw new SecurityException("The 'x5c' header parameter contained no certificates.");
       }
+
+      CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
       CertPath certPath = cf.generateCertPath(certChain);
       PKIXParameters params = new PKIXParameters(this.trustAnchors);
@@ -89,12 +92,16 @@ public class CertificateValidationService {
 
       logger.info("Successfully validated certificate chain against the trusted Root CA.");
 
+    } catch (ParseException e) {
+      logger.warn("Failed to parse certificate chain from 'x5c' header: {}", e.getMessage());
+      throw new SecurityException("Failed to parse certificate chain: " + e.getMessage(), e);
     } catch (CertPathValidatorException e) {
       logger.warn(
           "Certificate path validation failed: {} on certificate {}",
           e.getMessage(),
           e.getCertPath() != null
-              ? e.getCertPath().getCertificates().get(e.getIndex())
+              ? ((X509Certificate) e.getCertPath().getCertificates().get(e.getIndex()))
+                  .getSubjectX500Principal()
               : "Unknown certificate");
       throw new SecurityException("Certificate path validation failed: " + e.getMessage(), e);
     } catch (Exception e) {

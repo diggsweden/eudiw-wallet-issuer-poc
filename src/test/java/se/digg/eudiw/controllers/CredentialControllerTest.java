@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
@@ -73,12 +72,10 @@ class CredentialControllerTest {
     validWalletKey = new ECKeyGenerator(Curve.P_256).generate();
     X509Certificate cert = generateSelfSignedCertificate(validWalletKey.toKeyPair());
     validX5cChain = Collections.singletonList(Base64.encode(cert.getEncoded()));
-    validX5cChainAsStrings =
-        validX5cChain.stream().map(Base64::toString).collect(Collectors.toList());
 
     // 3. Configure the mock to accept our "valid" certificate chain
     // When the service is called with this specific chain, it will do nothing (succeed).
-    doNothing().when(certificateValidationService).validateCertificateChain(validX5cChainAsStrings);
+    doNothing().when(certificateValidationService).validateCertificateChain(validX5cChain);
 
     // Build the request body with a valid proof JWT containing the x5c header
     JwtProof jwtProof = new JwtProof();
