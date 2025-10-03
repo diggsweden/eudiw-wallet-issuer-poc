@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -66,13 +65,13 @@ public class CredentialController {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   public CredentialController(
-      @Autowired OpenIdFederationService openIdFederationService,
-      @Autowired ProofDecoder proofDecoder,
-      @Autowired CredentialIssuerService credentialIssuerService,
-      @Autowired CredentialOfferService credentialOfferService,
-      @Autowired MetadataService metadataService,
-      @Autowired DummyProofService dummyProofService,
-      @Autowired CertificateValidationService certificateValidationService) {
+      OpenIdFederationService openIdFederationService,
+      ProofDecoder proofDecoder,
+      CredentialIssuerService credentialIssuerService,
+      CredentialOfferService credentialOfferService,
+      MetadataService metadataService,
+      DummyProofService dummyProofService,
+      CertificateValidationService certificateValidationService) {
     this.openIdFederationService = openIdFederationService;
     this.proofDecoder = proofDecoder;
     this.credentialIssuerService = credentialIssuerService;
