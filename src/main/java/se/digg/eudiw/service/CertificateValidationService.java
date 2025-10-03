@@ -1,5 +1,3 @@
-// src/main/java/se/digg/eudiw/service/CertificateValidationService.java
-
 package se.digg.eudiw.service;
 
 import jakarta.annotation.PostConstruct;
@@ -18,7 +16,6 @@ public class CertificateValidationService {
 
   private static final Logger logger = LoggerFactory.getLogger(CertificateValidationService.class);
 
-  // Update @Value annotations to match the new YAML structure
   @Value("${eudiw.trust-store.location}")
   private Resource trustStoreResource;
 
@@ -34,11 +31,9 @@ public class CertificateValidationService {
   @PostConstruct
   public void init() {
     try (InputStream is = trustStoreResource.getInputStream()) {
-      // Use the KeyStore class for .p12 files
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       keyStore.load(is, trustStorePassword.toCharArray());
 
-      // Get the certificate from the keystore using its alias
       Certificate cert = keyStore.getCertificate(trustStoreAlias);
       if (cert == null) {
         throw new RuntimeException(
@@ -49,7 +44,6 @@ public class CertificateValidationService {
             "Certificate with alias '" + trustStoreAlias + "' is not an X.509 certificate.");
       }
 
-        // Create a TrustAnchor for the Root CA
       TrustAnchor trustAnchor = new TrustAnchor(rootCaCert, null);
       this.trustAnchors = Collections.singleton(trustAnchor);
 
@@ -88,7 +82,7 @@ public class CertificateValidationService {
 
       CertPath certPath = cf.generateCertPath(certChain);
       PKIXParameters params = new PKIXParameters(this.trustAnchors);
-      params.setRevocationEnabled(false); // Keep revocation disabled for this example
+      params.setRevocationEnabled(false);
 
       CertPathValidator validator = CertPathValidator.getInstance("PKIX");
       validator.validate(certPath, params);
@@ -99,7 +93,9 @@ public class CertificateValidationService {
       logger.warn(
           "Certificate path validation failed: {} on certificate {}",
           e.getMessage(),
-          e.getCertPath() != null ? e.getCertPath().getCertificates().get(e.getIndex()) : "Unknown certificate");
+          e.getCertPath() != null
+              ? e.getCertPath().getCertificates().get(e.getIndex())
+              : "Unknown certificate");
       throw new SecurityException("Certificate path validation failed: " + e.getMessage(), e);
     } catch (Exception e) {
       logger.error("An unexpected error occurred during certificate validation.", e);
