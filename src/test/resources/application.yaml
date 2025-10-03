@@ -31,8 +31,7 @@ spring:
     bundle:
       pem:
         rest:
-          truststore:
-            # certificate path works in local sc-environment if the repos are located side by side
+          truststore: # certificate path works in local sc-environment if the repos are located side by side
             # otherwise: set the filepath with SPRING_SSL_BUNDLE_PEM_REST_TRUSTSTORE_CERTIFICATE environment variable
             certificate: "classpath:dev/tokenSigner.crt"
 
@@ -71,6 +70,11 @@ eudiw:
       kid: tokenSigner-1
     - cert-location: classpath:dev/tokenSigner.crt
       kid: wp-1
+
+  trust-store:
+    location: classpath:certificates/verifier.p12
+    password: "verifier"
+    alias: "verifier"
 
 
 credential:
