@@ -1,4 +1,3 @@
-
 server:
   use-forward-headers: true
   forward-headers-strategy: NATIVE
@@ -19,9 +18,9 @@ logging:
 
 management:
   endpoints:
-      web:
-          exposure:
-              include: [ "prometheus", "health", "info", "metrics"]
+    web:
+      exposure:
+        include: [ "prometheus", "health", "info", "metrics" ]
 
 eudiw:
   issuer: https://local.dev.swedenconnect.se:9090
@@ -32,6 +31,10 @@ eudiw:
   clientId: eudiw-client
   credentialOfferTtlInSeconds: 600
   signedMetaData: true
+  trust-store:
+    location: ${TRUST_STORE_PATH}
+    password: ${TRUST_STORE_PASSWORD}
+    alias: ${TRUST_STORE_ALIAS}
 
   redirectUris:
     - "https://local.dev.swedenconnect.se:9091/callback-test-1-authorisation-flow"
@@ -43,6 +46,6 @@ eudiw:
     return-base-url: https://local.dev.swedenconnect.se:9090/auth/return
 
   token-issuer-cert:
-  - cert-location: classpath:dev/tokenSigner.crt
-    kid: tokenSigner-1
+    - cert-location: classpath:dev/tokenSigner.crt
+      kid: tokenSigner-1
 

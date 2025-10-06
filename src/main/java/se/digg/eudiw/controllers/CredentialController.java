@@ -7,6 +7,7 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.ECDSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.openid.connect.sdk.Nonce;
 import jakarta.validation.Valid;
@@ -16,7 +17,6 @@ import java.text.ParseException;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,6 +39,7 @@ import se.digg.eudiw.model.credentialissuer.CredentialOfferParam;
 import se.digg.eudiw.model.credentialissuer.CredentialParam;
 import se.digg.eudiw.model.credentialissuer.CredentialResponse;
 import se.digg.eudiw.model.credentialissuer.JwtProof;
+import se.digg.eudiw.service.CertificateValidationService;
 import se.digg.eudiw.service.CredentialIssuerService;
 import se.digg.eudiw.service.CredentialOfferService;
 import se.digg.eudiw.service.DummyProofService;
@@ -52,26 +53,34 @@ import se.oidc.oidfed.md.wallet.credentialissuer.SdJwtCredentialConfiguration;
 @RestController
 public class CredentialController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CredentialController.class);
+  private static final Logger logger = LoggerFactory.getLogger(CredentialController.class);
 
-    private final OpenIdFederationService openIdFederationService;
-    private final ProofDecoder proofDecoder;
-    private final CredentialIssuerService credentialIssuerService;
-    private final CredentialOfferService credentialOfferService;
-    private final MetadataService metadataService;
-    private final DummyProofService dummyProofService;
+  private final OpenIdFederationService openIdFederationService;
+  private final ProofDecoder proofDecoder;
+  private final CredentialIssuerService credentialIssuerService;
+  private final CredentialOfferService credentialOfferService;
+  private final MetadataService metadataService;
+  private final DummyProofService dummyProofService;
+  private final CertificateValidationService certificateValidationService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public CredentialController(@Autowired OpenIdFederationService openIdFederationService, @Autowired ProofDecoder proofDecoder, @Autowired CredentialIssuerService credentialIssuerService, @Autowired CredentialOfferService credentialOfferService,
-        MetadataService metadataService, DummyProofService dummyProofService) {
-        this.openIdFederationService = openIdFederationService;
-        this.proofDecoder = proofDecoder;
-        this.credentialIssuerService = credentialIssuerService;
-        this.credentialOfferService = credentialOfferService;
-      this.metadataService = metadataService;
-      this.dummyProofService = dummyProofService;
-    }
+  public CredentialController(
+      OpenIdFederationService openIdFederationService,
+      ProofDecoder proofDecoder,
+      CredentialIssuerService credentialIssuerService,
+      CredentialOfferService credentialOfferService,
+      MetadataService metadataService,
+      DummyProofService dummyProofService,
+      CertificateValidationService certificateValidationService) {
+    this.openIdFederationService = openIdFederationService;
+    this.proofDecoder = proofDecoder;
+    this.credentialIssuerService = credentialIssuerService;
+    this.credentialOfferService = credentialOfferService;
+    this.metadataService = metadataService;
+    this.dummyProofService = dummyProofService;
+    this.certificateValidationService = certificateValidationService;
+  }
 
     @GetMapping("/demo-oidfed-client")
     String oidfedClientDemo() {
@@ -110,6 +119,14 @@ public class CredentialController {
                                 kid = kid.split("#")[0];
                                 proofJwk = dummyProofService.jwk(kid);
                             }
+                        }
+
+                        try {
+                            List<Base64> x5cHeader = signedJWT.getHeader().getX509CertChain();
+                            certificateValidationService.validateCertificateChain(x5cHeader);
+                        } catch (SecurityException e) {
+                            logger.warn("JWT certificate validation failed: {}", e.getMessage());
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT is not signed by a trusted party");
                         }
 
                         try {
@@ -233,11 +250,16 @@ public class CredentialController {
         }
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
+        logger.error("ResponseStatusException in credential issuer", ex);
+        return new ResponseEntity<>("An error occurred: " + ex.getMessage(), ex.getStatusCode());
+    }
+
     // Catch all other exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
         logger.error("General exception in credential issuer", ex);
         return new ResponseEntity<>("An error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
