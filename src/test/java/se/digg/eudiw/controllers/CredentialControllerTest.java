@@ -154,7 +154,7 @@ class CredentialControllerTest {
         .andExpect(
             content()
                 .string(
-                    "An error occurred: 401 UNAUTHORIZED \"JWT is not signed by a trusted issuer\""));
+                    "An error occurred: 401 UNAUTHORIZED \"JWT is not signed by a trusted party\""));
   }
 
   private JWTClaimsSet createClaims() {
