@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Digg - Agency for Digital Government
+# SPDX-FileCopyrightText: 2025 The wallet-issuer-poc Authors
 #
 # SPDX-License-Identifier: CC0-1.0
 
@@ -6,33 +6,32 @@
 name: Pull Request Workflow
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+      - develop
+      - 'release/**'
+      - 'feature/**'
 
 permissions:
-  contents: read
+  contents: read  # Best Security practice. Jobs only get read as base, and then permissions are added as needed
 
 jobs:
-  commitlint:
-    uses: diggsweden/.github/.github/workflows/commit-lint.yml@main
-  dependencyreviewlint:
-    uses: diggsweden/.github/.github/workflows/dependency-review.yml@main
-  #licenselint:
-  #  uses: diggsweden/.github/.github/workflows/license-lint.yml@main
-  misclint:
+  pr-checks:
+    uses: diggsweden/reusable-ci/.github/workflows/pullrequest-orchestrator.yml@v1
+    secrets: inherit  # Pass org-level secrets (for private package access if needed)
     permissions:
-      contents: read
-      security-events: write
-    uses: diggsweden/.github/.github/workflows/megalint.yml@main
+      contents: read         # Clone and read repository code
+      packages: read         # Download packages from GitHub Packages (for dependencies)
+      security-events: write # Upload security scan results to GitHub Security tab
+    with:
+      projectType: maven
+      linters.licenselint: false  # Skip license checking (POC/test project)
+  
   test:
+    needs: [pr-checks]
+    if: always()  # Run tests even if linting fails (get complete feedback)
     permissions:
-      contents: read
-      packages: read
-    if: always()
-    #needs: [licenselint, commitlint, dependencyreviewlint, misclint]
-    needs: [commitlint, dependencyreviewlint, misclint]
+      contents: read  # Access source code for testing
+      packages: read  # Fetch test dependencies from GitHub Packages
     uses: ./.github/workflows/test.yml

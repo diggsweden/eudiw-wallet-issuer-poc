@@ -1,55 +1,49 @@
-# SPDX-FileCopyrightText: 2024 Digg - The Agency for Digital Government
+# SPDX-FileCopyrightText: 2025 The wallet-issuer-poc Authors
 #
 # SPDX-License-Identifier: CC0-1.0
-
 name: Release Workflow
 
 on:
   push:
     tags:
-      - "v[0-9]*.[0-9]*" # Forces at least vX.Y and then allows anything after
+      - "v[0-9]+.[0-9]+.[0-9]+"              # Stable: v1.0.0
+      - "v[0-9]+.[0-9]+.[0-9]+-alpha*"       # Alpha: v1.0.0-alpha.1
+      - "v[0-9]+.[0-9]+.[0-9]+-beta*"        # Beta: v1.0.0-beta.1
+      - "v[0-9]+.[0-9]+.[0-9]+-rc*"          # RC: v1.0.0-rc.1
+      - "v[0-9]+.[0-9]+.[0-9]+-snapshot*"    # Snapshot: v1.0.0-snapshot
+      - "v[0-9]+.[0-9]+.[0-9]+-SNAPSHOT*"    # Snapshot: v1.0.0-SNAPSHOT
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false  # Queue releases, don't cancel partial releases
 
 permissions:
-  contents: read
+  contents: read  # Best Security practice. Jobs only get read as base, and then permissions are added as needed
 
 jobs:
   release:
     permissions:
-      contents: write
-      packages: write
-      id-token: write
-      actions: read   # Required for SLSA provenance v2
-      security-events: write
-      attestations: write  # Required for SBOM attestation
-    secrets: inherit
-    uses: diggsweden/.github/.github/workflows/release-orchestrator.yml@feat/ci-refactor
+      contents: write         # Create GitHub releases, push tags and commits
+      packages: write         # Publish JARs to GitHub Packages and images to ghcr.io
+      id-token: write        # Generate OIDC token for SLSA provenance attestation
+      actions: read          # Read workflow runs for SLSA provenance generation
+      security-events: write # Upload vulnerability scan results from container scanning
+      attestations: write    # Attach SBOM attestation to container images
+    secrets: inherit  # Use org-level GPG keys, Maven credentials if configured
+    uses: diggsweden/reusable-ci/.github/workflows/release-orchestrator.yml@v1
     with:
       # Project configuration
-      projectType: maven
-      releaseType: stable
+      projectType: maven  # Build system type (determines version file location)
       
-      # Version and changelog - same as before
-      skipVersionBump: false
-      changelogConfig: ".github-templates/gitcliff-templates/keepachangelog.toml"
+      # Artifact publisher configuration
+      artifactPublisher: maven-app-github  # Publishes JAR to GitHub Packages
       
-      # Maven publishing - preserving existing behavior
-      skipArtifactPublish: false
-      artifactRegistry: github
+      # Container builder configuration  
+      containerBuilder: containerimage-ghcr  # Build and push Docker image to ghcr.io
+      container.platforms: "linux/amd64,linux/arm64"  # Multi-arch support for Intel and ARM
       
-      # Container image - preserving all existing features
-      skipContainerPublish: false
-      containerRegistry: ghcr.io
-      containerPlatforms: "linux/amd64,linux/arm64"
-      containerEnableSLSA: true  # Preserving SLSA provenance
-      containerfile: Containerfile
+      # Changelog configuration
+      changelogCreator: git-cliff  # Generate changelog from conventional commits
       
-      # GitHub Release - using JReleaser to preserve existing setup
-      skipGitHubRelease: false
-      useJReleaser: true  # Preserving JReleaser functionality
-      jreleaserConfig: jreleaser.yml
-      generateSBOM: true  # Already configured in jreleaser.yml
-      signArtifacts: true  # Already using GPG signing
-      attachArtifacts: "target/*.jar"
-      
-      # Java configuration
-      javaVersion: "21"
+      # Release publisher configuration
+      releasePublisher: github-cli  # Creates GitHub release with changelog and artifacts

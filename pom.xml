@@ -472,17 +472,6 @@
   </build>
 
   <repositories>
-    <repository>
-        <id>snapshots</id>
-        <url>https://registry.digg.se/repository/maven-snapshots/</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
-    </repository>
   <repository>
     <name>Central Portal Snapshots</name>
     <id>central-portal-snapshots</id>
