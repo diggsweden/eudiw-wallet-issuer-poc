@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.22.0] - 2025-10-06
+
+### Changed
+
+- Feat/verify root ca (#191)
+- Use openssf-scorecard v1
+- Use openssf-scorecard v1
+- Use reusable-ci v1
+- Update dependency org.apache.maven.plugins:maven-enforcer-plugin to v3.6.2 (#190)
+- Feat/validate credentials (#189)
+
+### Fixed
+
+- Update dependency com.nimbusds:oauth2-oidc-sdk to v11.29.2 (#187)
+
 ## [0.21.0] - 2025-09-29
 
 ### Added
@@ -30,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update java non-major to v1.82 (#177)
 - Update java non-major to v2.0.7 (#175)
 - Update dependency io.projectreactor:reactor-core to v3.7.11 (#173)
+
 
 ## [0.0.20] - 2025-09-09
 
@@ -344,7 +360,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update plugin org.openapi.generator to v7.10.0
 - Refactor, clean up, fix deprecated warnings
 - Expose public jwk on endpoint and include kid in jwk
-- Change configured host in dev profile to <https://local.dev.swedenconnect.se:8443>
+- Change configured host in dev profile to https://local.dev.swedenconnect.se:8443
 
 ### Fixed
 
@@ -369,6 +385,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update zxing to v3.5.3
 - Update spring non-major
 
+[0.22.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.21.0..v0.22.0
 [0.21.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.20..v0.21.0
 [0.0.20]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.19..v0.0.20
 [0.0.19]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.18..v0.0.19
