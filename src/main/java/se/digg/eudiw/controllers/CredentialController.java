@@ -126,7 +126,7 @@ public class CredentialController {
                             certificateValidationService.validateCertificateChain(x5cHeader);
                         } catch (SecurityException e) {
                             logger.warn("JWT certificate validation failed: {}", e.getMessage());
-                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT is not signed by a trusted issuer");
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT is not signed by a trusted party");
                         }
 
                         try {

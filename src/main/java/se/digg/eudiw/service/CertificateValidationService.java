@@ -9,6 +9,7 @@ import java.security.cert.*;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +40,7 @@ public class CertificateValidationService {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       keyStore.load(is, trustStorePassword.toCharArray());
 
-      Certificate cert = keyStore.getCertificate(trustStoreAlias);
-      if (cert == null) {
-        throw new RuntimeException(
-            "Certificate with alias '" + trustStoreAlias + "' not found in keystore.");
-      }
+      Certificate cert = Objects.requireNonNull(keyStore.getCertificate(trustStoreAlias));
       if (!(cert instanceof X509Certificate rootCaCert)) {
         throw new RuntimeException(
             "Certificate with alias '" + trustStoreAlias + "' is not an X.509 certificate.");
@@ -52,9 +49,7 @@ public class CertificateValidationService {
       TrustAnchor trustAnchor = new TrustAnchor(rootCaCert, null);
       this.trustAnchors = Collections.singleton(trustAnchor);
 
-      logger.info(
-          "Successfully loaded Root CA for trust validation: {}",
-          rootCaCert.getSubjectX500Principal());
+      logger.info("Successfully loaded Root CA for trust validation:");
 
     } catch (Exception e) {
       logger.error(
@@ -72,7 +67,7 @@ public class CertificateValidationService {
    */
   public void validateCertificateChain(List<Base64> x5cChain) throws SecurityException {
     if (x5cChain == null || x5cChain.isEmpty()) {
-      throw new SecurityException("Certificate chain is missing in JWT 'x5c' header.");
+      throw new SecurityException("Certificate chain is missing in JWS 'x5c' header.");
     }
 
     try {
@@ -105,7 +100,7 @@ public class CertificateValidationService {
               : "Unknown certificate");
       throw new SecurityException("Certificate path validation failed: " + e.getMessage(), e);
     } catch (Exception e) {
-      logger.error("An unexpected error occurred during certificate validation.", e);
+      logger.warn("An unexpected error occurred during certificate validation.", e);
       throw new SecurityException("Could not validate certificate chain due to an error.", e);
     }
   }
