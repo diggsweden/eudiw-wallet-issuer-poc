@@ -32,9 +32,9 @@ eudiw:
   credentialOfferTtlInSeconds: 600
   signedMetaData: true
   trust-store:
-    location: classpath:certificates/verifier.p12
-    password: "verifier"
-    alias: "verifier"
+    location: ${TRUST_STORE_PATH}
+    password: ${TRUST_STORE_PASSWORD}
+    alias: ${TRUST_STORE_ALIAS}
 
   redirectUris:
     - "https://local.dev.swedenconnect.se:9091/callback-test-1-authorisation-flow"
