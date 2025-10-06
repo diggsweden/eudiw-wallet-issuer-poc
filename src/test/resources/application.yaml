@@ -76,7 +76,6 @@ eudiw:
     password: "verifier"
     alias: "verifier"
 
-
 credential:
   bundles:
     pem:
