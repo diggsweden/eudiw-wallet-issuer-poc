@@ -72,9 +72,9 @@ eudiw:
       kid: wp-1
 
   trust-store:
-    location: classpath:certificates/verifier.p12
-    password: "verifier"
-    alias: "verifier"
+    location: classpath:certificates/truststore.p12
+    password: secret
+    alias: rootca
 
 credential:
   bundles:
