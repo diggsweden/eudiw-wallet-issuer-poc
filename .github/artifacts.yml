@@ -1,0 +1,23 @@
+
+# SPDX-FileCopyrightText: 2025 The wallet-issuer-poc Authors
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# Artifacts Configuration for wallet-issuer-poc
+# Defines what to build and where to publish
+
+artifacts:
+  - name: issuer-poc
+    project-type: maven
+    working-directory: .
+    build-type: application
+    config:
+      java-version: 21
+
+containers:
+  - name: issuer-poc
+    from: [issuer-poc]
+    container-file: Containerfile
+    context: .
+    platforms: linux/amd64,linux/arm64
+    registry: ghcr.io
