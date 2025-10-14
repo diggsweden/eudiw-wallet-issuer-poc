@@ -92,7 +92,7 @@ public class CredentialController {
     }
 
     @PostMapping("/credential")
-    CredentialResponse credential(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CredentialParam credential) throws TokenIssuingException {
+    CredentialResponse credential(@AuthenticationPrincipal Jwt userJwt, @Valid @RequestBody CredentialParam credential) throws TokenIssuingException {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.getPrincipal() instanceof Jwt) {
@@ -107,7 +107,6 @@ public class CredentialController {
                     try {
                         logger.info("proof jwt: {}", jwtProof.getJwt());
                         SignedJWT signedJWT = SignedJWT.parse(jwtProof.getJwt());
-                        //JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
                         JWSHeader header = signedJWT.getHeader();
                         JWK jwk = header.getJWK();
                         if (jwk != null)  {
@@ -115,8 +114,10 @@ public class CredentialController {
                         }
                         else {
                             String kid = header.getKeyID();
-                            if (StringUtils.hasText(kid) && kid.indexOf("#") > 0) {
-                                kid = kid.split("#")[0];
+                            if (StringUtils.hasText(kid)) {
+                                if (kid.indexOf("#") > 0){
+                                    kid = kid.split("#")[0];
+                                }
                                 proofJwk = dummyProofService.jwk(kid);
                             }
                         }
@@ -189,7 +190,7 @@ public class CredentialController {
                             credential.getFormat(),
                             sdJwtConfig.getVct(),
                             proofJwk.get(),
-                            jwt
+                            userJwt
                         )
                     );
                 }
@@ -198,7 +199,7 @@ public class CredentialController {
                         credential.getFormat(),
                         null,
                         proofJwk.get(),
-                        jwt
+                        userJwt
                     )
                 );
 

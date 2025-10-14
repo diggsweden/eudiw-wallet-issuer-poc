@@ -360,7 +360,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update plugin org.openapi.generator to v7.10.0
 - Refactor, clean up, fix deprecated warnings
 - Expose public jwk on endpoint and include kid in jwk
-- Change configured host in dev profile to https://local.dev.swedenconnect.se:8443
+- Change configured host in dev profile to <https://local.dev.swedenconnect.se:8443>
 
 ### Fixed
 
