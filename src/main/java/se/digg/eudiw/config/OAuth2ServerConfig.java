@@ -211,6 +211,8 @@ public class OAuth2ServerConfig {
                                     .requestMatchers("/cert/**").permitAll()
                                     .requestMatchers("/actuator/**").permitAll()
                                     .requestMatchers("/v3/api-docs/**").permitAll()
+                                    .requestMatchers("/swagger-ui.html").permitAll()
+                                    .requestMatchers("/swagger-ui/**").permitAll()
                                     .requestMatchers("/error**").permitAll()
                                     .requestMatchers("/login*").permitAll()
                                     .requestMatchers("/demo-credential").permitAll()

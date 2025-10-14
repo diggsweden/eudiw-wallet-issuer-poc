@@ -3,9 +3,9 @@ server:
   ssl:
     enabled: true
     key-store-type: JKS
-    key-store: "${user.home}/.config/devcerts/local.dev.swedenconnect.se.jks"
-    key-store-password: secret
-    key-alias: tls
+    key-store: classpath:keystores/local.dev.swedenconnect.se.jks
+    key-store-password: changeit
+    key-alias: local.dev.swedenconnect.se
 
 logging:
   level:
@@ -52,7 +52,7 @@ spring:
           truststore:
             # certificate path works in local sc-environment if the repos are located side by side
             # otherwise: set the filepath with SPRING_SSL_BUNDLE_PEM_REST_TRUSTSTORE_CERTIFICATE environment variable
-            certificate: "file:${user.home}/.config/devcerts/local.dev.swedenconnect.se-cert.pem"
+            certificate: classpath:keystores/local.dev.swedenconnect.se-cert.pem
 
 eudiw:
   issuer: https://local.dev.swedenconnect.se:9090
@@ -77,6 +77,10 @@ eudiw:
   expHours: 24
   clientId: 1234567891
   credentialOfferTtlInSeconds: 600
+  trust-store:
+    location: file:src/test/resources/certificates/truststore.p12
+    password: secret
+    alias: rootca
   #eudiw-client
 
   openidFederation:
