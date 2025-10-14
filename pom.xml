@@ -7,7 +7,7 @@
   <!-- Project coordinates -->
   <groupId>se.digg.eudiw</groupId>
   <artifactId>eudiw-wallet-issuer-poc</artifactId>
-  <version>0.22.0</version>
+  <version>0.23.0</version>
 
   <!-- Project information -->
   <name>${project.groupId}:${project.artifactId}</name>

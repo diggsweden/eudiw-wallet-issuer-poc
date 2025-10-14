@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.23.0] - 2025-10-14
+
+### Changed
+
+- Set project-type for devflow
+- Use reuseable-ci v2
+
+### Fixed
+
+- Refactor WuaToCredentialControllerTest
+
 ## [0.22.0] - 2025-10-06
 
 ### Changed
@@ -19,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Update dependency com.nimbusds:oauth2-oidc-sdk to v11.29.2 (#187)
+
 
 ## [0.21.0] - 2025-09-29
 
@@ -360,7 +372,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update plugin org.openapi.generator to v7.10.0
 - Refactor, clean up, fix deprecated warnings
 - Expose public jwk on endpoint and include kid in jwk
-- Change configured host in dev profile to <https://local.dev.swedenconnect.se:8443>
+- Change configured host in dev profile to https://local.dev.swedenconnect.se:8443
 
 ### Fixed
 
@@ -385,6 +397,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update zxing to v3.5.3
 - Update spring non-major
 
+[0.23.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.22.0..v0.23.0
 [0.22.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.21.0..v0.22.0
 [0.21.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.20..v0.21.0
 [0.0.20]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.0.19..v0.0.20
