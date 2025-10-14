@@ -27,5 +27,5 @@ jobs:
       packages: write         # Push dev images to ghcr.io
     uses: diggsweden/reusable-ci/.github/workflows/release-dev-orchestrator.yml@v2
     with:
-      projectType: maven
+      project-type: maven
     secrets: inherit
