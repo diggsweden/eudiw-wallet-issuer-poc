@@ -12,9 +12,11 @@ import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.openid.connect.sdk.Nonce;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+
 import java.security.cert.CertificateEncodingException;
 import java.text.ParseException;
 import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ import se.digg.eudiw.service.CredentialOfferService;
 import se.digg.eudiw.service.DummyProofService;
 import se.digg.eudiw.service.MetadataService;
 import se.digg.eudiw.service.OpenIdFederationService;
+import se.digg.eudiw.util.JwtUtils;
 import se.digg.wallet.datatypes.common.TokenIssuingException;
 import se.oidc.oidfed.md.wallet.credentialissuer.AbstractCredentialConfiguration;
 import se.oidc.oidfed.md.wallet.credentialissuer.CredentialIssuerMetadata;
@@ -103,27 +105,28 @@ public class CredentialController {
                 JwtProof jwtProof = credential.getProof();
 
                 if (jwtProof != null && "jwt".equals(jwtProof.getProofType()) && jwtProof.getJwt() != null) {
-
                     try {
                         logger.info("proof jwt: {}", jwtProof.getJwt());
                         SignedJWT signedJWT = SignedJWT.parse(jwtProof.getJwt());
                         JWSHeader header = signedJWT.getHeader();
-                        JWK jwk = header.getJWK();
-                        if (jwk != null)  {
-                            proofJwk = Optional.of(jwk);
-                        }
-                        else {
-                            String kid = header.getKeyID();
-                            if (StringUtils.hasText(kid)) {
-                                if (kid.indexOf("#") > 0){
-                                    kid = kid.split("#")[0];
-                                }
-                                proofJwk = dummyProofService.jwk(kid);
-                            }
+
+                        SignedJWT keyAttestation;
+                        try {
+                             keyAttestation = JwtUtils.getKeyAttestation(header);
+                        } catch (IllegalArgumentException e) {
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Could not find key attestation");
                         }
 
                         try {
-                            List<Base64> x5cHeader = signedJWT.getHeader().getX509CertChain();
+                            JWK jwk = JwtUtils.firstAttestedKey(keyAttestation, objectMapper);
+                            proofJwk = Optional.of(jwk);
+                        } catch (Exception e) {
+                            logger.warn("Failed getting attested key from attested_keys array");
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No attested key was found");
+                        }
+
+                        try {
+                            List<Base64> x5cHeader = keyAttestation.getHeader().getX509CertChain();
                             certificateValidationService.validateCertificateChain(x5cHeader);
                         } catch (SecurityException e) {
                             logger.warn("JWT certificate validation failed: {}", e.getMessage());
@@ -139,8 +142,6 @@ public class CredentialController {
                         } catch (JOSEException e) {
                             throw new TokenIssuingException("Failed to process proof JWT due to malformed content", e);
                         }
-
-                        logger.info("jwk: {}", jwk);
 
                     } catch (ParseException e) {
                         logger.info("No proof is parsed in credential request");
@@ -169,8 +170,6 @@ public class CredentialController {
 //                        logger.info("Compare proof key with clientId: {} registered key in federation", clientId);
 //                    }
 //                }
-
-                if (proofJwk.isEmpty()) throw new TokenIssuingException("Missing valid proof");
 
               CredentialIssuerMetadata metadata = null;
               try {

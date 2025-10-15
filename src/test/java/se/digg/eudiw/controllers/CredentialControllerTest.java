@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.crypto.ECDSASigner;
@@ -51,6 +53,7 @@ class CredentialControllerTest {
   private JwtRequestPostProcessor mockUserJwt;
   private CredentialParam requestBody;
   private ECKey validWalletKey;
+  private String keyAttestation;
 
   @BeforeEach
   void setup() throws Exception {
@@ -61,10 +64,12 @@ class CredentialControllerTest {
     doNothing().when(certificateValidationService).validateCertificateChain(mockX5cChain);
 
     validWalletKey = new ECKeyGenerator(Curve.P_256).generate();
+    ECKey walletProviderKey = new ECKeyGenerator(Curve.P_256).generate();
+    keyAttestation = createKeyAttestation(validWalletKey, walletProviderKey);
 
     JwtProof jwtProof = new JwtProof();
     jwtProof.setProofType("jwt");
-    jwtProof.setJwt(createProofJwt(validWalletKey, mockX5cChain));
+    jwtProof.setJwt(createProofJwt(validWalletKey, keyAttestation));
 
     requestBody = new CredentialParam();
     requestBody.setFormat(CredentialFormatEnum.VC_SD_JWT);
@@ -90,8 +95,8 @@ class CredentialControllerTest {
 
     JWSHeader proofHeader =
         new JWSHeader.Builder(JWSAlgorithm.ES256)
-            .jwk(validWalletKey.toPublicJWK())
-            .x509CertChain(mockX5cChain)
+            .type(new JOSEObjectType("openid4vci-proof+jwt"))
+            .customParam("key_attestation", keyAttestation)
             .build();
 
     SignedJWT proofJwt = new SignedJWT(proofHeader, createClaims());
@@ -137,15 +142,39 @@ class CredentialControllerTest {
         .build();
   }
 
-  private String createProofJwt(ECKey signingKey, List<Base64> x5cChain) throws Exception {
+  private String createProofJwt(ECKey signingKey, String keyAttestation) throws Exception {
     JWSHeader proofHeader =
         new JWSHeader.Builder(JWSAlgorithm.ES256)
+            .type(new JOSEObjectType("openid4vci-proof+jwt"))
+            .customParam("key_attestation", keyAttestation)
             .jwk(signingKey.toPublicJWK())
-            .x509CertChain(x5cChain)
             .build();
 
     SignedJWT proofJwt = new SignedJWT(proofHeader, createClaims());
     proofJwt.sign(new ECDSASigner(signingKey));
+    return proofJwt.serialize();
+  }
+
+  private String createKeyAttestation(ECKey walletKey, ECKey walletProviderKey) throws JOSEException {
+    List<Object> attestedKeys = List.of(walletKey.toPublicJWK().toJSONObject());
+
+    JWSHeader proofHeader =
+        new JWSHeader.Builder(JWSAlgorithm.ES256)
+            .type(new JOSEObjectType("keyattestation+jwt"))
+            .x509CertChain(mockX5cChain)
+            .build();
+
+
+    JWTClaimsSet claims = new JWTClaimsSet.Builder()
+            .audience("https://issuer.example.com")
+            .claim("nonce", UUID.randomUUID().toString())
+            .claim("attested_keys", attestedKeys)
+            .issueTime(new Date())
+            .build();
+
+    SignedJWT proofJwt = new SignedJWT(proofHeader, claims);
+    proofJwt.sign(new ECDSASigner(walletProviderKey));
+
     return proofJwt.serialize();
   }
 }
