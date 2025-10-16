@@ -52,21 +52,6 @@ class WuaToCredentialControllerTest {
   private JwtRequestPostProcessor mockUserJwt;
   private CredentialParam requestBody;
 
-  private String createProof(ECKey jwk, String keyAttestation) throws JOSEException {
-    JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES256)
-            .type(new JOSEObjectType("openid4vci-proof+jwt"))
-            .customParam("key_attestation", keyAttestation)
-            .build();
-
-    JWTClaimsSet claims = new JWTClaimsSet.Builder().build();
-
-    SignedJWT jwt = new SignedJWT(header, claims);
-
-    jwt.sign(new ECDSASigner(jwk));
-
-    return jwt.serialize();
-  }
-
   @BeforeEach
   void setup() throws Exception {
     ECKey jwk = new ECKeyGenerator(Curve.P_256).generate();
@@ -115,5 +100,20 @@ class WuaToCredentialControllerTest {
                 .content(objectMapper.writeValueAsString(requestBody)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.credential").exists());
+  }
+
+  private String createProof(ECKey jwk, String keyAttestation) throws JOSEException {
+    JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES256)
+            .type(new JOSEObjectType("openid4vci-proof+jwt"))
+            .customParam("key_attestation", keyAttestation)
+            .build();
+
+    JWTClaimsSet claims = new JWTClaimsSet.Builder().build();
+
+    SignedJWT jwt = new SignedJWT(header, claims);
+
+    jwt.sign(new ECDSASigner(jwk));
+
+    return jwt.serialize();
   }
 }

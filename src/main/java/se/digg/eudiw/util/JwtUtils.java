@@ -6,31 +6,41 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 public final class JwtUtils {
     public static SignedJWT getKeyAttestation(JWSHeader header)
-            throws ParseException, IllegalArgumentException {
+            throws ParseException {
         Object keyAttestation = header.getCustomParam("key_attestation");
         if (!(keyAttestation instanceof String compactStringJwt) || compactStringJwt.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "key_attestation missing or not a string");
+            throw new ParseException("key_attestation missing or not a string", 0);
         }
         return SignedJWT.parse(compactStringJwt);
     }
 
-    public static JWK firstAttestedKey(SignedJWT keyAttestation, ObjectMapper mapper)
-            throws ParseException, IllegalArgumentException, JsonProcessingException {
-        JWTClaimsSet claims = keyAttestation.getJWTClaimsSet();
-        List<Object> keys = claims.getListClaim("attested_keys");
-        if (keys == null || keys.isEmpty() ) {
-            throw new IllegalArgumentException(
-                    "attested_keys missing or empty");
+    public static Optional<JWK> firstAttestedKey(SignedJWT keyAttestation, ObjectMapper mapper) {
+        List<Object> attestedKeys;
+        try {
+            JWTClaimsSet claims = keyAttestation.getJWTClaimsSet();
+            attestedKeys = claims.getListClaim("attested_keys");
+        } catch (ParseException e) {
+            return Optional.empty();
         }
 
-        Object firstKey = keys.getFirst();
-        String json = mapper.writeValueAsString(firstKey);
-        return JWK.parse(json);
+        if (attestedKeys == null || attestedKeys.isEmpty()) {
+            return Optional.empty();
+        }
+
+        try {
+            Object firstKey = attestedKeys.getFirst();
+            String json = mapper.writeValueAsString(firstKey);
+            JWK jwk = JWK.parse(json);
+            return Optional.of(jwk);
+        } catch (ParseException | JsonProcessingException e) {
+            return Optional.empty();
+        }
     }
 }

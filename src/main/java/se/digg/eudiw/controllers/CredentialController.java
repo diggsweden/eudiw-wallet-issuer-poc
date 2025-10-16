@@ -99,10 +99,8 @@ public class CredentialController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.getPrincipal() instanceof Jwt) {
 
-                // wallet proof in request from wallet
-                Optional<JWK> proofJwk = proofDecoder.decodeJwtProf(credential.getProof());
-
                 JwtProof jwtProof = credential.getProof();
+                Optional<JWK> attestedJwk = Optional.empty();
 
                 if (jwtProof != null && "jwt".equals(jwtProof.getProofType()) && jwtProof.getJwt() != null) {
                     try {
@@ -112,17 +110,10 @@ public class CredentialController {
 
                         SignedJWT keyAttestation;
                         try {
-                             keyAttestation = JwtUtils.getKeyAttestation(header);
-                        } catch (IllegalArgumentException e) {
-                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Could not find key attestation");
-                        }
-
-                        try {
-                            JWK jwk = JwtUtils.firstAttestedKey(keyAttestation, objectMapper);
-                            proofJwk = Optional.of(jwk);
-                        } catch (Exception e) {
-                            logger.warn("Failed getting attested key from attested_keys array");
-                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No attested key was found");
+                            keyAttestation = JwtUtils.getKeyAttestation(header);
+                            attestedJwk = JwtUtils.firstAttestedKey(keyAttestation, objectMapper);
+                        } catch (ParseException e) {
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "key_attestation is required");
                         }
 
                         try {
@@ -134,12 +125,12 @@ public class CredentialController {
                         }
 
                         try {
-                            JWSVerifier verifier = new ECDSAVerifier(proofJwk.get().toECKey());
+                            JWSVerifier verifier = new ECDSAVerifier(attestedJwk.orElseThrow().toECKey());
                             boolean isSignatureValid = signedJWT.verify(verifier);
                             if (!isSignatureValid) {
                                 throw new TokenIssuingException("Signature is not valid");
                             }
-                        } catch (JOSEException e) {
+                        } catch (JOSEException | NoSuchElementException e) {
                             throw new TokenIssuingException("Failed to process proof JWT due to malformed content", e);
                         }
 
@@ -188,7 +179,7 @@ public class CredentialController {
                         credentialIssuerService.credential(
                             credential.getFormat(),
                             sdJwtConfig.getVct(),
-                            proofJwk.get(),
+                            attestedJwk.get(),
                             userJwt
                         )
                     );
@@ -197,7 +188,7 @@ public class CredentialController {
                     credentialIssuerService.credential(
                         credential.getFormat(),
                         null,
-                        proofJwk.get(),
+                        attestedJwk.get(),
                         userJwt
                     )
                 );
