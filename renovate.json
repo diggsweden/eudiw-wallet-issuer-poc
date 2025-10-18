@@ -1,47 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices",
-    ":gitSignOff",
-    ":maintainLockFilesWeekly",
-    ":automergeMinor",
-    ":semanticCommits"
+    "local>diggsweden/.github:renovate-base"
   ],
-  "semanticCommitType": "build",
-  "semanticCommitScope": "deps",
-  "commitMessageLowerCase": "auto",
-  "commitBody": "Signed-off-by: {{{gitAuthor}}}",
-  "vulnerabilityAlerts": {
-    "labels": [
-      "security"
-    ],
-    "enabled": true,
-    "automerge": true
-  },
+  "enabledManagers": [
+    "github-actions",
+    "gradle",
+    "maven",
+    "dockerfile"
+  ],
   "packageRules": [
-    {
-      "matchManagers": [
-        "github-actions"
-      ],
-      "addLabels": [
-        "actions"
-      ],
-      "pinDigests": true,
-      "groupName": "github actions",
-      "schedule": [
-        "after 10pm every weekday",
-        "before 5am every weekday"
-      ]
-    },
-    {
-      "matchManagers": [
-        "github-actions"
-      ],
-      "matchPackageNames": [
-        "slsa-framework/slsa-github-generator"
-      ],
-      "pinDigests": false
-    },
     {
       "description": "Java dependencies - Major updates",
       "matchManagers": [
@@ -91,10 +59,6 @@
         "major-update",
         "spring"
       ],
-      "schedule": [
-        "after 10pm every weekday",
-        "before 5am every weekday"
-      ],
       "matchPackageNames": [
         "org.springframework{/,}**",
         "org.springdoc{/,}**",
@@ -112,10 +76,6 @@
       ],
       "labels": [
         "spring"
-      ],
-      "schedule": [
-        "after 10pm every weekday",
-        "before 5am every weekday"
       ],
       "matchPackageNames": [
         "org.springframework{/,}**",
@@ -154,6 +114,11 @@
       "matchPackageNames": [
         "io.micrometer:micrometer-registry-prometheus"
       ]
+    },
+    {
+      "description": "Docker base images",
+      "matchManagers": ["dockerfile"],
+      "addLabels": ["docker", "infrastructure"]
     }
   ]
 }
