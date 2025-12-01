@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.23.2] - 2025-12-01
+
+### Changed
+
+- Use reuseable ci 2.4.x
+- Pin version
+- Use base renovate config
+- Adjust settings
+
 ## [0.23.1] - 2025-10-16
 
 ### Added
@@ -14,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Remove jreleaser from pom
+
 
 ## [0.23.0] - 2025-10-14
 
@@ -408,6 +418,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update zxing to v3.5.3
 - Update spring non-major
 
+[0.23.2]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.23.1..v0.23.2
 [0.23.1]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.23.0..v0.23.1
 [0.23.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.22.0..v0.23.0
 [0.22.0]: https://github.com/diggsweden/eudiw-wallet-issuer-poc/compare/v0.21.0..v0.22.0
