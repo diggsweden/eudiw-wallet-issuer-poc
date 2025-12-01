@@ -25,7 +25,7 @@ jobs:
     permissions:
       contents: write         # Read code and create version bump commits
       packages: write         # Push dev images to ghcr.io
-    uses: diggsweden/reusable-ci/.github/workflows/release-dev-orchestrator.yml@1a7dcd9c5257495ebf141e4e4b4bac438a8aae56 # v2.0.0          
+    uses: diggsweden/reusable-ci/.github/workflows/release-dev-orchestrator.yml@b7d46f42641d7d0f24032c44f8a92da0a39a9a51 # v2.4.0          
     with:
       project-type: maven
     secrets: inherit
