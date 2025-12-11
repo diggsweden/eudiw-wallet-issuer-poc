@@ -53,6 +53,11 @@
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
       <credentials-support.version>2.0.7</credentials-support.version>
       <maven.javadoc.skip>true</maven.javadoc.skip>
+    <formatter-maven-plugin.version>2.29.0</formatter-maven-plugin.version>
+    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+    <checkstyle.version>10.23.1</checkstyle.version>
+    <maven-pmd-plugin.version>3.27.0</maven-pmd-plugin.version>
+    <spotbugs-maven-plugin.version>4.9.3.0</spotbugs-maven-plugin.version>
   </properties>
 
   <dependencies>
@@ -420,7 +425,73 @@
               </configuration>
           </plugin>
 
-          <!-- Quality -->
+          <!-- Code Quality -->
+          <plugin>
+              <groupId>net.revelc.code.formatter</groupId>
+              <artifactId>formatter-maven-plugin</artifactId>
+              <version>${formatter-maven-plugin.version}</version>
+              <configuration>
+                  <configFile>${project.basedir}/development/format/eclipse-java-google-style.xml</configFile>
+                  <lineEnding>LF</lineEnding>
+                  <compilerSource>${java.version}</compilerSource>
+                  <compilerCompliance>${java.version}</compilerCompliance>
+                  <compilerTargetPlatform>${java.version}</compilerTargetPlatform>
+                  <excludes>
+                      <exclude>**/generated-sources/**</exclude>
+                  </excludes>
+              </configuration>
+          </plugin>
+
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-checkstyle-plugin</artifactId>
+              <version>${maven-checkstyle-plugin.version}</version>
+              <dependencies>
+                  <dependency>
+                      <groupId>com.puppycrawl.tools</groupId>
+                      <artifactId>checkstyle</artifactId>
+                      <version>${checkstyle.version}</version>
+                  </dependency>
+              </dependencies>
+              <configuration>
+                  <configLocation>${project.basedir}/development/checkstyle_prettier.xml</configLocation>
+                  <consoleOutput>true</consoleOutput>
+                  <failsOnError>true</failsOnError>
+                  <linkXRef>false</linkXRef>
+                  <excludes>**/generated-sources/**/*</excludes>
+              </configuration>
+          </plugin>
+
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-pmd-plugin</artifactId>
+              <version>${maven-pmd-plugin.version}</version>
+              <configuration>
+                  <rulesets>
+                      <ruleset>${project.basedir}/development/pmd_default_java_mod.xml</ruleset>
+                  </rulesets>
+                  <failOnViolation>true</failOnViolation>
+                  <printFailingErrors>true</printFailingErrors>
+                  <linkXRef>false</linkXRef>
+                  <excludeRoots>
+                      <excludeRoot>target/generated-sources</excludeRoot>
+                  </excludeRoots>
+              </configuration>
+          </plugin>
+
+          <plugin>
+              <groupId>com.github.spotbugs</groupId>
+              <artifactId>spotbugs-maven-plugin</artifactId>
+              <version>${spotbugs-maven-plugin.version}</version>
+              <configuration>
+                  <effort>Max</effort>
+                  <threshold>Low</threshold>
+                  <failOnError>true</failOnError>
+                  <excludeFilterFile>${project.basedir}/development/spotbugs-exclude.xml</excludeFilterFile>
+              </configuration>
+          </plugin>
+
+          <!-- Enforcer -->
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-enforcer-plugin</artifactId>

@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   pr-checks:
-    uses: diggsweden/reusable-ci/.github/workflows/pullrequest-orchestrator.yml@b7d46f42641d7d0f24032c44f8a92da0a39a9a51 # v2.4.0          
+    uses: diggsweden/reusable-ci/.github/workflows/pullrequest-orchestrator.yml@e29145e720cef0b86ef147c72c2d001b5ac6c8b9 # v2.4.2
     secrets: inherit  # Pass org-level secrets (for private package access if needed)
     permissions:
       contents: read         # Clone and read repository code
@@ -26,8 +26,12 @@ jobs:
       security-events: write # Upload security scan results to GitHub Security tab
     with:
       project-type: maven
-      linters.licenselint: false  # Skip license checking (POC/test project)
-  
+      # Use just+mise linting (replaces megalint, commitlint, licenselint)
+      linters.justmiselint: true
+      linters.megalint: false
+      linters.commitlint: false
+      linters.licenselint: false
+
   test:
     needs: [pr-checks]
     if: always()  # Run tests even if linting fails (get complete feedback)
