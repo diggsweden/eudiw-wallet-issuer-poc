@@ -20,29 +20,27 @@ import se.swedenconnect.auth.commons.idtoken.SubjAttributeType;
 import se.swedenconnect.auth.commons.idtoken.SubjAttributes;
 
 @SpringBootApplication
-@RegisterReflectionForBinding(
-	{
-		ClientAuthRequest.class, 
-		ClientAuthResponse.class, 
-		ClientAuthStatus.class, 
-		CustomClaim.class,
-		DisoUI.class,
-		IdProfile.class,
-		IdTokenClaims.class,
-		SourceID.class,
-		SubjAttributes.class,
-		SubjAttributeType.class,
-		AuthReturnPayload.class, 
-		CustomUserDetails.class, 
-		SwedenConnectAuthenticationToken.class, 
-		SwedenConnectPrincipal.class
-	}
-)
+@RegisterReflectionForBinding({
+    ClientAuthRequest.class,
+    ClientAuthResponse.class,
+    ClientAuthStatus.class,
+    CustomClaim.class,
+    DisoUI.class,
+    IdProfile.class,
+    IdTokenClaims.class,
+    SourceID.class,
+    SubjAttributes.class,
+    SubjAttributeType.class,
+    AuthReturnPayload.class,
+    CustomUserDetails.class,
+    SwedenConnectAuthenticationToken.class,
+    SwedenConnectPrincipal.class
+})
 @ComponentScan
 public class IssuerApplication {
 
- 	public static void main(String[] args) {
-		SpringApplication.run(IssuerApplication.class, args);
-	}
-	
+  public static void main(String[] args) {
+    SpringApplication.run(IssuerApplication.class, args);
+  }
+
 }

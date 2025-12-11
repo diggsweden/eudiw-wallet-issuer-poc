@@ -10,11 +10,11 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfiguration {
 
-    @Bean
-    public RestTemplate sslRestTemplate(RestTemplateBuilder builder, SslBundles sslBundles) {
-        SslBundle sslBundle = sslBundles.getBundle("rest");
+  @Bean
+  public RestTemplate sslRestTemplate(RestTemplateBuilder builder, SslBundles sslBundles) {
+    SslBundle sslBundle = sslBundles.getBundle("rest");
 
-        return builder.rootUri("").setSslBundle(sslBundle).build();
-    }
+    return builder.rootUri("").setSslBundle(sslBundle).build();
+  }
 
 }

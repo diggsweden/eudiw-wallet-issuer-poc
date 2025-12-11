@@ -7,16 +7,17 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 
 public class IdProxyAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
 
-        public IdProxyAuthenticationEntryPoint(final String url) {
-            super(url);
-        }
+  public IdProxyAuthenticationEntryPoint(final String url) {
+    super(url);
+  }
 
-        @Override
-        protected String buildRedirectUrlToLoginPage(final HttpServletRequest request, final HttpServletResponse response,
-                                                     final AuthenticationException authException) {
+  @Override
+  protected String buildRedirectUrlToLoginPage(final HttpServletRequest request,
+      final HttpServletResponse response,
+      final AuthenticationException authException) {
 
-            return super.buildRedirectUrlToLoginPage(request, response, authException);
-        }
+    return super.buildRedirectUrlToLoginPage(request, response, authException);
+  }
 
-    }
+}
 

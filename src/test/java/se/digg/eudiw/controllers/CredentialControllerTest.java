@@ -46,9 +46,12 @@ class CredentialControllerTest {
   private static final String CREDENTIAL_CONFIG_ID = "eu.europa.ec.eudi.pid_jwt_vc_json";
   private static final List<Base64> mockX5cChain = Collections.emptyList();
 
-  @Autowired private MockMvc mockMvc;
-  @Autowired private ObjectMapper objectMapper;
-  @MockitoBean private CertificateValidationService certificateValidationService;
+  @Autowired
+  private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper objectMapper;
+  @MockitoBean
+  private CertificateValidationService certificateValidationService;
 
   private JwtRequestPostProcessor mockUserJwt;
   private CredentialParam requestBody;
@@ -155,7 +158,8 @@ class CredentialControllerTest {
     return proofJwt.serialize();
   }
 
-  private String createKeyAttestation(ECKey walletKey, ECKey walletProviderKey) throws JOSEException {
+  private String createKeyAttestation(ECKey walletKey, ECKey walletProviderKey)
+      throws JOSEException {
     List<Object> attestedKeys = List.of(walletKey.toPublicJWK().toJSONObject());
 
     JWSHeader proofHeader =
@@ -166,11 +170,11 @@ class CredentialControllerTest {
 
 
     JWTClaimsSet claims = new JWTClaimsSet.Builder()
-            .audience("https://issuer.example.com")
-            .claim("nonce", UUID.randomUUID().toString())
-            .claim("attested_keys", attestedKeys)
-            .issueTime(new Date())
-            .build();
+        .audience("https://issuer.example.com")
+        .claim("nonce", UUID.randomUUID().toString())
+        .claim("attested_keys", attestedKeys)
+        .issueTime(new Date())
+        .build();
 
     SignedJWT proofJwt = new SignedJWT(proofHeader, claims);
     proofJwt.sign(new ECDSASigner(walletProviderKey));

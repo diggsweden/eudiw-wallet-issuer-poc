@@ -10,13 +10,13 @@ import se.digg.eudiw.service.ParCacheServiceValKey;
 @Configuration
 public class ParCacheConfig {
 
-    private final RedisOperations<String, MultiValueMap<String, String>> operations;
+  private final RedisOperations<String, MultiValueMap<String, String>> operations;
 
-    ParCacheConfig(@Autowired RedisOperations<String, MultiValueMap<String, String>> operations) {
-        this.operations = operations;
-    }
+  ParCacheConfig(@Autowired RedisOperations<String, MultiValueMap<String, String>> operations) {
+    this.operations = operations;
+  }
 
-    ParCacheService parCacheService() {
-        return new ParCacheServiceValKey(operations);
-    }
+  ParCacheService parCacheService() {
+    return new ParCacheServiceValKey(operations);
+  }
 }

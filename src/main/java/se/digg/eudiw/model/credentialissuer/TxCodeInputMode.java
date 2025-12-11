@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public enum TxCodeInputMode {
-    @JsonProperty("numeric")
-    NUMERIC,
-    @JsonProperty("text")
-    TEXT;
+  @JsonProperty("numeric")
+  NUMERIC,
+  @JsonProperty("text")
+  TEXT;
 }

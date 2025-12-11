@@ -51,8 +51,8 @@ public class EwcItbController {
       CredentialIssuanceRequest credentialIssuanceRequest =
           ewcItbService.initAuthFlow(sessionId, credentialType);
       return ResponseEntity.ok().body(credentialIssuanceRequest);
-    } catch (URISyntaxException | ParseException | JOSEException | IOException |
-        WriterException e) {
+    } catch (URISyntaxException | ParseException | JOSEException | IOException
+        | WriterException e) {
       throw new ItbException("fail",
           "An internal server error occurred in issuer while processing the request", sessionId);
     }
@@ -111,8 +111,8 @@ public class EwcItbController {
           ewcItbService.initAuthFlow(sessionId, credentialType);
       model.addAttribute("qrCode", credentialIssuanceRequest.qr());
       return new ModelAndView("qr", model.asMap());
-    } catch (URISyntaxException | ParseException | JOSEException | IOException |
-        WriterException e) {
+    } catch (URISyntaxException | ParseException | JOSEException | IOException
+        | WriterException e) {
       throw new RuntimeException("Error generating QR code");
     }
   }
@@ -124,8 +124,7 @@ public class EwcItbController {
     ItpErrorResponse errorResponse = new ItpErrorResponse(
         itbException.getStatus(),
         itbException.getReason(),
-        itbException.getSessionId()
-    );
+        itbException.getSessionId());
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
   }
 

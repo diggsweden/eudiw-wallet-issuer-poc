@@ -9,8 +9,8 @@ import java.util.List;
 @Component
 public class SpringCacheCustomizer implements CacheManagerCustomizer<ConcurrentMapCacheManager> {
 
-    @Override
-    public void customize(ConcurrentMapCacheManager cacheManager) {
-        cacheManager.setCacheNames(List.of("trust-mark"));
-    }
+  @Override
+  public void customize(ConcurrentMapCacheManager cacheManager) {
+    cacheManager.setCacheNames(List.of("trust-mark"));
+  }
 }

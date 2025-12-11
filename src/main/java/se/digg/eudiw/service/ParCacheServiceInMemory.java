@@ -12,18 +12,17 @@ import java.util.Map;
 @Service
 public class ParCacheServiceInMemory implements ParCacheService {
 
-    Map<String, MultiValueMap<String, String>> savedParams = new HashMap<>();
+  Map<String, MultiValueMap<String, String>> savedParams = new HashMap<>();
 
-    public ParCacheServiceInMemory() {
-    }
+  public ParCacheServiceInMemory() {}
 
-    @Override
-    public void saveParParams(String requestId, MultiValueMap<String, String> storedParams, int ttl) {
-        savedParams.put(requestId, storedParams);
-    }
+  @Override
+  public void saveParParams(String requestId, MultiValueMap<String, String> storedParams, int ttl) {
+    savedParams.put(requestId, storedParams);
+  }
 
-    @Override
-    public MultiValueMap<String, String> loadParParamsAndRemoveFromCache(String requestId) {
-        return savedParams.get(requestId);
-    }
+  @Override
+  public MultiValueMap<String, String> loadParParamsAndRemoveFromCache(String requestId) {
+    return savedParams.get(requestId);
+  }
 }

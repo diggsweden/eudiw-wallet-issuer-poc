@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationEventLogger {
 
-    Logger logger = LoggerFactory.getLogger(AuthenticationEventLogger.class);
+  Logger logger = LoggerFactory.getLogger(AuthenticationEventLogger.class);
 
-    @EventListener
-    public void onSuccess(AuthenticationSuccessEvent success) {
-        logger.info("AuthenticationSuccessEvent: {}", success);
-    }
+  @EventListener
+  public void onSuccess(AuthenticationSuccessEvent success) {
+    logger.info("AuthenticationSuccessEvent: {}", success);
+  }
 
-    @EventListener
-    public void onFailure(AbstractAuthenticationFailureEvent failures) {
-        logger.error("AbstractAuthenticationFailureEvent: {}", failures);
-    }
+  @EventListener
+  public void onFailure(AbstractAuthenticationFailureEvent failures) {
+    logger.error("AbstractAuthenticationFailureEvent: {}", failures);
+  }
 }

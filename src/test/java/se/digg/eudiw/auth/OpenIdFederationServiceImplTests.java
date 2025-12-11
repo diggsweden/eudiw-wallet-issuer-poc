@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class OpenIdFederationServiceImplTests {
 
-    @Test
-    void testResolve() {
-    }
+  @Test
+  void testResolve() {}
 }

@@ -10,8 +10,7 @@ public class Credential {
 
   private String credential;
 
-  public Credential() {
-  }
+  public Credential() {}
 
   public Credential(String credential) {
     this.credential = credential;

@@ -1,10 +1,7 @@
 # SPDX-FileCopyrightText: 2025 The wallet-issuer-poc Authors
 #
 # SPDX-License-Identifier: CC0-1.0
-
----
 name: Pull Request Workflow
-
 on:
   pull_request:
     branches:
@@ -12,17 +9,15 @@ on:
       - develop
       - 'release/**'
       - 'feature/**'
-
 permissions:
-  contents: read  # Best Security practice. Jobs only get read as base, and then permissions are added as needed
-
+  contents: read # Best Security practice. Jobs only get read as base, and then permissions are added as needed
 jobs:
   pr-checks:
     uses: diggsweden/reusable-ci/.github/workflows/pullrequest-orchestrator.yml@e29145e720cef0b86ef147c72c2d001b5ac6c8b9 # v2.4.2
-    secrets: inherit  # Pass org-level secrets (for private package access if needed)
+    secrets: inherit # Pass org-level secrets (for private package access if needed)
     permissions:
-      contents: read         # Clone and read repository code
-      packages: read         # Download packages from GitHub Packages (for dependencies)
+      contents: read # Clone and read repository code
+      packages: read # Download packages from GitHub Packages (for dependencies)
       security-events: write # Upload security scan results to GitHub Security tab
     with:
       project-type: maven
@@ -31,11 +26,10 @@ jobs:
       linters.megalint: false
       linters.commitlint: false
       linters.licenselint: false
-
   test:
     needs: [pr-checks]
-    if: always()  # Run tests even if linting fails (get complete feedback)
+    if: always() # Run tests even if linting fails (get complete feedback)
     permissions:
-      contents: read  # Access source code for testing
-      packages: read  # Fetch test dependencies from GitHub Packages
+      contents: read # Access source code for testing
+      packages: read # Fetch test dependencies from GitHub Packages
     uses: ./.github/workflows/test.yml

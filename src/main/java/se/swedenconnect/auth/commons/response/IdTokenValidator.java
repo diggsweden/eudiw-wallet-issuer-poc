@@ -77,7 +77,8 @@ public class IdTokenValidator {
     SourceID sourceID = null;
     Object sourceClaimObject = jwtClaimsSet.getClaim("source");
     if (sourceClaimObject != null) {
-      sourceID = OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(sourceClaimObject), SourceID.class);
+      sourceID = OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(sourceClaimObject),
+          SourceID.class);
     }
 
     builder
@@ -117,7 +118,8 @@ public class IdTokenValidator {
   }
 
   private JWSVerifier getVerifier(SignedJWT signedJWT)
-      throws IdTokenValidationException, CertificateEncodingException, NoSuchAlgorithmException, JOSEException {
+      throws IdTokenValidationException, CertificateEncodingException, NoSuchAlgorithmException,
+      JOSEException {
 
     JWSHeader header = signedJWT.getHeader();
 
@@ -128,7 +130,8 @@ public class IdTokenValidator {
     X509Certificate trustedCertificate = getTrustedCertificate(header);
     if (trustedCertificate == null) {
       throw new IdTokenValidationException(
-          "Non of the trusted certificates matches the Id token JWT header declarations", signedJWT);
+          "Non of the trusted certificates matches the Id token JWT header declarations",
+          signedJWT);
     }
 
     PublicKey publicKey = trustedCertificate.getPublicKey();

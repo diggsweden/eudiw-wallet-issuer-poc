@@ -6,7 +6,6 @@ server:
     key-store: classpath:keystores/local.dev.swedenconnect.se.jks
     key-store-password: changeit
     key-alias: local.dev.swedenconnect.se
-
 logging:
   level:
     org:
@@ -53,7 +52,6 @@ spring:
             # certificate path works in local sc-environment if the repos are located side by side
             # otherwise: set the filepath with SPRING_SSL_BUNDLE_PEM_REST_TRUSTSTORE_CERTIFICATE environment variable
             certificate: classpath:keystores/local.dev.swedenconnect.se-cert.pem
-
 eudiw:
   issuer: https://local.dev.swedenconnect.se:9090
   issuerBaseUrl: https://local.dev.swedenconnect.se:9090
@@ -84,7 +82,7 @@ eudiw:
   #eudiw-client
 
   openidFederation:
-    baseUrl:  https://local.dev.swedenconnect.se:9040/oidfed
+    baseUrl: https://local.dev.swedenconnect.se:9040/oidfed
     trustMarkId: https://local.dev.swedenconnect.se/trust-mark-id/pid-issuer
     walletProviderAnchor: https://local.dev.swedenconnect.se:9040/oidfed/wallet-provider
     walletBaseUri: https://local.dev.swedenconnect.se/wallets/
@@ -92,7 +90,6 @@ eudiw:
     trustListTtlInSeconds: 60
     authorityHints:
       - "https://local.dev.swedenconnect.se:9040/oidfed/intermediate"
-
   valkey:
     host: local.dev.swedenconnect.se
     port: 6379
@@ -113,7 +110,6 @@ eudiw:
     base-url: https://local.dev.swedenconnect.se:9060/id-backend/auth
     client: wallet-dev
     return-base-url: https://local.dev.swedenconnect.se:9090/auth/return
-
   token-issuer-cert:
     - cert-location: classpath:dev/tokenSigner.crt
       kid: tokenSigner-1
@@ -121,7 +117,6 @@ eudiw:
       kid: wp-1
   ewc-itb:
     idp: "http://local.dev.swedenconnect.se/idp"
-
 credential:
   bundles:
     pem:
@@ -131,8 +126,8 @@ credential:
         #./pkcs8/private_pkcs8.key
         certificates: file:../eudiw-prototype/sc-environment/config/openid-fed/keystores/issuer-certificate.crt
         #./pkcs8/certificate.crt
+  #name: "Issuer credential"
 
-        #name: "Issuer credential"
   bundle:
     monitoring:
       health-endpoint-enabled: true

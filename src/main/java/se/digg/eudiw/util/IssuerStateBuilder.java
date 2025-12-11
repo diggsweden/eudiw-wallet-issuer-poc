@@ -23,78 +23,78 @@ import se.swedenconnect.security.credential.PkiCredential;
 public class IssuerStateBuilder {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(IssuerStateBuilder.class);
-    Map<String, Object> payload = new HashMap<String, Object>();
-    Calendar issCalendar;
-    JWSSigner signer;
-    JWK publicJWK;
+  private static final Logger logger = LoggerFactory.getLogger(IssuerStateBuilder.class);
+  Map<String, Object> payload = new HashMap<String, Object>();
+  Calendar issCalendar;
+  JWSSigner signer;
+  JWK publicJWK;
 
-    SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+  SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public IssuerStateBuilder(String iss, PkiCredential credential) {
-        Date now = new Date();
-        issCalendar = Calendar.getInstance();
-        issCalendar.setTime(now);
-        payload.put("iss", iss);
-        payload.put("iat", now);
-        payload.put("nbf", now);
+  public IssuerStateBuilder(String iss, PkiCredential credential) {
+    Date now = new Date();
+    issCalendar = Calendar.getInstance();
+    issCalendar.setTime(now);
+    payload.put("iss", iss);
+    payload.put("iat", now);
+    payload.put("nbf", now);
 
-        try {
-            publicJWK = JSONUtils.getJWKfromPublicKey(credential.getPublicKey());
-            signer  = TokenSigningAlgorithm.fromJWSAlgorithm(JWSAlgorithm.ES256).jwsSigner(credential.getPrivateKey());
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
+    try {
+      publicJWK = JSONUtils.getJWKfromPublicKey(credential.getPublicKey());
+      signer = TokenSigningAlgorithm.fromJWSAlgorithm(JWSAlgorithm.ES256)
+          .jwsSigner(credential.getPrivateKey());
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public IssuerStateBuilder withExp(int hours) {
+    Calendar expCalendar = Calendar.getInstance();
+    expCalendar.setTime(issCalendar.getTime());
+    expCalendar.add(Calendar.HOUR_OF_DAY, hours);
+    payload.put("exp", expCalendar.getTime());
+    return this;
+  }
+
+  public IssuerStateBuilder with(String key, Object value) {
+    payload.put(key, value);
+    return this;
+  }
+
+  public IssuerStateBuilder with(String key, boolean value) {
+    payload.put(key, value);
+    return this;
+  }
+
+  public IssuerStateBuilder withCredentialOfferId(String credentialOfferId) {
+    payload.put("credential_offer_id", credentialOfferId);
+    return this;
+  }
+
+  public String build() {
+    StringBuilder sb = new StringBuilder();
+
+
+
+    try {
+      JWSObject jwsObject = new JWSObject(
+          new JWSHeader.Builder(JWSAlgorithm.ES256)
+              .keyID(publicJWK.computeThumbprint().toString())
+              .jwk(publicJWK)
+              .type(new JOSEObjectType("JWT"))
+              .build(),
+          new Payload(payload));
+
+      jwsObject.sign(signer);
+      sb.append(jwsObject.serialize());
+      return sb.toString();
+    } catch (Exception e) {
+      logger.error("IssuerStateBuilder", e);
+      throw new RuntimeException(e);
     }
 
-    public IssuerStateBuilder withExp(int hours) {
-        Calendar expCalendar = Calendar.getInstance();
-        expCalendar.setTime(issCalendar.getTime());
-        expCalendar.add(Calendar.HOUR_OF_DAY, hours);
-        payload.put("exp", expCalendar.getTime());
-        return this;
-    }
-
-    public IssuerStateBuilder with(String key, Object value) {
-        payload.put(key, value);
-        return this;
-    }
-
-    public IssuerStateBuilder with(String key, boolean value) {
-        payload.put(key, value);
-        return this;
-    }
-
-    public IssuerStateBuilder withCredentialOfferId(String credentialOfferId) {
-        payload.put("credential_offer_id", credentialOfferId);
-        return this;
-    }
-
-    public String build() {
-        StringBuilder sb = new StringBuilder();
-
-
-
-        try {
-            JWSObject jwsObject = new JWSObject(
-                    new JWSHeader.Builder(JWSAlgorithm.ES256)
-                            .keyID(publicJWK.computeThumbprint().toString())
-                            .jwk(publicJWK)
-                            .type(new JOSEObjectType("JWT"))
-                            .build(),
-                    new Payload(payload)
-            );
-
-            jwsObject.sign(signer);
-            sb.append(jwsObject.serialize());
-            return sb.toString();
-        } catch (Exception e) {
-            logger.error("IssuerStateBuilder", e);
-            throw new RuntimeException(e);
-        }
-
-    }
+  }
 
 
 }

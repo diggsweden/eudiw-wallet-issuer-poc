@@ -45,10 +45,14 @@ import se.digg.eudiw.service.DummyProofService;
 class WuaToCredentialControllerTest {
 
   private static final String CREDENTIAL_CONFIG_ID = "eu.europa.ec.eudi.pid_jwt_vc_json";
-  @Autowired private MockMvc mockMvc;
-  @Autowired private ObjectMapper objectMapper;
-  @MockitoBean private DummyProofService dummyProofService;
-  @Autowired private CertificateValidationService certificateValidationService;
+  @Autowired
+  private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper objectMapper;
+  @MockitoBean
+  private DummyProofService dummyProofService;
+  @Autowired
+  private CertificateValidationService certificateValidationService;
   private JwtRequestPostProcessor mockUserJwt;
   private CredentialParam requestBody;
 
@@ -104,9 +108,9 @@ class WuaToCredentialControllerTest {
 
   private String createProof(ECKey jwk, String keyAttestation) throws JOSEException {
     JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES256)
-            .type(new JOSEObjectType("openid4vci-proof+jwt"))
-            .customParam("key_attestation", keyAttestation)
-            .build();
+        .type(new JOSEObjectType("openid4vci-proof+jwt"))
+        .customParam("key_attestation", keyAttestation)
+        .build();
 
     JWTClaimsSet claims = new JWTClaimsSet.Builder().build();
 

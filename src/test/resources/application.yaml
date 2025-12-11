@@ -6,7 +6,6 @@ server:
     key-store: "file:bogusStore.p12"
     key-store-password: mypass
     key-alias: boguscert
-
 logging:
   level:
     org:
@@ -18,7 +17,6 @@ logging:
   error:
     whitelabel:
       enabled: false
-
 spring:
   data:
     redis:
@@ -34,7 +32,6 @@ spring:
           truststore: # certificate path works in local sc-environment if the repos are located side by side
             # otherwise: set the filepath with SPRING_SSL_BUNDLE_PEM_REST_TRUSTSTORE_CERTIFICATE environment variable
             certificate: "classpath:dev/tokenSigner.crt"
-
 eudiw:
   issuer: https://local.dev.swedenconnect.se:9090
   issuerBaseUrl: https://local.dev.swedenconnect.se:9090
@@ -64,18 +61,15 @@ eudiw:
     base-url: https://local.dev.swedenconnect.se:9060/id-backend
     client: wallet-dev
     return-base-url: https://local.dev.swedenconnect.se:9090/auth/return
-
   token-issuer-cert:
     - cert-location: classpath:dev/tokenSigner.crt
       kid: tokenSigner-1
     - cert-location: classpath:dev/tokenSigner.crt
       kid: wp-1
-
   trust-store:
     location: classpath:certificates/truststore.p12
     password: secret
     alias: rootca
-
 credential:
   bundles:
     pem:

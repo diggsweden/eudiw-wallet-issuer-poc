@@ -10,13 +10,14 @@ import java.text.ParseException;
 
 public class JwkCustomDeserializer extends JsonDeserializer<JWK> {
 
-    @Override
-    public JWK deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        try {
-            String jwkJson = jsonParser.readValueAsTree().toString();
-            return JWK.parse(jwkJson);
-        } catch (ParseException e) {
-            throw new IOException("Failed to parse JWK: " + e.getMessage(), e);
-        }
+  @Override
+  public JWK deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+      throws IOException {
+    try {
+      String jwkJson = jsonParser.readValueAsTree().toString();
+      return JWK.parse(jwkJson);
+    } catch (ParseException e) {
+      throw new IOException("Failed to parse JWK: " + e.getMessage(), e);
     }
+  }
 }

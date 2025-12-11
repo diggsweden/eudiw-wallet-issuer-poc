@@ -3,10 +3,10 @@ info:
   title: Federation endpoints API
   description: |-
     APIs for OpenID federation endpoints provided by this application
-    
+
     The server URL:s provided in this API documentation describes the server URL:s that are made
     available when running the demo setup.
-    
+
     The name component of all URLs is a URL safe name assigned to each Federation Entity through the
     configuration setup of this application. The configuration setup allows creation of any number of
     individual federation entities, each supporting a configurable set of the endpoints described here.
@@ -39,7 +39,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/fetch:
     get:
       description: Fetch Entity Statement endpoint
@@ -54,9 +53,9 @@ paths:
         - in: query
           name: iss
           title: Issuer
-          description: |- 
+          description: |-
             The Entity Identifier of the issuer of the Entity Statement
-            
+
             Note that the standard draft currently requires the 'iss' query parameter to be provided
             in the request, but we allow it to be absent as it is not used for anything.
             If issuer is not provided, we can safely assume that the request was intended for the entity
@@ -97,7 +96,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/subordinate_listing:
     get:
       description: Subordinate Listings endpoint
@@ -165,7 +163,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/trust_mark:
     get:
       description: Trust Mark endpoint
@@ -217,7 +214,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/trust_mark_listing:
     get:
       description: Trust Marked Entities Listing endpoint
@@ -271,7 +267,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/trust_mark_status:
     post:
       description: Trust Mark Status endpoint
@@ -330,7 +325,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/resolve:
     get:
       description: Resolve Entity endpoint
@@ -389,7 +383,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /{name}/discovery:
     get:
       description: Discovery endpoint
@@ -454,9 +447,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
-
-
 components:
   schemas:
     ErrorResponse:
@@ -467,13 +457,11 @@ components:
         error_description:
           title: Human readable description of the error
           type: string
-
     TrustMarkStatusResponse:
       description: Trust Mark status response from a Trust Mark Status endpoint
       properties:
         active:
           type: boolean
-
     ErrorCodes:
       title: Federation endpoint error codes
       type: string
@@ -485,7 +473,6 @@ components:
         - server_error
         - temporarily_unavailable
         - unsupported_parameter
-
     EntityTypes:
       title: Federation endpoint error codes
       type: string
@@ -496,4 +483,3 @@ components:
         - oauth_authorization_server
         - oauth_client
         - oauth_resource
-

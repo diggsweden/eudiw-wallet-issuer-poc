@@ -11,7 +11,7 @@ import se.swedenconnect.auth.commons.idtoken.DisoUI;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientAuthRequest {
-  
+
   String client;
   String idp;
   String idpAlias;
@@ -24,8 +24,10 @@ public class ClientAuthRequest {
   Boolean discovery;
   DisoUI ui;
 
-  public ClientAuthRequest(String client, String idp, String idpAlias, String returnUrl, Boolean forceAuth,
-        Boolean silent, List<String> loa, List<String> profile, String id, Boolean discovery, DisoUI ui) {
+  public ClientAuthRequest(String client, String idp, String idpAlias, String returnUrl,
+      Boolean forceAuth,
+      Boolean silent, List<String> loa, List<String> profile, String id, Boolean discovery,
+      DisoUI ui) {
     this.client = client;
     this.idp = idp;
     this.idpAlias = idpAlias;
@@ -38,8 +40,8 @@ public class ClientAuthRequest {
     this.discovery = discovery;
     this.ui = ui;
   }
-      
-  public ClientAuthRequest(String id,String client, String returnUrl) {
+
+  public ClientAuthRequest(String id, String client, String returnUrl) {
     this.id = id;
     this.returnUrl = returnUrl;
     this.client = client;
@@ -141,5 +143,5 @@ public class ClientAuthRequest {
     this.ui = ui;
   }
 
-  
+
 }

@@ -10,18 +10,15 @@ server:
         same-site: "none"
         http-only: true
         secure: false
-
 logging:
   level:
     org.springframework.security: trace
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
-
 management:
   endpoints:
     web:
       exposure:
-        include: [ "prometheus", "health", "info", "metrics" ]
-
+        include: ["prometheus", "health", "info", "metrics"]
 eudiw:
   issuer: https://local.dev.swedenconnect.se:9090
   issuerBaseUrl: https://local.dev.swedenconnect.se:9090
@@ -35,17 +32,13 @@ eudiw:
     location: ${TRUST_STORE_PATH}
     password: ${TRUST_STORE_PASSWORD}
     alias: ${TRUST_STORE_ALIAS}
-
   redirectUris:
     - "https://local.dev.swedenconnect.se:9091/callback-test-1-authorisation-flow"
     - "https://local.dev.swedenconnect.se:9091"
-
   swedenconnect:
     base-url: https://local.dev.swedenconnect.se:9060/id-backend/auth
     client: wallet-dev
     return-base-url: https://local.dev.swedenconnect.se:9090/auth/return
-
   token-issuer-cert:
     - cert-location: classpath:dev/tokenSigner.crt
       kid: tokenSigner-1
-

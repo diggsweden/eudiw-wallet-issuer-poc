@@ -59,7 +59,8 @@ public class EwcItbService {
   Nonce nonce = new Nonce(); // move to request
   CodeVerifier pkceVerifier = new CodeVerifier(); // move to request
 
-  public EwcItbService(EudiwConfig eudiwConfig, RestClient.Builder restClientBuilder, MetadataService metadataService,
+  public EwcItbService(EudiwConfig eudiwConfig, RestClient.Builder restClientBuilder,
+      MetadataService metadataService,
       CredentialOfferService credentialOfferService, JwtIdUtil jwtIdUtil) {
     this.eudiwConfig = eudiwConfig;
     this.restClientBuilder = restClientBuilder;
@@ -86,8 +87,7 @@ public class EwcItbService {
 
     Set<String> requestedScopes = new HashSet<>();
     try {
-      Map<String, AbstractCredentialConfiguration>
-          credentialsSupported =
+      Map<String, AbstractCredentialConfiguration> credentialsSupported =
           metadataService.metadata().getCredentialConfigurationsSupported();
       if (credentialsSupported == null || credentialsSupported.isEmpty()) {
         throw new ItbException("fail", "Could not lookup supported credentials in issuer metadata",
@@ -108,7 +108,7 @@ public class EwcItbService {
     credentialOfferService.store(credentialOfferFormId, credentialType);
 
     // Generate new random string to link the callback to the authZ request
-    //State state = new State();
+    // State state = new State();
     State state = new State(jwtIdUtil.id2jwt(credentialOfferFormId));
 
     Scope scope = new Scope();
@@ -156,7 +156,7 @@ public class EwcItbService {
 
       ResponseEntity<String> idpBackendResult = client.get()
           .uri(idpLocation)
-          //.header("Cookie", sessionCookieArray)
+          // .header("Cookie", sessionCookieArray)
           .retrieve().toEntity(String.class);
 
       List<String> authSessionCookieList = Objects.requireNonNull(
@@ -176,7 +176,7 @@ public class EwcItbService {
 
       client.get()
           .uri(idpFrontendLocation)
-          //.header("Cookie", sessionCookieArray)
+          // .header("Cookie", sessionCookieArray)
           .retrieve().toEntity(String.class);
 
       URI uri = new URI(idpFrontendLocation);
@@ -194,16 +194,14 @@ public class EwcItbService {
       final String id = idParsed;
 
       ResponseEntity<String> requestSessionFrontend = client.get()
-          .uri(uriBuilder ->
-              uriBuilder
-                  .scheme(eudiwConfig.getIdProxyFrontend().scheme())
-                  .host(eudiwConfig.getIdProxyFrontend().host())
-                  .port(eudiwConfig.getIdProxyFrontend().port())
-                  .path(eudiwConfig.getIdProxyFrontend().path("/api/request"))
-                  .queryParam("id", id)
-                  .queryParam("idp", eudiwConfig.getEwcItb().idp())
-                  .build()
-          )
+          .uri(uriBuilder -> uriBuilder
+              .scheme(eudiwConfig.getIdProxyFrontend().scheme())
+              .host(eudiwConfig.getIdProxyFrontend().host())
+              .port(eudiwConfig.getIdProxyFrontend().port())
+              .path(eudiwConfig.getIdProxyFrontend().path("/api/request"))
+              .queryParam("id", id)
+              .queryParam("idp", eudiwConfig.getEwcItb().idp())
+              .build())
           .header("Cookie", cookiesArray)
           .retrieve().toEntity(String.class);
       String requestSessionBackendLocation =

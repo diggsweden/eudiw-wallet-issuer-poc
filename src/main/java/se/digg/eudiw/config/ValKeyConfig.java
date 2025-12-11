@@ -23,58 +23,64 @@ import java.util.List;
 @Configuration
 public class ValKeyConfig {
 
-    private final ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
-    public ValKeyConfig() {
-        mapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Grant.class, new GrantCustomDeserializer());
-        module.addDeserializer(CodeVerifier.class, new CodeVerifierCustomDeserializer());
-        module.addDeserializer(JWK.class, new JwkCustomDeserializer());
-        module.addDeserializer(MultiValueMap.class, new MultiValueMapCustomDeserializer());
-        mapper.registerModule(module);
-    }
+  public ValKeyConfig() {
+    mapper = new ObjectMapper();
+    SimpleModule module = new SimpleModule();
+    module.addDeserializer(Grant.class, new GrantCustomDeserializer());
+    module.addDeserializer(CodeVerifier.class, new CodeVerifierCustomDeserializer());
+    module.addDeserializer(JWK.class, new JwkCustomDeserializer());
+    module.addDeserializer(MultiValueMap.class, new MultiValueMapCustomDeserializer());
+    mapper.registerModule(module);
+  }
 
-    @Bean
-    RedisTemplate<String, MultiValueMap<String, String>> valKeyMultiValueMapTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, MultiValueMap<String, String>> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, MultiValueMap.class));
-        return template;
-    }
+  @Bean
+  RedisTemplate<String, MultiValueMap<String, String>> valKeyMultiValueMapTemplate(
+      RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, MultiValueMap<String, String>> template = new RedisTemplate<>();
+    template.setConnectionFactory(connectionFactory);
+    template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, MultiValueMap.class));
+    return template;
+  }
 
-    @Bean
-    RedisTemplate<String, CredentialOfferParam> valKeyCredentialOfferParamRedisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, CredentialOfferParam> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, CredentialOfferParam.class));
-        return template;
-    }
+  @Bean
+  RedisTemplate<String, CredentialOfferParam> valKeyCredentialOfferParamRedisTemplate(
+      RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, CredentialOfferParam> template = new RedisTemplate<>();
+    template.setConnectionFactory(connectionFactory);
+    template
+        .setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, CredentialOfferParam.class));
+    return template;
+  }
 
-    @Bean
-    RedisTemplate<String, List<String>> selectedCredentialsRedisOperations(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, List<String>> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, List.class));
-        return template;
-    }
+  @Bean
+  RedisTemplate<String, List<String>> selectedCredentialsRedisOperations(
+      RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, List<String>> template = new RedisTemplate<>();
+    template.setConnectionFactory(connectionFactory);
+    template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, List.class));
+    return template;
+  }
 
-    @Bean
-    RedisTemplate<String, PendingPreAuthorization> pendingPreAuthorizationRedisOperations(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, PendingPreAuthorization> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, PendingPreAuthorization.class));
-        return template;
-    }
+  @Bean
+  RedisTemplate<String, PendingPreAuthorization> pendingPreAuthorizationRedisOperations(
+      RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, PendingPreAuthorization> template = new RedisTemplate<>();
+    template.setConnectionFactory(connectionFactory);
+    template.setValueSerializer(
+        new Jackson2JsonRedisSerializer<>(mapper, PendingPreAuthorization.class));
+    return template;
+  }
 
-    @Bean
-    RedisTemplate<String, JWK> kidJwksOperations(RedisConnectionFactory connectionFactory) {
-        // TODO remove with DummyProofService work-around
-        RedisTemplate<String, JWK> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        //template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, JWK.class));
-        return template;
-    }
+  @Bean
+  RedisTemplate<String, JWK> kidJwksOperations(RedisConnectionFactory connectionFactory) {
+    // TODO remove with DummyProofService work-around
+    RedisTemplate<String, JWK> template = new RedisTemplate<>();
+    template.setConnectionFactory(connectionFactory);
+    // template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, JWK.class));
+    return template;
+  }
 
 }
 

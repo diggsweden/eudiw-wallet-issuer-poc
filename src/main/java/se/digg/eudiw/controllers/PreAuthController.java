@@ -129,7 +129,8 @@ public class PreAuthController {
         "<body>" +
         "<h1>Logga in EUDIW wallet</h1>" +
         "<p>Öppna EUDIW wallet och skanna QR-koden</p>" +
-        "<img style='display:block; width:300px;height:300px;' id='base64image' src='data:image/jpeg;base64, " + qrcode + "'></img>" +
+        "<img style='display:block; width:300px;height:300px;' id='base64image' src='data:image/jpeg;base64, "
+        + qrcode + "'></img>" +
         "</body>\n" + "</html>";
   }
 
@@ -174,8 +175,8 @@ public class PreAuthController {
     // TokenResponse tokenResponse = OIDCTokenResponseParser.parse(response);
 
     // if (! tokenResponse.indicatesSuccess()) {
-    //     // We got an error response...
-    //     TokenErrorResponse errorResponse = tokenResponse.toErrorResponse();
+    // // We got an error response...
+    // TokenErrorResponse errorResponse = tokenResponse.toErrorResponse();
     // }
 
     // OIDCTokenResponse successResponse = (OIDCTokenResponse)tokenResponse.toSuccessResponse();
@@ -185,7 +186,8 @@ public class PreAuthController {
     // AccessToken accessToken = successResponse.getOIDCTokens().getAccessToken();
     // RefreshToken refreshToken = successResponse.getOIDCTokens().getRefreshToken();
 
-    // logger.info("idToken: %s accessToken: %s refreshToken: %s", idToken, accessToken, refreshToken);
+    // logger.info("idToken: %s accessToken: %s refreshToken: %s", idToken, accessToken,
+    // refreshToken);
 
     return pngData;
   }
@@ -222,7 +224,7 @@ public class PreAuthController {
       AccessTokenResponse accessToken = tokenResponse.toSuccessResponse();
       String jwt = accessToken.getTokens().getBearerAccessToken().getValue();
       logger.info("token jwt: " + jwt);
-      //logger.info("token jwt: " + accessToken.getTokens().getRefreshToken().toString());
+      // logger.info("token jwt: " + accessToken.getTokens().getRefreshToken().toString());
 
       return jwt;
     } catch (Exception e) {

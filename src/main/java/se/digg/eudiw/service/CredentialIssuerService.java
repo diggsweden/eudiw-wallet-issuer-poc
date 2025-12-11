@@ -6,5 +6,6 @@ import se.digg.eudiw.model.credentialissuer.CredentialFormatEnum;
 import se.digg.wallet.datatypes.common.TokenIssuingException;
 
 public interface CredentialIssuerService {
-    String credential(CredentialFormatEnum reqFormat, String credentialType, JWK deviceProofPublicKey, Jwt jwt) throws TokenIssuingException;
+  String credential(CredentialFormatEnum reqFormat, String credentialType, JWK deviceProofPublicKey,
+      Jwt jwt) throws TokenIssuingException;
 }

@@ -19,31 +19,30 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class SpringCachingConfig implements CachingConfigurer {
 
-    Logger logger = LoggerFactory.getLogger(SpringCachingConfig.class);
+  Logger logger = LoggerFactory.getLogger(SpringCachingConfig.class);
 
-    @Autowired
-    EudiwConfig eudiwConfig;
+  @Autowired
+  EudiwConfig eudiwConfig;
 
-    @Bean
-    public CacheManager cacheManager() {
-        ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager("trust-mark") {
+  @Bean
+  public CacheManager cacheManager() {
+    ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager("trust-mark") {
 
-            @Override
-            protected Cache createConcurrentMapCache(final String name) {
-                Integer ttl = eudiwConfig.getOpenidFederation().trustListTtlInSeconds();
-                logger.info("cache config trustListTtlInSeconds: {}", ttl);
-                return new ConcurrentMapCache(
-                        name,
-                        CacheBuilder.newBuilder()
-                                .expireAfterWrite(ttl, TimeUnit.SECONDS)
-                                .maximumSize(100)
-                                .build()
-                                .asMap(),
-                        false
-                );
-            }
-        };
+      @Override
+      protected Cache createConcurrentMapCache(final String name) {
+        Integer ttl = eudiwConfig.getOpenidFederation().trustListTtlInSeconds();
+        logger.info("cache config trustListTtlInSeconds: {}", ttl);
+        return new ConcurrentMapCache(
+            name,
+            CacheBuilder.newBuilder()
+                .expireAfterWrite(ttl, TimeUnit.SECONDS)
+                .maximumSize(100)
+                .build()
+                .asMap(),
+            false);
+      }
+    };
 
-        return cacheManager;
-    }
+    return cacheManager;
+  }
 }

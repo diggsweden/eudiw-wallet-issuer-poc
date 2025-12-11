@@ -44,14 +44,14 @@ public class RestClientConfig {
     }
 
     HttpClientBuilder httpClientBuilder = HttpClients.custom()
-        .setDefaultRequestConfig(requestConfigBuilder.setRedirectsEnabled(false).build()).disableRedirectHandling().disableCookieManagement();
+        .setDefaultRequestConfig(requestConfigBuilder.setRedirectsEnabled(false).build())
+        .disableRedirectHandling().disableCookieManagement();
 
     if (!proxyUsername.isEmpty()) {
       BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
       credentialsProvider.setCredentials(
           new AuthScope(proxyHost, proxyPort),
-          new UsernamePasswordCredentials(proxyUsername, proxyPassword.toCharArray())
-      );
+          new UsernamePasswordCredentials(proxyUsername, proxyPassword.toCharArray()));
       httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
     }
 

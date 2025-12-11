@@ -14,14 +14,15 @@ import java.io.IOException;
 
 public class GrantCustomDeserializer extends JsonDeserializer<Grant> {
 
-    @Override
-    public Grant deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
-        ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
-        JsonNode node = mapper.readTree(jsonParser);
+  @Override
+  public Grant deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+      throws IOException, JacksonException {
+    ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
+    JsonNode node = mapper.readTree(jsonParser);
 
-        if (node.has("pre-authorized_code")) {
-            return mapper.treeToValue(node, PreAuthorizationCodeGrant.class);
-        }
-        return mapper.treeToValue(node, AuthorizationCodeGrant.class);
+    if (node.has("pre-authorized_code")) {
+      return mapper.treeToValue(node, PreAuthorizationCodeGrant.class);
     }
+    return mapper.treeToValue(node, AuthorizationCodeGrant.class);
+  }
 }

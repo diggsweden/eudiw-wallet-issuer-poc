@@ -12,19 +12,20 @@ import java.time.Duration;
 @Primary
 public class ParCacheServiceValKey implements ParCacheService {
 
-    private final RedisOperations<String, MultiValueMap<String, String>> operations;
+  private final RedisOperations<String, MultiValueMap<String, String>> operations;
 
-    public ParCacheServiceValKey(@Autowired RedisOperations<String, MultiValueMap<String, String>> operations) {
-        this.operations = operations;
-    }
+  public ParCacheServiceValKey(
+      @Autowired RedisOperations<String, MultiValueMap<String, String>> operations) {
+    this.operations = operations;
+  }
 
-    @Override
-    public void saveParParams(String requestId, MultiValueMap<String, String> storedParams, int ttl) {
-        operations.opsForValue().set(requestId, storedParams, Duration.ofMinutes(10));
-    }
+  @Override
+  public void saveParParams(String requestId, MultiValueMap<String, String> storedParams, int ttl) {
+    operations.opsForValue().set(requestId, storedParams, Duration.ofMinutes(10));
+  }
 
-    @Override
-    public MultiValueMap<String, String> loadParParamsAndRemoveFromCache(String requestId) {
-        return operations.opsForValue().get(requestId);
-    }
+  @Override
+  public MultiValueMap<String, String> loadParParamsAndRemoveFromCache(String requestId) {
+    return operations.opsForValue().get(requestId);
+  }
 }

@@ -1,6 +1,7 @@
 # Development Guide
 
 ## Table of Contents
+
 - [Setup and Configuration](#setup-and-configuration)
   - [Prerequisites](#prerequisites)
   - [Quick Start](#quick-start)
@@ -103,6 +104,7 @@ just lint-fix
 ## Issuer Signer Certificate
 
 Generate private key in PKCS#8 format:
+
 ```shell
 openssl genpkey -algorithm EC \
   -pkeyopt ec_paramgen_curve:prime256v1 \
@@ -110,11 +112,13 @@ openssl genpkey -algorithm EC \
 ```
 
 Extract public key:
+
 ```shell
 openssl pkey -in issuer_private_pkcs8.key -pubout -out issuer_public.key
 ```
 
 Create self-signed certificate using PKCS#8 key:
+
 ```shell
 openssl req -new -x509 \
   -key issuer_private_pkcs8.key \
@@ -126,6 +130,7 @@ openssl req -new -x509 \
 ```
 
 Make sure application.properties in the active profile has proper key pair config:
+
 ```yaml
 credential:
   bundles:
@@ -150,6 +155,7 @@ SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run
 ### Docker Compose
 
 See [quick-start](../dev-environment/compose/quick-start.md)
+
 ```shell
 cd dev-environment/compose
 docker-compose --profile ewc up

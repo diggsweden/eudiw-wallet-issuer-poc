@@ -1,21 +1,20 @@
 package se.digg.eudiw.model;
 
 public class AuthReturnPayload {
-    String response;
+  String response;
 
-    public AuthReturnPayload() {
-    }
+  public AuthReturnPayload() {}
 
-    public AuthReturnPayload(String response) {
-        this.response = response;
-    }
+  public AuthReturnPayload(String response) {
+    this.response = response;
+  }
 
-    public String getResponse() {
-        return response;
-    }
+  public String getResponse() {
+    return response;
+  }
 
-    public void setResponse(String response) {
-        this.response = response;
-    }
+  public void setResponse(String response) {
+    this.response = response;
+  }
 
 }

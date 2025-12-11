@@ -12,27 +12,32 @@ import java.util.Optional;
 @Component
 public class ProofDecoder {
 
-    public Optional<JWK> decodeJwtProf(JwtProof proof) {
-        if (proof == null)  return Optional.empty();
+  public Optional<JWK> decodeJwtProf(JwtProof proof) {
+    if (proof == null)
+      return Optional.empty();
 
-        if (!"jwt".equals(proof.getProofType())) return  Optional.empty();
+    if (!"jwt".equals(proof.getProofType()))
+      return Optional.empty();
 
-        if (proof.getJwt() == null)  return  Optional.empty();
+    if (proof.getJwt() == null)
+      return Optional.empty();
 
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(proof.getJwt());
-            //JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
-            JWSHeader header = signedJWT.getHeader();
-            JWK jwk = header.getJWK();
-            String kid = header.getKeyID();
+    try {
+      SignedJWT signedJWT = SignedJWT.parse(proof.getJwt());
+      // JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+      JWSHeader header = signedJWT.getHeader();
+      JWK jwk = header.getJWK();
+      String kid = header.getKeyID();
 
-            if (jwk != null)  return  Optional.of(jwk);
+      if (jwk != null)
+        return Optional.of(jwk);
 
-            if (jwk == null && kid != null)  return  Optional.empty();
-        } catch (ParseException e) {
-            return  Optional.empty();
-        }
-
+      if (jwk == null && kid != null)
         return Optional.empty();
+    } catch (ParseException e) {
+      return Optional.empty();
     }
+
+    return Optional.empty();
+  }
 }

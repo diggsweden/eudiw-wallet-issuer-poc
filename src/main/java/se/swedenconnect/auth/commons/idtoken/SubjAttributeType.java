@@ -1,8 +1,8 @@
 package se.swedenconnect.auth.commons.idtoken;
 
 /**
- * Enumeration of the attribute names used in ID tokens. ID tokens can only contain attributes with a name that appear in this
- * enumeration.
+ * Enumeration of the attribute names used in ID tokens. ID tokens can only contain attributes with
+ * a name that appear in this enumeration.
  */
 public enum SubjAttributeType {
 
@@ -26,7 +26,10 @@ public enum SubjAttributeType {
   personalNumberBinding,
   /** Organization number */
   orgNumber,
-  /** Organization affiliation (id@orgnumber format) as specified by Sweden Connect technical framework */
+  /**
+   * Organization affiliation (id@orgnumber format) as specified by Sweden Connect technical
+   * framework
+   */
   orgAffiliation,
   /** Organization name */
   orgName,

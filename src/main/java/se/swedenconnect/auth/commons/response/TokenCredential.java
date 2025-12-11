@@ -8,18 +8,17 @@ import java.security.cert.X509Certificate;
 /**
  * Token verification credential data
  */
-public record TokenCredential (
-  X509Certificate certificate,
-  byte[] sha256Hash,
-  String kid
-) {
+public record TokenCredential(
+    X509Certificate certificate,
+    byte[] sha256Hash,
+    String kid) {
 
   /**
    * Create ID token verification credential based on a certificate with no kid
    *
    * @param certificate trusted certificate
    */
-  public TokenCredential (X509Certificate certificate) {
+  public TokenCredential(X509Certificate certificate) {
     this(certificate, getThumbprint(certificate), null);
   }
 
@@ -37,8 +36,7 @@ public record TokenCredential (
     try {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
       return md.digest(certificate.getEncoded());
-    }
-    catch (CertificateEncodingException | NoSuchAlgorithmException e) {
+    } catch (CertificateEncodingException | NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
     }
   }

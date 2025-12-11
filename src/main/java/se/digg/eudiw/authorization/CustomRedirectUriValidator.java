@@ -7,16 +7,17 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
 
 import java.util.function.Consumer;
 
-public class CustomRedirectUriValidator implements Consumer<OAuth2AuthorizationCodeRequestAuthenticationContext> {
+public class CustomRedirectUriValidator
+    implements Consumer<OAuth2AuthorizationCodeRequestAuthenticationContext> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomRedirectUriValidator.class);
+  private static final Logger logger = LoggerFactory.getLogger(CustomRedirectUriValidator.class);
 
-    @Override
-    public void accept(OAuth2AuthorizationCodeRequestAuthenticationContext authenticationContext) {
-        OAuth2AuthorizationCodeRequestAuthenticationToken authorizationCodeRequestAuthentication =
-                authenticationContext.getAuthentication();
-        String requestedRedirectUri = authorizationCodeRequestAuthentication.getRedirectUri();
+  @Override
+  public void accept(OAuth2AuthorizationCodeRequestAuthenticationContext authenticationContext) {
+    OAuth2AuthorizationCodeRequestAuthenticationToken authorizationCodeRequestAuthentication =
+        authenticationContext.getAuthentication();
+    String requestedRedirectUri = authorizationCodeRequestAuthentication.getRedirectUri();
 
-        logger.info("Skip Redirect URI verification for {}", requestedRedirectUri);
-    }
+    logger.info("Skip Redirect URI verification for {}", requestedRedirectUri);
+  }
 }

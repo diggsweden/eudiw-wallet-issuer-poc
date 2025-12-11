@@ -35,7 +35,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 @ExtendWith(MockitoExtension.class)
 class CertificateValidationServiceTest {
 
-  @InjectMocks private CertificateValidationService certificateValidationService;
+  @InjectMocks
+  private CertificateValidationService certificateValidationService;
 
   private KeyPair rootCaKeyPair;
   private X509Certificate rootCaCert;

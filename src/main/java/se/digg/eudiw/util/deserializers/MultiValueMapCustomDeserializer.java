@@ -14,36 +14,37 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class MultiValueMapCustomDeserializer extends JsonDeserializer<MultiValueMap<String, String>> {
+public class MultiValueMapCustomDeserializer
+    extends JsonDeserializer<MultiValueMap<String, String>> {
 
-    @Override
-    public MultiValueMap<String, String> deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+  @Override
+  public MultiValueMap<String, String> deserialize(JsonParser jp, DeserializationContext ctxt)
+      throws IOException, JsonProcessingException {
 
-        MultiValueMap<String, String> result = new LinkedMultiValueMap<>();
-        JsonNode node = jp.getCodec().readTree(jp);
+    MultiValueMap<String, String> result = new LinkedMultiValueMap<>();
+    JsonNode node = jp.getCodec().readTree(jp);
 
-        if (node.isObject()) {
-            Iterator<Entry<String, JsonNode>> fields = node.fields();
+    if (node.isObject()) {
+      Iterator<Entry<String, JsonNode>> fields = node.fields();
 
-            while (fields.hasNext()) {
-                Entry<String, JsonNode> entry = fields.next();
-                String key = entry.getKey();
-                JsonNode valueNode = entry.getValue();
+      while (fields.hasNext()) {
+        Entry<String, JsonNode> entry = fields.next();
+        String key = entry.getKey();
+        JsonNode valueNode = entry.getValue();
 
-                if (valueNode.isArray()) {
-                    List<String> values = new ArrayList<>();
-                    for (JsonNode item : valueNode) {
-                        values.add(item.asText());
-                    }
-                    result.put(key, values);
-                } else {
-                    // If not an array, treat as a single value
-                    result.add(key, valueNode.asText());
-                }
-            }
+        if (valueNode.isArray()) {
+          List<String> values = new ArrayList<>();
+          for (JsonNode item : valueNode) {
+            values.add(item.asText());
+          }
+          result.put(key, values);
+        } else {
+          // If not an array, treat as a single value
+          result.add(key, valueNode.asText());
         }
-
-        return result;
+      }
     }
+
+    return result;
+  }
 }

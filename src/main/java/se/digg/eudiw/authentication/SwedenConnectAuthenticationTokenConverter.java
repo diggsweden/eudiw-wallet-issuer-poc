@@ -10,21 +10,23 @@ import org.springframework.security.web.authentication.AuthenticationConverter;
 import se.digg.eudiw.context.EudiwSessionSecurityContextRepository;
 
 
-public class SwedenConnectAuthenticationTokenConverter implements AuthenticationConverter  {
+public class SwedenConnectAuthenticationTokenConverter implements AuthenticationConverter {
 
-    Logger logger = LoggerFactory.getLogger(SwedenConnectAuthenticationTokenConverter.class);
+  Logger logger = LoggerFactory.getLogger(SwedenConnectAuthenticationTokenConverter.class);
 
-    private final EudiwSessionSecurityContextRepository securityContextRepository;
+  private final EudiwSessionSecurityContextRepository securityContextRepository;
 
-    public SwedenConnectAuthenticationTokenConverter(@Autowired EudiwSessionSecurityContextRepository securityContextRepository) {
-        this.securityContextRepository = securityContextRepository;
-    }
+  public SwedenConnectAuthenticationTokenConverter(
+      @Autowired EudiwSessionSecurityContextRepository securityContextRepository) {
+    this.securityContextRepository = securityContextRepository;
+  }
 
-    @Override
-    public Authentication convert(HttpServletRequest request) {
-        DeferredSecurityContext deferredSecurityContext = securityContextRepository.loadDeferredContext(request);
-        Authentication auth = deferredSecurityContext.get().getAuthentication();
-        logger.info("Loaded security context authentication {}", auth);
-        return auth;
-    }
+  @Override
+  public Authentication convert(HttpServletRequest request) {
+    DeferredSecurityContext deferredSecurityContext =
+        securityContextRepository.loadDeferredContext(request);
+    Authentication auth = deferredSecurityContext.get().getAuthentication();
+    logger.info("Loaded security context authentication {}", auth);
+    return auth;
+  }
 }

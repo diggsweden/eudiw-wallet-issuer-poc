@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Data class that holds the identifiers of the source requests and responses from the upstream IdP/OP
+ * Data class that holds the identifiers of the source requests and responses from the upstream
+ * IdP/OP
  */
 @Data
 @NoArgsConstructor

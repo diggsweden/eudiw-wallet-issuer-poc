@@ -11,9 +11,11 @@ import lombok.Getter;
  */
 public class IdTokenValidationException extends Exception {
 
-  @Getter private final SignedJWT signedJWT;
+  @Getter
+  private final SignedJWT signedJWT;
 
-  @Serial private static final long serialVersionUID = -6908586099690472926L;
+  @Serial
+  private static final long serialVersionUID = -6908586099690472926L;
 
   /** {@inheritDoc} */
   public IdTokenValidationException(String message, SignedJWT signedJWT) {

@@ -44,9 +44,12 @@ public class JwtIdUtil {
     expCalendar.add(Calendar.MINUTE, 10); // todo config
 
     JWTClaimsSet.Builder claimsSetBuilder = new JWTClaimsSet.Builder();
-    claimsSetBuilder.issuer(eudiwConfig.getIssuer()).subject(eudiwConfig.getIssuer()).claim("id", id).jwtID(new BigInteger(128, rnd).toString(16)).expirationTime(expCalendar.getTime()).issueTime(issCalendar.getTime());
-    SignedJWT jwt = new SignedJWT(new JWSHeader.Builder(algorithm).keyID(signer.getPublicJwk().getKeyID()).type(
-        JOSEObjectType.JWT).build(), claimsSetBuilder.build());
+    claimsSetBuilder.issuer(eudiwConfig.getIssuer()).subject(eudiwConfig.getIssuer())
+        .claim("id", id).jwtID(new BigInteger(128, rnd).toString(16))
+        .expirationTime(expCalendar.getTime()).issueTime(issCalendar.getTime());
+    SignedJWT jwt =
+        new SignedJWT(new JWSHeader.Builder(algorithm).keyID(signer.getPublicJwk().getKeyID()).type(
+            JOSEObjectType.JWT).build(), claimsSetBuilder.build());
     jwt.sign(signer.getSigner());
 
     return jwt.serialize();
