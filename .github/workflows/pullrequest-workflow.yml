@@ -13,7 +13,7 @@ permissions:
   contents: read # Best Security practice. Jobs only get read as base, and then permissions are added as needed
 jobs:
   pr-checks:
-    uses: diggsweden/reusable-ci/.github/workflows/pullrequest-orchestrator.yml@e29145e720cef0b86ef147c72c2d001b5ac6c8b9 # v2.4.2
+    uses: diggsweden/reusable-ci/.github/workflows/pullrequest-orchestrator.yml@e1e1387d5b0399bb5edb00e40485746772344176 # v2.6.0
     secrets: inherit # Pass org-level secrets (for private package access if needed)
     permissions:
       contents: read # Clone and read repository code
@@ -21,8 +21,8 @@ jobs:
       security-events: write # Upload security scan results to GitHub Security tab
     with:
       project-type: maven
-      # Use just+mise linting (replaces megalint, commitlint, licenselint)
-      linters.justmiselint: true
+      # Use devbase-check linting (replaces megalint, commitlint, licenselint)
+      linters.devbasecheck: true
       linters.megalint: false
       linters.commitlint: false
       linters.licenselint: false
