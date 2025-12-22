@@ -89,7 +89,7 @@
       <dependency>
           <groupId>io.lettuce</groupId>
           <artifactId>lettuce-core</artifactId>
-          <version>6.8.1.RELEASE</version>
+          <version>7.2.1.RELEASE</version>
       </dependency>
       <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -107,7 +107,7 @@
       <dependency>
           <groupId>se.oidc.oidfed</groupId>
           <artifactId>openid-federation-base</artifactId>
-          <version>3.0.1</version>
+          <version>4.0.0</version>
       </dependency>
 
       <dependency>
